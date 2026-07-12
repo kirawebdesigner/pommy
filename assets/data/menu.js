@@ -1,0 +1,156 @@
+(function () {
+  "use strict";
+
+  var images = {
+    breakfast: "/assets/images/menu/breakfast.jpg",
+    burger: "/assets/images/menu/burger.jpg",
+    pizza: "/assets/images/menu/hot-drink.jpg",
+    wrap: "/assets/images/menu/chicken.jpg",
+    chicken: "/assets/images/menu/chicken.jpg",
+    juice: "/assets/images/menu/shake.jpg",
+    shakes: "/assets/images/menu/shake.jpg",
+    "seasonal-juice": "/assets/images/menu/drink.jpg",
+    "hot-drinks": "/assets/images/menu/drink.jpg",
+    "soft-drinks": "/assets/images/menu/drink.jpg"
+  };
+
+  function product(slug, name, category, price, description, featured) {
+    return {
+      id: slug,
+      slug: slug,
+      name: name,
+      category: category,
+      description: description || "",
+      price: price,
+      image: images[category],
+      featured: Boolean(featured),
+      available: true
+    };
+  }
+
+  window.POMMY_CATEGORIES = [
+    { id: "breakfast", name: "Breakfast" },
+    { id: "burger", name: "Burger" },
+    { id: "pizza", name: "Pizza" },
+    { id: "wrap", name: "Wrap" },
+    { id: "chicken", name: "Chicken" },
+    { id: "juice", name: "Juice" },
+    { id: "shakes", name: "Shakes" },
+    { id: "seasonal-juice", name: "Seasonal Juice" },
+    { id: "hot-drinks", name: "Hot Drinks" },
+    { id: "soft-drinks", name: "Soft Drinks" }
+  ];
+
+  window.POMMY_MENU = [
+    product("egg-sandwich", "Egg Sandwich", "breakfast", 580),
+    product("scrambled-egg", "Scrambled Egg", "breakfast", 680),
+    product("omelette", "Omelette", "breakfast", 580),
+    product("vegetable-sandwich", "Vegetable Sandwich", "breakfast", 550),
+    product("tuna-sandwich", "Tuna Sandwich", "breakfast", 880),
+    product("club-sandwich", "Club Sandwich", "breakfast", 880),
+    product("pan-cake", "Pan Cake", "breakfast", 500),
+    product("chechebsa-with-black", "Chechebsa with Black", "breakfast", 580),
+    product("chechebsa-with-white", "Chechebsa with White", "breakfast", 580),
+    product("toast-bread-with-egg", "Toast Bread with Egg", "breakfast", 450),
+    product("special-fetira", "Special Fetira", "breakfast", 550),
+    product("normal-fetira", "Normal Fetira", "breakfast", 450),
+    product("tuna-extra", "Tuna Extra", "breakfast", 130),
+    product("fish-cotelet", "Fish Cotelet", "breakfast", 998),
+    product("fish-gulash", "Fish Gulash", "breakfast", 998),
+    product("fish-finger", "Fish Finger", "breakfast", 998),
+
+    product("double-burger", "Double Burger", "burger", 920, "Meat, tomato, onion, cheese, salad and mayonnaise."),
+    product("cheese-burger", "Cheese Burger", "burger", 880, "Meat, tomato, onion, salad and cheese."),
+    product("beef-burger", "Beef Burger", "burger", 820, "Meat, onion, tomato, salad and mayonnaise."),
+    product("mini-special", "Mini Special", "burger", 895, "Meat, tomato, lettuce, cheese, egg and mayonnaise."),
+    product("fasting-double-burger", "Fasting Double Burger", "burger", 820),
+    product("takeaway-box", "Takeaway Box", "burger", 95),
+    product("extra-egg-cheese-beef", "Extra Egg/Cheese/Beef", "burger", 130),
+    product("pommy-special-burger", "Pommy Special Burger", "burger", 989, "Meat, egg, mayonnaise, chicken and beef slice.", true),
+    product("pommy-chicken-special-burger", "Pommy Chicken Special Burger", "burger", 1250, "Double chicken, egg, mayonnaise, cheese, salad, onion and tomato.", true),
+
+    product("pommy-special-pizza", "Pommy Special Pizza", "pizza", 1155, "Tomato sauce, mozzarella cheese, meat, egg, olive, mushroom, beef slice, pesto and ricotta cheese.", true),
+    product("beef-meat-lover-pizza", "Beef Meat Lover Pizza", "pizza", 1100, "Tomato sauce, mozzarella cheese, beef, pepper, onion and oregano."),
+    product("chicken-pizza", "Chicken Pizza", "pizza", 1125, "Tomato sauce, mozzarella cheese, chicken, onion, pepper and oregano."),
+    product("margarita-pizza", "Margarita Pizza", "pizza", 800, "Tomato sauce, cheese and oregano."),
+    product("pizzala-pizza", "Pizzala Pizza", "pizza", 998),
+    product("olive-pizza", "Olive Pizza", "pizza", 998, "Tomato sauce, cheese, olive and oregano."),
+    product("tuna-pizza", "Tuna Pizza", "pizza", 998, "Tomato sauce, mozzarella cheese, tuna, pepper and onion."),
+    product("calzoni-pizza", "Calzoni Pizza", "pizza", 900, "Tomato sauce, cheese, oregano, beef slice and sliced cheese."),
+    product("fasting-special-pizza", "Fasting Special Pizza", "pizza", 920, "Tomato, tuna, onion, pepper and olive."),
+    product("vegetable-pizza", "Vegetable Pizza", "pizza", 880),
+    product("tuna-fasting-pizza", "Tuna Fasting Pizza", "pizza", 900),
+    product("pizza-takeaway-box", "Pizza Takeaway Box", "pizza", 95),
+    product("chicken-bbq-pizza", "Chicken BBQ Pizza", "pizza", 1190, "", true),
+
+    product("chicken-wrap", "Chicken Wrap", "wrap", 1100),
+    product("tuna-wrap", "Tuna Wrap", "wrap", 998),
+    product("french-fries", "French Fries", "wrap", 400),
+    product("vegetable-wrap", "Vegetable Wrap", "wrap", 800),
+
+    product("half-grill-chicken", "Half Grill Chicken", "chicken", 1998),
+    product("chicken-drum-stick", "Chicken Drum Stick", "chicken", 1150),
+    product("chicken-crispy", "Chicken Crispy", "chicken", 1150),
+    product("chicken-wing", "Chicken Wing", "chicken", 1150),
+    product("chicken-bowl", "Chicken Bowl", "chicken", 1150),
+    product("lasagne", "Lasagne", "chicken", 1150),
+    product("chicken-breast", "Chicken Breast", "chicken", 1150),
+    product("chicken-cutlets", "Chicken Cutlets", "chicken", 1150),
+    product("vegetable-rice", "Vegetable Rice", "chicken", 850),
+    product("rice-with-meat", "Rice with Meat", "chicken", 950),
+    product("rice-with-chicken-tuna", "Rice with Chicken / Tuna", "chicken", 950),
+    product("roasted-orange-chicken-full", "Roasted Orange Chicken (Full)", "chicken", 2650),
+    product("roasted-grilled-chicken-half", "Roasted Grilled Chicken (Half)", "chicken", 1300),
+    product("roasted-orange-chicken-half", "Roasted Orange Chicken (Half)", "chicken", 1350),
+
+    product("pommy-special-smoothie", "Pommy Special Smoothie", "juice", 295, "Strawberry, avocado, papaya, mango, banana and orange."),
+    product("mocha-pommy", "Mocha Pommy", "juice", 286, "Mango, papaya, banana, milk and chocolate syrup."),
+    product("mixed-juice", "Mixed", "juice", 286, "Strawberry, avocado, papaya, milk and chocolate."),
+    product("pommy-special-juice-with-ta", "Pommy Special Juice with TA", "juice", 345),
+
+    product("strawberry-shake", "Strawberry Shake", "shakes", 295),
+    product("chocolate-milk-shake", "Chocolate Milk Shake", "shakes", 295),
+    product("banana-milk-shake", "Banana Milk Shake", "shakes", 295),
+    product("milk-shake", "Milk Shake", "shakes", 295, "Mango, banana, milk and chocolate syrup."),
+    product("fruit-salad", "Fruit Salad", "shakes", 300),
+
+    product("orange-juice", "Orange Juice", "seasonal-juice", 320),
+    product("mango-juice", "Mango Juice", "seasonal-juice", 295),
+    product("papaya-juice", "Papaya Juice", "seasonal-juice", 286),
+    product("avocado-juice", "Avocado Juice", "seasonal-juice", 286),
+    product("watermelon-juice", "Watermelon Juice", "seasonal-juice", 295),
+    product("juice-cup", "Juice Cup", "seasonal-juice", 40),
+    product("ananas-juice", "Ananas Juice", "seasonal-juice", 295),
+    product("half-half-juice", "Half Half Juice", "seasonal-juice", 285),
+
+    product("tea", "Tea", "hot-drinks", 58.87),
+    product("tea-espresso", "Tea Espresso", "hot-drinks", 104),
+    product("macchiato", "Macchiato", "hot-drinks", 109.87),
+    product("fasting-macchiato", "Fasting Macchiato", "hot-drinks", 150.87),
+    product("cafe-latte-milk", "Cafe Latte / Milk", "hot-drinks", 133.05),
+    product("cappuccino", "Cappuccino", "hot-drinks", 161.01),
+    product("flavored-tea", "Flavored Tea", "hot-drinks", 110.65),
+    product("peanut-tea", "Peanut Tea", "hot-drinks", 133.5),
+    product("special-tea", "Special Tea", "hot-drinks", 161.35),
+    product("coffee", "Coffee", "hot-drinks", 120),
+    product("espresso", "Espresso", "hot-drinks", 110),
+    product("peanut", "Peanut", "hot-drinks", 1330),
+    product("keshir", "Keshir", "hot-drinks", 98),
+    product("hot-drinks-takeaway", "Hot Drinks Takeaway", "hot-drinks", 40.87),
+    product("double-peanut-tea", "Double Peanut Tea", "hot-drinks", 200),
+    product("double-fasting-macchiato", "Double Fasting Macchiato", "hot-drinks", 200),
+    product("double-tea", "Double Tea", "hot-drinks", 80),
+    product("tea-with-lemon", "Tea with Lemon", "hot-drinks", 70),
+    product("hot-chocolate", "Hot Chocolate", "hot-drinks", 207),
+    product("double-macchiato", "Double Macchiato", "hot-drinks", 230),
+
+    product("soft-drinks", "Soft Drinks", "soft-drinks", 75),
+    product("bottled-soft-drinks-300ml", "Bottled Soft Drinks 300 ml", "soft-drinks", 100),
+    product("ambo-flavour-water", "Ambo Flavour / Water", "soft-drinks", 100),
+    product("soft-drinks-500ml", "Soft Drinks 500 ml", "soft-drinks", 100),
+    product("soft-drink-1l", "Soft Drink 1 L", "soft-drinks", 75),
+    product("water-1l", "Water 1 L", "soft-drinks", 60),
+    product("pepsi", "Pepsi", "soft-drinks", 75),
+    product("water-half-litre", "Water 1/2 L", "soft-drinks", 50)
+  ];
+})();
