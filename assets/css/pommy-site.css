@@ -305,6 +305,59 @@ body.pommy-cart-locked { overflow: hidden; }
   max-width: 560px;
 }
 
+@media (min-width: 992px) {
+  .pommy-original-home .pommy-home-hero-container {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+
+  .pommy-original-home .pommy-home-hero-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    align-items: center;
+    column-gap: 40px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .pommy-original-home .section.home-hero h1 {
+    max-width: 500px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy > p {
+    max-width: 440px;
+    margin-bottom: 32px;
+  }
+
+  .pommy-original-home .pommy-home-hero-media {
+    width: 100%;
+    max-width: 540px;
+    justify-self: end;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pommy-original-home .pommy-home-hero-container {
+    max-width: 1232px;
+  }
+
+  .pommy-original-home .pommy-home-hero-grid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+    column-gap: 64px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy,
+  .pommy-original-home .section.home-hero h1 {
+    max-width: 600px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy > p {
+    max-width: 470px;
+  }
+}
+
 .pommy-service-apps {
   display: flex;
   flex-wrap: wrap;

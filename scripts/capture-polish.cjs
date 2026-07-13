@@ -49,6 +49,34 @@ fs.mkdirSync(output, { recursive: true });
       pageHeight: document.documentElement.scrollHeight,
       scrollWidth: document.documentElement.scrollWidth,
       clientWidth: document.documentElement.clientWidth,
+      hero: (() => {
+        const select = selector => document.querySelector(selector);
+        const rect = element => {
+          const value = element?.getBoundingClientRect();
+          return value ? {
+            x: Math.round(value.x),
+            y: Math.round(value.y),
+            width: Math.round(value.width),
+            height: Math.round(value.height),
+            centerY: Math.round(value.y + value.height / 2)
+          } : null;
+        };
+        const heading = select(".pommy-home-hero-copy h1");
+        const lineHeight = heading ? Number.parseFloat(getComputedStyle(heading).lineHeight) : 0;
+        const headingRect = rect(heading);
+        return {
+          section: rect(select(".section.home-hero")),
+          container: rect(select(".pommy-home-hero-container")),
+          grid: rect(select(".pommy-home-hero-grid")),
+          copy: rect(select(".pommy-home-hero-copy")),
+          heading: headingRect,
+          headingLines: headingRect && lineHeight ? Math.round(headingRect.height / lineHeight) : null,
+          paragraph: rect(select(".pommy-home-hero-copy > p")),
+          buttons: rect(select(".pommy-home-hero-copy ._2-button-wrap")),
+          media: rect(select(".pommy-home-hero-media")),
+          image: rect(select(".image.home-hero-image"))
+        };
+      })(),
       hiddenTargets: Array.from(document.querySelectorAll(".pommy-original-home [data-w-id]")).filter(element => element.offsetParent !== null && Number.parseFloat(getComputedStyle(element).opacity || "1") < .85).map(element => ({ id: element.dataset.wId, className: element.className, opacity: getComputedStyle(element).opacity, inlineStyle: element.getAttribute("style") })),
       footer: (() => {
         const footer = document.querySelector("footer.footer");
@@ -92,6 +120,7 @@ fs.mkdirSync(output, { recursive: true });
       })
     }));
 
+    await page.screenshot({ path: `${output}/hero-${name}.png`, fullPage: false });
     await page.screenshot({ path: `${output}/home-${name}.png`, fullPage: true });
     results.push({ viewport: `${width}x${height}`, status: response?.status(), ...metrics });
     await context.close();

@@ -10,6 +10,8 @@ function assert(condition, message) {
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: chrome });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  context.setDefaultTimeout(15000);
+  context.setDefaultNavigationTimeout(30000);
   const failures = [];
   const consoleErrors = [];
   const pageErrors = [];
@@ -17,8 +19,8 @@ function assert(condition, message) {
   async function prepare(page) {
     await page.route("**/*", route => {
       const url = new URL(route.request().url());
-      if (url.origin === base) route.continue();
-      else route.abort();
+      if (url.origin === base) return route.continue();
+      return route.abort();
     });
     page.on("console", message => {
       if (message.type() === "error" && !/ERR_FAILED/.test(message.text())) consoleErrors.push(message.text());
@@ -183,6 +185,8 @@ function assert(condition, message) {
   await checkout.close();
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  mobileContext.setDefaultTimeout(15000);
+  mobileContext.setDefaultNavigationTimeout(30000);
   const mobile = await mobileContext.newPage();
   await prepare(mobile);
   await mobile.goto(base + "/", { waitUntil: "load" });
