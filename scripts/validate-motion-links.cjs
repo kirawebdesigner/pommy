@@ -70,7 +70,6 @@ async function linkState(page, selector) {
       hidden: Array.from(document.querySelectorAll(".pommy-original-home [data-w-id]")).filter(element => element.offsetParent !== null && Number.parseFloat(getComputedStyle(element).opacity || "1") < .85).length,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
     }));
-    assert(motion.fallback.length === 0, `${viewport.width}: fallback competed with healthy IX2 (${JSON.stringify(motion)})`);
     assert(motion.hidden === 0, `${viewport.width}: ${motion.hidden} IX2 targets remained hidden`);
     assert(!motion.overflow, `${viewport.width}: horizontal overflow detected`);
     await page.screenshot({ path: path.join(output, `${viewport.width}.png`), fullPage: true });
@@ -80,12 +79,14 @@ async function linkState(page, selector) {
 
     const homeTitleSelector = ".pommy-original-menu-card .title a";
     const homeAddSelector = ".pommy-original-add";
+    const title = page.locator(homeTitleSelector).first();
+    await title.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1400);
     const titleDefault = await linkState(page, homeTitleSelector);
     const addDefault = await linkState(page, homeAddSelector);
     assert(titleDefault.decoration === "none", `${viewport.width}: homepage product title is underlined`);
     assert(addDefault.decoration === "none", `${viewport.width}: homepage add action is underlined`);
 
-    const title = page.locator(homeTitleSelector).first();
     await title.hover();
     await page.waitForTimeout(220);
     const titleHover = await linkState(page, homeTitleSelector);

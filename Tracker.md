@@ -30,13 +30,14 @@
 - [x] Give native IX2 exclusive first opportunity to initialize and complete; fallback observation now starts only after the IX2 session is active and at the native 25% scroll boundary.
 - [x] Batch stuck-target sampling every 160ms, require at least 1.4s plus three stable checks, recheck after image decoding, resolve each target once, and disconnect it from observation.
 - [x] Restrict fallback repair to a 260ms opacity-only recovery. It never removes, resets, or animates an IX2 transform.
-- [x] Remove the concurrent eager decode experiment after traces showed it created decode bursts; keep native lazy loading with asynchronous decoding for below-fold media.
+- [x] Remove the concurrent eager decode experiment after traces showed it created decode bursts; keep browser-managed native lazy loading and default decoding for below-fold media.
 - [x] Preserve the hero as eager/high-priority media with explicit intrinsic dimensions and preload the hero image and local DM Sans font.
 - [x] Add reduced-motion behavior that exposes all IX2 targets immediately, suppresses transforms/transitions, preserves the hero's static rotation, swaps the Lottie menu icon for the static local icon, and disables slider autoplay.
 - [x] Remove permanent underlines only from Pommy product titles, homepage Add to cart actions, and menu View actions; preserve scoped hover color and high-contrast two-tone keyboard focus states.
 - [x] Correct the trace observer so mutation recording does not call `getComputedStyle()` or `getBoundingClientRect()` on every IX2 style write.
 - [x] Local performance traces at 1440, 1024, 768, and 390px: zero fallback activations, zero hidden targets, zero native writes after fallback, zero forced-reflow warnings, zero overflow, zero console/runtime errors, and CLS of 0 except 0.000006 at 1024px.
-- [x] Local desktop trace p95 frame intervals were 17.31ms at 1440px, 17.12ms at 1024px, and 17.94ms at 768px. The 4x CPU mobile run measured 50.10ms p95 with 13 scroll-window long tasks; no fixed 60 FPS claim is made.
+- [x] At 768px and below, remove IX2 IDs only from repeated category, product, and supporting-blog cards before Webflow initializes; headings, hero, slider, navigation, and section reveals remain native while large repeated card groups appear immediately.
+- [x] Local desktop/tablet trace p95 frame intervals were 16.97ms at 1440px and 17.15ms at 768px. The final 4x CPU mobile run improved from 66.68ms p95 and 20 scroll-window long tasks to 33.36ms p95 and 6 scroll-window long tasks; no fixed 60 FPS claim is made.
 - [x] Four-breakpoint browser validation confirms clean wrapped titles, no permanent product-action underlines, hover without size shift, visible keyboard focus, working product navigation/cart, working slider arrows/mobile navigation, and zero hidden targets.
 - [x] Reduced-motion emulation at 390px confirms immediate visibility, disabled slider autoplay, zero fallback activations, and no animation-dependent hidden content.
 - [ ] Deploy the focused motion/link changes and repeat performance traces and browser validation on `https://pommydemo.netlify.app`.

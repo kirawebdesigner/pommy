@@ -32,7 +32,7 @@
     var description = item.description || "View this item on the Pommy menu.";
     return '<article data-w-id="770cf311-3a76-a0f9-0c48-8b6b85d6c484" class="pommy-menu-card w-dyn-item" data-category="' + escapeHtml(item.category) + '" data-search="' + escapeHtml((item.name + " " + description).toLowerCase()) + '">' +
       '<a class="pommy-menu-card-image" href="/product/' + escapeHtml(item.slug) + '/">' +
-        '<img src="' + escapeHtml(item.image) + '" alt="Food image for the ' + escapeHtml(item.category.replace(/-/g, " ")) + ' category" loading="lazy" decoding="async">' +
+        '<img src="' + escapeHtml(item.image) + '" alt="Food image for the ' + escapeHtml(item.category.replace(/-/g, " ")) + ' category" loading="lazy">' +
       '</a>' +
       '<div class="pommy-menu-card-body">' +
         '<div class="pommy-menu-card-top"><h3><a href="/product/' + escapeHtml(item.slug) + '/">' + escapeHtml(item.name) + '</a></h3><span class="pommy-price">' + formatEtb(item.price) + '</span></div>' +
@@ -44,7 +44,7 @@
 
   function postCard(post) {
     return '<article class="pommy-post-card">' +
-      '<a href="/blog-posts/' + escapeHtml(post.slug) + '/"><img src="' + escapeHtml(post.image) + '" alt="Food from the Pommy menu" loading="lazy" decoding="async"></a>' +
+      '<a href="/blog-posts/' + escapeHtml(post.slug) + '/"><img src="' + escapeHtml(post.image) + '" alt="Food from the Pommy menu" loading="lazy"></a>' +
       '<div class="pommy-post-card-body"><time datetime="' + escapeHtml(post.date) + '">' + new Date(post.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) + '</time>' +
       '<h3><a href="/blog-posts/' + escapeHtml(post.slug) + '/">' + escapeHtml(post.title) + '</a></h3><p>' + escapeHtml(post.description) + '</p></div></article>';
   }
@@ -53,7 +53,7 @@
     var description = item.description || "View this item on the Pommy menu.";
     return '<article data-w-id="07b23b0f-b430-385d-b89d-4525f6d1d0be" role="listitem" class="w-dyn-item">' +
       '<div class="card menu-card pommy-original-menu-card">' +
-        '<a href="/product/' + escapeHtml(item.slug) + '/" class="image-wrapper menu-card mg-bottom-24px w-inline-block"><img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.name) + ' from the Pommy menu" class="image" loading="lazy" decoding="async"><span class="badge dish">' + formatEtb(item.price) + '</span></a>' +
+        '<a href="/product/' + escapeHtml(item.slug) + '/" class="image-wrapper menu-card mg-bottom-24px w-inline-block"><img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.name) + ' from the Pommy menu" class="image" loading="lazy"><span class="badge dish">' + formatEtb(item.price) + '</span></a>' +
         '<div><h3 class="title mg-bottom-8px"><a href="/product/' + escapeHtml(item.slug) + '/">' + escapeHtml(item.name) + '</a></h3><p class="mg-bottom-16px">' + escapeHtml(description) + '</p><button class="pommy-original-add" type="button" data-add-to-cart="' + escapeHtml(item.id) + '">Add to cart</button></div>' +
       '</div>' +
     '</article>';
@@ -65,7 +65,7 @@
     var contentClass = isFeatured ? "card-content blog-card featured" : "card-content blog-card side";
     var heading = isFeatured ? "h2" : "h3";
     var headingClass = isFeatured ? "title blog-post-title" : "title h5-size mg-bottom-0px";
-    return '<a href="/blog-posts/' + escapeHtml(post.slug) + '/" class="' + cardClass + '"><div class="mask"><img src="' + escapeHtml(post.image) + '" alt="Food from the Pommy menu" class="image full-image" loading="lazy" decoding="async"></div><div class="' + contentClass + '"><div><div class="' + (isFeatured ? "mg-bottom-16px" : "text-100 mg-bottom-8px") + '"><time datetime="' + escapeHtml(post.date) + '">' + date + '</time></div><' + heading + ' class="' + headingClass + '">' + escapeHtml(post.title) + '</' + heading + '>' + (isFeatured ? '<p class="mg-bottom-0px">' + escapeHtml(post.description) + '</p>' : '') + '</div></div></a>';
+    return '<a href="/blog-posts/' + escapeHtml(post.slug) + '/" class="' + cardClass + '"><div class="mask"><img src="' + escapeHtml(post.image) + '" alt="Food from the Pommy menu" class="image full-image" loading="lazy"></div><div class="' + contentClass + '"><div><div class="' + (isFeatured ? "mg-bottom-16px" : "text-100 mg-bottom-8px") + '"><time datetime="' + escapeHtml(post.date) + '">' + date + '</time></div><' + heading + ' class="' + headingClass + '">' + escapeHtml(post.title) + '</' + heading + '>' + (isFeatured ? '<p class="mg-bottom-0px">' + escapeHtml(post.description) + '</p>' : '') + '</div></div></a>';
   }
 
   function trustSlide(title, body, details) {
@@ -136,7 +136,7 @@
     return '<div class="container-default"><div class="w-layout-grid footer-grid">' +
       '<div class="footer-column"><a href="/" class="footer-logo-container mg-bottom-16px w-inline-block"><img src="/assets/images/pommy-logo.png" alt="Pommy Burger and Pizzeria logo" class="footer-logo pommy-logo"></a><p class="mg-bottom-24px">Burgers, pizza, chicken, breakfast and fresh drinks served in Addis Ababa.</p><div class="pommy-contact-list"><div><strong>Location</strong>Addis Ababa, Ethiopia</div><div><strong>Plus code</strong>' + escapeHtml(config.plusCode) + '</div><div><strong>Phone</strong><a href="tel:' + escapeHtml(config.phoneInternational) + '">' + escapeHtml(config.phoneDisplay) + '</a></div></div></div>' +
       '<div class="footer-column middle"><div class="footer-nav-main-wrapper"><div class="footer-nav-column"><div class="footer-nav-title mg-bottom-32px">Explore</div><ul role="list" class="footer-nav"><li class="footer-nav-item"><a href="/" class="footer-link">Home</a></li><li class="footer-nav-item"><a href="/menu/" class="footer-link">Menu</a></li><li class="footer-nav-item"><a href="/about/" class="footer-link">About</a></li><li class="footer-nav-item"><a href="/blog/" class="footer-link">Blog</a></li><li class="footer-nav-item last"><a href="/contact/" class="footer-link">Contact</a></li></ul></div><div class="footer-nav-column last"><div class="footer-nav-title mg-bottom-32px">Customer actions</div><div class="pommy-footer-actions"><a href="/menu/" class="footer-link">Order Now</a><a href="tel:' + escapeHtml(config.phoneInternational) + '" class="footer-link">Call Pommy</a><a href="' + escapeHtml(config.directionsUrl) + '" class="footer-link" target="_blank" rel="noopener">Get Directions</a></div></div></div></div>' +
-      '<div class="footer-column"><div class="footer-nav-title mg-bottom-32px">From the Pommy menu</div><div class="_2-column-grid instagram-footer-grid">' + footerImages.map(function (image) { return '<div class="mask instagram-image"><img src="/assets/images/menu/' + image + '" alt="Food from the Pommy menu" class="image instagram" loading="lazy" decoding="async"></div>'; }).join("") + '</div></div>' +
+      '<div class="footer-column"><div class="footer-nav-title mg-bottom-32px">From the Pommy menu</div><div class="_2-column-grid instagram-footer-grid">' + footerImages.map(function (image) { return '<div class="mask instagram-image"><img src="/assets/images/menu/' + image + '" alt="Food from the Pommy menu" class="image instagram" loading="lazy"></div>'; }).join("") + '</div></div>' +
     '</div><div class="divider"></div><div data-w-id="eea6b3e0-d9ff-e6b5-76a4-5c0b4254248e" class="footer-bottom-content"><div>© Pommy Burger and Pizza</div><div>Addis Ababa, Ethiopia</div></div></div>';
   }
 
@@ -436,6 +436,20 @@
     })();
   }
 
+  function reduceMobileMotionTargets() {
+    if (!document.querySelector(".pommy-original-home") || !window.matchMedia("(max-width: 768px)").matches) return;
+    [
+      '[data-w-id="7ee8d58f-3281-8591-7277-504ae59adede"]',
+      '[data-w-id="42ea016a-dd17-69a0-5966-e8a73e8c3b0c"]',
+      '[data-w-id="07b23b0f-b430-385d-b89d-4525f6d1d0be"]',
+      '[data-w-id="a93067cb-0928-afca-d824-13b4116694e6"]'
+    ].forEach(function (selector) {
+      document.querySelectorAll(".pommy-original-home " + selector).forEach(function (element) {
+        element.removeAttribute("data-w-id");
+      });
+    });
+  }
+
   function section(inner, className) {
     return '<section class="section pommy-standard-section ' + (className || "") + '"><div class="pommy-section-inner">' + inner + '</div></section>';
   }
@@ -481,7 +495,7 @@
       '<section class="section mask"><div class="container-default w-container"><div><div class="section-title-wrapper max-w-550px mg-bottom-48px"><div class="pommy-eyebrow">Why visit Pommy</div><h2 data-w-id="e826389b-52a5-f15b-300b-8ecb0cacc41c">Simple, casual and convenient</h2><p data-w-id="b7d475eb-fa18-02e4-91a2-2f974d57821e" class="mg-bottom-0px">Verified service information presented with the substantial slider experience of the original restaurant template.</p></div><div data-delay="5000" data-animation="slide" class="slider w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-w-id="13ae4adb-993f-1830-95d5-5dde326abd83" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true" role="region" aria-label="Pommy service information"><div class="false-mask testimonials w-slider-mask">' + trust.map(function (item) { return trustSlide(item[0], item[1], item[2]); }).join("") + '</div><div data-w-id="13ae4adb-993f-1830-95d5-5dde326abd87" class="slider-arrow-v1 left w-slider-arrow-left" role="button" tabindex="0" aria-label="Previous service"><div></div></div><div data-w-id="13ae4adb-993f-1830-95d5-5dde326abd89" class="slider-arrow-v1 right w-slider-arrow-right" role="button" tabindex="0" aria-label="Next service"><div></div></div><div class="slide-nav w-slider-nav w-round"></div></div><div class="_2-button-wrap center-content mg-top-48px"><a href="/about/" class="button-primary _2-buttons w-button">About Pommy</a><a href="/contact/" class="button-secondary w-button">Visit Pommy</a></div></div></div></section>' +
       '<section class="section bg-secondary-1"><div class="container-default w-container"><div><div class="_2-column-grid header-button"><h2 class="mg-bottom-0px">Our articles</h2><div><a href="/blog/" class="button-secondary w-button">Browse our articles</a></div></div><div data-w-id="c566be7d-bfce-fa09-ba5c-0292f02c3210" class="_2-column-grid blog-grid"><div class="w-dyn-list"><div role="list" class="w-dyn-items"><div role="listitem" class="w-dyn-item">' + originalBlogCard(posts[0], true) + '</div></div></div><div class="w-dyn-list"><div role="list" class="_2-column-grid w-dyn-items">' + posts.slice(1, 5).map(function (post) { return '<div data-w-id="a93067cb-0928-afca-d824-13b4116694e6" role="listitem" class="w-dyn-item">' + originalBlogCard(post, false) + '</div>'; }).join("") + '</div></div></div></div></div></section>' +
       '<section id="visit-pommy" class="section mask"><div class="container-default w-container"><div><div class="_2-column-grid contact"><div class="contact-left-column"><div class="pommy-eyebrow">Find Pommy</div><h2 data-w-id="5f58b64f-8a57-4a45-7318-4897091c7bd9">Visit us in Addis Ababa</h2><p data-w-id="6b896708-10c0-e763-6ea7-d5ad48bc595d" class="mg-bottom-40px">Use the confirmed plus code for directions or call Pommy before you visit.</p><div class="contact-links-wrapper"><a data-w-id="ec8292a9-0a3c-2c2f-6748-e90050991f67" href="' + escapeHtml(config.directionsUrl) + '" target="_blank" rel="noopener" class="contact-link mg-bottom-24px w-inline-block"><img src="/assets/icons/location.svg" alt="Location" class="icon contact-link-icon"><div>Addis Ababa, Ethiopia<br>' + escapeHtml(config.plusCode) + '</div></a><a data-w-id="7d04e0ff-35fc-d327-6ef1-3531b9dbae80" href="tel:' + escapeHtml(config.phoneInternational) + '" class="contact-link mg-bottom-24px w-inline-block"><img src="/assets/icons/phone.svg" alt="Phone" class="icon contact-link-icon"><div>' + escapeHtml(config.phoneDisplay) + '</div></a><a data-w-id="18819023-8cb5-d558-4969-6971cd3710e4" href="/menu/" class="contact-link w-inline-block"><img src="/assets/icons/menu.svg" alt="Menu" class="icon contact-link-icon"><div>Browse the full Pommy menu</div></a></div></div><div><div data-w-id="baeee943-8869-8b06-2e94-48674f0d6d94" class="card contact-form-card book-a-table pommy-visit-card"><div class="pommy-eyebrow">Visit Pommy</div><h3>Pommy Burger and Pizza</h3><div class="pommy-visit-facts"><div><strong>Location</strong><span>Addis Ababa, Ethiopia</span></div><div><strong>Service</strong><span>Dine-in and takeaway</span></div><div><strong>Good for</strong><span>Groups, kids and quick bites</span></div><div><strong>Parking</strong><span>Free street parking and parking lot</span></div></div><div class="_2-button-wrap"><a href="' + escapeHtml(config.directionsUrl) + '" target="_blank" rel="noopener" class="button-primary _2-buttons w-button">Get Directions</a><a href="tel:' + escapeHtml(config.phoneInternational) + '" class="button-secondary w-button">Call Pommy</a><a href="/menu/" class="button-secondary w-button">View Menu</a></div></div></div></div></div></div><div data-w-id="08227222-e73e-68fe-2cb5-569054c87cc7" class="bg home-contact-bg"></div></section>' +
-      '<section class="section bg-secondary-1 pommy-gallery-section"><div class="container-default w-container"><div><div class="_2-column-grid header-button"><div><div class="pommy-eyebrow">From the Pommy menu</div><h2 class="mg-bottom-0px">See what\'s cooking</h2></div><div><a href="/menu/" class="button-primary w-button">View Menu</a></div></div><div class="_3-column-grid instagram-grid"><div class="mask instagram-image"><img src="/assets/images/menu/' + gallery[0] + '" alt="Burgers and fries from the Pommy menu" class="image instagram" loading="lazy" decoding="async"></div><div class="mask instagram-image"><img src="/assets/images/menu/' + gallery[1] + '" alt="French fries from the Pommy menu" class="image instagram" loading="lazy" decoding="async"></div><div class="_2-column-grid instagram-grid">' + gallery.slice(2).map(function (image, index) { return '<div class="mask instagram-image' + (index > 1 ? ' hide-in-mobile' : '') + '"><img src="/assets/images/menu/' + image + '" alt="Food and drinks from the Pommy menu" class="image instagram" loading="lazy" decoding="async"></div>'; }).join("") + '</div></div></div></div></section>' +
+      '<section class="section bg-secondary-1 pommy-gallery-section"><div class="container-default w-container"><div><div class="_2-column-grid header-button"><div><div class="pommy-eyebrow">From the Pommy menu</div><h2 class="mg-bottom-0px">See what\'s cooking</h2></div><div><a href="/menu/" class="button-primary w-button">View Menu</a></div></div><div class="_3-column-grid instagram-grid"><div class="mask instagram-image"><img src="/assets/images/menu/' + gallery[0] + '" alt="Burgers and fries from the Pommy menu" class="image instagram" loading="lazy"></div><div class="mask instagram-image"><img src="/assets/images/menu/' + gallery[1] + '" alt="French fries from the Pommy menu" class="image instagram" loading="lazy"></div><div class="_2-column-grid instagram-grid">' + gallery.slice(2).map(function (image, index) { return '<div class="mask instagram-image' + (index > 1 ? ' hide-in-mobile' : '') + '"><img src="/assets/images/menu/' + image + '" alt="Food and drinks from the Pommy menu" class="image instagram" loading="lazy"></div>'; }).join("") + '</div></div></div></div></section>' +
       '</main>';
     replaceMain(html);
   }
@@ -576,6 +590,7 @@
     ensureCart();
     bindGlobalActions();
     enableNavigationFallback();
+    reduceMobileMotionTargets();
     enableOriginalMotionFallback();
     addRestaurantSchema();
     renderCart();
