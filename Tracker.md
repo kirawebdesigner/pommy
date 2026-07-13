@@ -37,7 +37,9 @@
 - [x] Restore the original Webflow open-overlay geometry with one mobile-scoped rule: `.w-nav-overlay .nav-menu.w-nav-menu[data-nav-menu-open] { top: 0; }`.
 - [x] Verify locally at 768px and 390px that the animated menu opens directly below the header, all five links remain inside the viewport, closing hides the panel, and no overflow or browser error occurs.
 - [x] Strengthen `validate-motion-links.cjs` to reject offscreen mobile menus and links instead of accepting `display: block` as sufficient evidence.
-- [/] Deploy and repeat the geometry-aware mobile-menu and full motion checks on production.
+- [x] Deploy commit `101cc57` as Netlify deploy `6a556b983ca33e00091315fb`; repeat the geometry-aware suite at 1440px, 1024px, 768px, and 390px with zero hidden targets, fallback repairs, overflow, or errors.
+- [x] Final headed production inspection confirms the open menu spans `112-436px` at 768 and `96-420px` at 390, all five links are inside the viewport, the Lottie close state is visible, and closing hides the panel.
+- [x] Final production regression after the navigation fix passed 12 representative routes and all 101 products with zero failed requests, runtime exceptions, or console errors.
 
 ## Production Asset And Hero Fix
 
