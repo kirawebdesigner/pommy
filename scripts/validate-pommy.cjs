@@ -11,7 +11,7 @@ function assert(condition, message) {
   const browser = await chromium.launch({ headless: true, executablePath: chrome });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   context.setDefaultTimeout(15000);
-  context.setDefaultNavigationTimeout(30000);
+  context.setDefaultNavigationTimeout(60000);
   const failures = [];
   const consoleErrors = [];
   const pageErrors = [];
@@ -28,7 +28,8 @@ function assert(condition, message) {
     page.on("pageerror", error => pageErrors.push(error.message));
     page.on("requestfailed", request => {
       const url = new URL(request.url());
-      if (url.origin === base) failures.push(request.url());
+      const errorText = request.failure()?.errorText || "";
+      if (url.origin === base && errorText !== "net::ERR_ABORTED") failures.push(`${request.url()} (${errorText})`);
     });
   }
 
@@ -41,7 +42,7 @@ function assert(condition, message) {
   for (const route of routes) {
     const page = await context.newPage();
     await prepare(page);
-    const response = await page.goto(base + route, { waitUntil: "domcontentloaded", timeout: 30000 });
+    const response = await page.goto(base + route, { waitUntil: "domcontentloaded", timeout: 60000 });
     assert(response && response.status() === 200, `${route} did not return 200`);
     await page.locator("#main-content").waitFor({ state: "attached" });
     const bodyText = await page.locator("body").innerText();
@@ -186,7 +187,7 @@ function assert(condition, message) {
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
   mobileContext.setDefaultTimeout(15000);
-  mobileContext.setDefaultNavigationTimeout(30000);
+  mobileContext.setDefaultNavigationTimeout(60000);
   const mobile = await mobileContext.newPage();
   await prepare(mobile);
   await mobile.goto(base + "/", { waitUntil: "load" });

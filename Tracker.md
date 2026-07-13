@@ -40,7 +40,11 @@
 - [x] Local desktop/tablet trace p95 frame intervals were 16.97ms at 1440px and 17.15ms at 768px. The final 4x CPU mobile run improved from 66.68ms p95 and 20 scroll-window long tasks to 33.36ms p95 and 6 scroll-window long tasks; no fixed 60 FPS claim is made.
 - [x] Four-breakpoint browser validation confirms clean wrapped titles, no permanent product-action underlines, hover without size shift, visible keyboard focus, working product navigation/cart, working slider arrows/mobile navigation, and zero hidden targets.
 - [x] Reduced-motion emulation at 390px confirms immediate visibility, disabled slider autoplay, zero fallback activations, and no animation-dependent hidden content.
-- [ ] Deploy the focused motion/link changes and repeat performance traces and browser validation on `https://pommydemo.netlify.app`.
+- [x] Deploy commits `0e2430c` and `98e48ea` and verify the final production bundle on `https://pommydemo.netlify.app`.
+- [x] Final live traces: 1440px p95 17.05ms, 1024px 17.16ms, 768px 17.27ms, and 390px at 4x CPU 33.23ms. Desktop/tablet recorded zero scroll-window long tasks; throttled mobile recorded two.
+- [x] Final live traces at every breakpoint recorded zero fallback activations, zero writes after fallback, zero hidden targets, zero forced-reflow warnings, zero horizontal overflow, and zero console/runtime errors. CLS was 0 at 1440px/390px and below 0.000016 at 1024px/768px.
+- [x] Final live motion/link suite passed at all four breakpoints, including slider keyboard input, mobile menu open/close, product hover/focus states, cart updates, and reduced-motion emulation.
+- [x] Final live full regression passed 12 representative routes and all 101 products with cart persistence, quantity controls, delivery/pickup COD preparation, zero failed required local requests, zero runtime exceptions, and zero console errors.
 
 ## Superseded Compact Polish
 
