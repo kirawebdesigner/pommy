@@ -27,7 +27,12 @@
 - [x] Headed Chrome wheel-scroll review confirms perceptible hero and card entrance choreography at desktop and mobile sizes without composition or content changes.
 - [x] Product-link suite confirms no permanent title/action underlines, scoped hover/focus states, no layout shift, working product navigation, and unchanged cart behavior at all four breakpoints.
 - [x] Local regression: 182 HTML pages, 101 products, 10 categories, 6 posts, zero broken local references, 12 representative routes passed, and zero failed local requests or browser errors.
-- [/] Deploy the focused motion fix and repeat the motion/link, runtime, and headed-browser checks on `https://pommydemo.netlify.app`.
+- [x] Deploy commit `edc1c13` to `https://pommydemo.netlify.app`; Netlify deploy `6a55656b269d7b0008562e76` is ready and references the exact commit.
+- [x] Live intermediate-state comparison at 1440px, 1024px, 768px, and 390px matches the original template's animated target set, with zero visible-before-hidden cases, zero missing targets, and zero browser errors.
+- [x] Live traces: zero fallback activations, zero writes after fallback, zero hidden targets, zero forced-reflow warnings, zero overflow, zero console/runtime errors, and CLS of 0 except 0.000010 at 1024px. Desktop/tablet p95 intervals were 17.26-17.84ms; the fully instrumented 4x CPU mobile trace measured 50ms p95 and four scroll-window long tasks.
+- [x] Final live motion/link suite passed all four breakpoints, reduced-motion, slider keyboard input, mobile navigation, product hover/focus states, cart updates, and product navigation.
+- [x] Final live regression passed 12 representative routes and all 101 products with cart/checkout behavior unchanged, zero failed required requests, zero runtime exceptions, and zero console errors.
+- [x] Final headed Chrome wheel-scroll inspection confirms clearly perceptible hero and section entrance motion on desktop and mobile without visual composition changes.
 
 ## Production Asset And Hero Fix
 
