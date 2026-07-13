@@ -33,6 +33,11 @@
 - [x] Final live motion/link suite passed all four breakpoints, reduced-motion, slider keyboard input, mobile navigation, product hover/focus states, cart updates, and product navigation.
 - [x] Final live regression passed 12 representative routes and all 101 products with cart/checkout behavior unchanged, zero failed required requests, zero runtime exceptions, and zero console errors.
 - [x] Final headed Chrome wheel-scroll inspection confirms clearly perceptible hero and section entrance motion on desktop and mobile without visual composition changes.
+- [x] Completion-audit headed journey exposed a mobile-menu false positive: Webflow reported the open menu visible, but Pommy's higher-specificity `top: 100%` rule positioned it at the bottom of the full-document-height navigation overlay (about 17,842px offscreen at 390px).
+- [x] Restore the original Webflow open-overlay geometry with one mobile-scoped rule: `.w-nav-overlay .nav-menu.w-nav-menu[data-nav-menu-open] { top: 0; }`.
+- [x] Verify locally at 768px and 390px that the animated menu opens directly below the header, all five links remain inside the viewport, closing hides the panel, and no overflow or browser error occurs.
+- [x] Strengthen `validate-motion-links.cjs` to reject offscreen mobile menus and links instead of accepting `display: block` as sufficient evidence.
+- [/] Deploy and repeat the geometry-aware mobile-menu and full motion checks on production.
 
 ## Production Asset And Hero Fix
 

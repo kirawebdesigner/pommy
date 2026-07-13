@@ -126,6 +126,21 @@ async function linkState(page, selector) {
       await page.goto(`${base}/`, { waitUntil: "load" });
       await page.locator(".w-nav-button").click();
       await page.locator(".w-nav-menu").waitFor({ state: "visible" });
+      await page.waitForTimeout(450);
+      const mobileMenu = await page.locator(".w-nav-menu").evaluate(element => {
+        const rect = element.getBoundingClientRect();
+        return {
+          top: rect.top,
+          bottom: rect.bottom,
+          links: Array.from(element.querySelectorAll("a")).map(link => {
+            const linkRect = link.getBoundingClientRect();
+            return { top: linkRect.top, bottom: linkRect.bottom };
+          })
+        };
+      });
+      assert(mobileMenu.top >= 0 && mobileMenu.top < viewport.height, `${viewport.width}: mobile menu is offscreen`);
+      assert(mobileMenu.bottom <= viewport.height, `${viewport.width}: mobile menu extends beyond the viewport`);
+      assert(mobileMenu.links.length > 0 && mobileMenu.links.every(link => link.top >= 0 && link.bottom <= viewport.height), `${viewport.width}: mobile menu links are offscreen`);
       await page.locator(".w-nav-button").click();
       await page.locator(".w-nav-menu").waitFor({ state: "hidden" });
     }
