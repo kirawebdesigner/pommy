@@ -321,11 +321,43 @@ body.pommy-cart-locked { overflow: hidden; }
     transition: none !important;
     animation: none !important;
   }
+  .pommy-card-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
   #main-content .image.home-hero-image {
     transform: rotate(-2deg) !important;
   }
   .menu-button .lottie-animation { display: none !important; }
   .menu-button .pommy-fallback-menu-icon { display: block !important; }
+}
+
+html.pommy-ix2-pending .pommy-original-home [data-pommy-native-reveal] {
+  opacity: 0 !important;
+}
+
+html.pommy-ix2-disabled .pommy-original-home [data-pommy-native-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
+  transform: rotate(-2deg) !important;
+}
+
+@media (max-width: 768px) {
+  html.pommy-card-reveals-ready .pommy-original-home .pommy-card-reveal {
+    opacity: 0;
+    transform: scale(.97);
+    transition: opacity 360ms cubic-bezier(.25, .1, .25, 1) var(--pommy-card-delay, 0ms),
+      transform 360ms cubic-bezier(.25, .1, .25, 1) var(--pommy-card-delay, 0ms);
+  }
+
+  html.pommy-card-reveals-ready .pommy-original-home .pommy-card-reveal.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Pommy content mapped onto the original Restaurante X compositions. */

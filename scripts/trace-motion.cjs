@@ -199,9 +199,12 @@ async function naturalScroll(page, duration) {
         transitionMutations: audit.styleMutations.filter(mutation => /transition/i.test(mutation.inlineStyle)).slice(0, 100),
         fallbackActivations: runtimeMetrics?.fallbackActivations || [],
         nativeProgressChecks: runtimeMetrics?.nativeProgressChecks || 0,
+        lightweightRevealTargets: runtimeMetrics?.lightweightRevealTargets || 0,
+        lightweightRevealActivations: runtimeMetrics?.lightweightRevealActivations || 0,
         nativeWritesAfterFallback: writesAfterFallback,
         matchingIxEvents: matchingEvents,
         hiddenTargets: Array.from(document.querySelectorAll(".pommy-original-home [data-w-id]")).filter(element => element.offsetParent !== null && Number.parseFloat(getComputedStyle(element).opacity || "1") < .85).map(element => ({ id: element.dataset.wId, opacity: getComputedStyle(element).opacity, transform: getComputedStyle(element).transform })),
+        hiddenLightweightTargets: Array.from(document.querySelectorAll(".pommy-card-reveal")).filter(element => element.offsetParent !== null && Number.parseFloat(getComputedStyle(element).opacity || "1") < .85).map(element => ({ opacity: getComputedStyle(element).opacity, transform: getComputedStyle(element).transform })),
         overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
       };
     });
@@ -235,6 +238,8 @@ async function naturalScroll(page, duration) {
       fallbackActivations: result.fallbackActivations.length,
       nativeWritesAfterFallback: Object.values(result.nativeWritesAfterFallback).reduce((total, count) => total + count, 0),
       hiddenTargets: result.hiddenTargets.length,
+      hiddenLightweightTargets: result.hiddenLightweightTargets.length,
+      lightweightRevealActivations: result.lightweightRevealActivations,
       frameIntervalP95Ms: result.frameIntervalP95Ms,
       intervalsOver33Ms: result.intervalsOver33Ms,
       overflow: result.overflow,

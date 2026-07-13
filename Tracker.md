@@ -9,6 +9,26 @@
 - [x] Validate original interaction hooks and compare all required breakpoints.
 - [x] Re-run full functional, accessibility, route, asset, and browser regression checks.
 
+## Visible Motion Fidelity Follow-up
+
+- [x] Treat the direct production observation that the page felt static as a motion-fidelity defect, independent of final-opacity and frame-stability metrics.
+- [x] Compare fresh-load and natural-scroll intermediate states against the archived Restaurante X homepage at 1440px, 1024px, 768px, and 390px.
+- [x] Diagnose the main perceptual race: 24 sampled desktop targets rendered at full opacity before IX2 applied its hidden initial state, so the later subtle reveal was visually undermined by a visible-before-hidden flash.
+- [x] Add a homepage-only pre-paint ownership guard for the mapped native IX2 reveal targets; release it only after the IX2 session is active and has established its initial styles.
+- [x] Add a deterministic IX2-unavailable state after the 10-second readiness deadline so content remains visible and a late runtime cannot hide it again.
+- [x] Keep native IX2 as the desktop/tablet section owner and restrict the emergency fallback to mapped native reveal targets, a 1.8-second stable failure window, opacity-only repair, and one repair per target.
+- [x] Replace the intentionally removed repeated-card IX2 IDs at 768px and 390px with one mobile-only `IntersectionObserver`: scale `0.97` to `1`, opacity `0` to `1`, 360ms restrained easing, and a maximum 60ms two-column stagger.
+- [x] Keep browser-managed lazy image decoding; do not call `decode()` as cards cross the reveal boundary because performance traces showed decode bursts during scrolling.
+- [x] Add observer feature detection, runtime reduced-motion cleanup, and stable-visible fallbacks; verify blocked IX2 and unavailable observer scenarios leave zero hidden content and do not interrupt cart initialization.
+- [x] Before/after motion comparison: Pommy now matches the original template's animated target set at all four breakpoints; the original gallery image remains intentionally static in both versions.
+- [x] Visible-order comparison: 1440px sampled targets improved from 24 visible-before-hidden cases to 0 while retaining intermediate opacity/transform progression.
+- [x] Local traces: zero fallback activations, zero native writes after fallback, zero hidden native or lightweight targets, zero forced-reflow warnings, zero horizontal overflow, zero runtime/console errors, and negligible CLS (0 except 0.000006 at 1024px).
+- [x] Local frame evidence: desktop/tablet p95 intervals remained about 17ms; a low-overhead 390px run at 4x CPU measured 33.4ms p95, while full DevTools traces varied from 47ms to 67ms under instrumentation overhead. No fixed frame-rate claim is made.
+- [x] Headed Chrome wheel-scroll review confirms perceptible hero and card entrance choreography at desktop and mobile sizes without composition or content changes.
+- [x] Product-link suite confirms no permanent title/action underlines, scoped hover/focus states, no layout shift, working product navigation, and unchanged cart behavior at all four breakpoints.
+- [x] Local regression: 182 HTML pages, 101 products, 10 categories, 6 posts, zero broken local references, 12 representative routes passed, and zero failed local requests or browser errors.
+- [/] Deploy the focused motion fix and repeat the motion/link, runtime, and headed-browser checks on `https://pommydemo.netlify.app`.
+
 ## Production Asset And Hero Fix
 
 - [x] Confirm the seven broken live URLs on `https://pommydemo.netlify.app` returned HTTP 404.
