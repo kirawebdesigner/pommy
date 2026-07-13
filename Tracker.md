@@ -4,24 +4,47 @@
 
 - [x] Render and inspect the original template at 1440px, 1024px, 768px, and 390px.
 - [x] Map the original homepage section hierarchy, dimensions, and Webflow interaction IDs.
-- [/] Remove the compact polish layer and restore original-template homepage compositions.
-- [ ] Restore rich product, CTA, trust slider, editorial blog, contact, gallery, and footer sections.
-- [ ] Validate original interaction hooks and compare all required breakpoints.
-- [ ] Re-run full functional, accessibility, route, asset, and browser regression checks.
+- [x] Remove the compact polish layer and restore original-template homepage compositions.
+- [x] Restore rich product, CTA, trust slider, editorial blog, contact, gallery, and footer sections.
+- [x] Validate original interaction hooks and compare all required breakpoints.
+- [x] Re-run full functional, accessibility, route, asset, and browser regression checks.
 
-- [x] Capture pre-polish homepage screenshots at 1440px, 1024px, 768px, and 390px.
-- [x] Add a scoped Pommy visual-polish layer for spacing, density, hierarchy, and responsive proportions.
-- [x] Capture matching post-polish screenshots and compare section geometry visually.
-- [x] Re-run accessibility, route, cart, checkout, asset, and browser regression checks.
+## Production Asset And Hero Fix
 
-## Visual Polish Verification
+- [x] Confirm the seven broken live URLs on `https://pommydemo.netlify.app` returned HTTP 404.
+- [x] Identify root cause: `.gitignore` pattern `template/` also ignored `assets/images/template/`, so the locally present SVGs never entered Git or the Netlify deploy.
+- [x] Preserve and relocate the original template SVG bytes to `assets/icons/burger.svg`, `pizza.svg`, `chicken.svg`, `wrap.svg`, `location.svg`, `phone.svg`, and `menu.svg`.
+- [x] Change all active generated references to root-relative `/assets/icons/...` URLs with exact lowercase filename matching.
+- [x] Verify all seven production icons are Git tracked in the index with distinct Git blob records; deployment inclusion is verified after publish below.
+- [x] Rebalance the existing desktop hero through scoped container, column, copy-width, paragraph-width, and alignment rules without changing its content, image, typography, orange geometry, section scale, or interactions.
+- [x] At 1440px, verify a two-line heading, `144px` copy inset, `517px` rendered image width, and exact copy/image vertical-center alignment at `573px`.
+- [x] At 1024px, verify a two-line heading, aligned copy/image centers, and no collision; preserve the existing 768px and 390px responsive compositions.
+- [x] Capture before screenshots in `.codex-screenshots/production-fix-before/` and after screenshots in `.codex-screenshots/production-fix-after/`.
+- [x] Audit all 149 active routes over HTTP: 0 broken DOM images, 0 failed image requests, 0 bad image responses, and 0 failed local image fetches.
+- [x] Pass the full route/search/cart/checkout/Webflow/mobile regression suite with 0 local request failures, 0 runtime exceptions, and 0 console errors.
+- [x] Verify the deployed `/assets/icons/...` URLs and live customer-facing image audit after Netlify publishes the deployment commit.
 
-- [x] Homepage compared at 1440px, 1024px, 768px, and 390px with no horizontal overflow.
-- [x] Desktop homepage height reduced from 10,675px to 6,340px by removing duplicated section padding.
-- [x] Mobile homepage height reduced from 14,062px to 11,136px while preserving full-width cards and touch targets.
-- [x] Hero, categories, business details, popular products, CTA, services, blog, location, final CTA, and footer inspected visually.
-- [x] Footer columns restored from a broken Webflow initial state and verified visible at every target width.
-- [x] Full menu, About, product, Contact, checkout, desktop, and mobile screenshots inspected after the polish pass.
+## Motion And Product Link Quality
+
+- [x] Diagnose the motion conflict with Chrome traces: the previous broad fallback wrote opacity and removed transforms after 700ms, overlapping healthy IX2 action lists whose native delay and transition can run for roughly 1.1s.
+- [x] Give native IX2 exclusive first opportunity to initialize and complete; fallback observation now starts only after the IX2 session is active and at the native 25% scroll boundary.
+- [x] Batch stuck-target sampling every 160ms, require at least 1.4s plus three stable checks, recheck after image decoding, resolve each target once, and disconnect it from observation.
+- [x] Restrict fallback repair to a 260ms opacity-only recovery. It never removes, resets, or animates an IX2 transform.
+- [x] Remove the concurrent eager decode experiment after traces showed it created decode bursts; keep native lazy loading with asynchronous decoding for below-fold media.
+- [x] Preserve the hero as eager/high-priority media with explicit intrinsic dimensions and preload the hero image and local DM Sans font.
+- [x] Add reduced-motion behavior that exposes all IX2 targets immediately, suppresses transforms/transitions, preserves the hero's static rotation, swaps the Lottie menu icon for the static local icon, and disables slider autoplay.
+- [x] Remove permanent underlines only from Pommy product titles, homepage Add to cart actions, and menu View actions; preserve scoped hover color and high-contrast two-tone keyboard focus states.
+- [x] Correct the trace observer so mutation recording does not call `getComputedStyle()` or `getBoundingClientRect()` on every IX2 style write.
+- [x] Local performance traces at 1440, 1024, 768, and 390px: zero fallback activations, zero hidden targets, zero native writes after fallback, zero forced-reflow warnings, zero overflow, zero console/runtime errors, and CLS of 0 except 0.000006 at 1024px.
+- [x] Local desktop trace p95 frame intervals were 17.31ms at 1440px, 17.12ms at 1024px, and 17.94ms at 768px. The 4x CPU mobile run measured 50.10ms p95 with 13 scroll-window long tasks; no fixed 60 FPS claim is made.
+- [x] Four-breakpoint browser validation confirms clean wrapped titles, no permanent product-action underlines, hover without size shift, visible keyboard focus, working product navigation/cart, working slider arrows/mobile navigation, and zero hidden targets.
+- [x] Reduced-motion emulation at 390px confirms immediate visibility, disabled slider autoplay, zero fallback activations, and no animation-dependent hidden content.
+- [ ] Deploy the focused motion/link changes and repeat performance traces and browser validation on `https://pommydemo.netlify.app`.
+
+## Superseded Compact Polish
+
+- [x] The rejected compact `pommy-polish.css` direction and its page-height reductions were removed.
+- [x] The current restored Restaurante X compositions supersede the prior compact-polish screenshots and geometry claims.
 
 - [x] Read the full task specification and inspect the official logo.
 - [x] Audit the current project structure and confirm no usable Git repository.

@@ -21,6 +21,10 @@ function Get-Shell {
   $encodedTitle = Encode $Title
   $encodedDescription = Encode $Description
   $pageAttribute = if ($PageId) { ' data-wf-page="' + (Encode $PageId) + '"' } else { "" }
+  $priorityAssets = if ($PageId) {
+    '  <link rel="preload" href="/assets/fonts/dm-sans-2.woff2" as="font" type="font/woff2" crossorigin/>' + "`r`n" +
+    '  <link rel="preload" href="/assets/images/menu/home-hero.jpg" as="image" type="image/jpeg" fetchpriority="high"/>'
+  } else { "" }
   return @"
 <!DOCTYPE html>
 <html lang="en" data-wf-site="6165adad51c39da51d4fe6cd"$pageAttribute>
@@ -36,6 +40,7 @@ function Get-Shell {
   <meta name="twitter:description" content="$encodedDescription"/>
   $robots
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+$priorityAssets
   <link href="/assets/css/webflow-original.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/dm-sans.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/pommy-site.css" rel="stylesheet" type="text/css"/>

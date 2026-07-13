@@ -108,11 +108,34 @@
 .pommy-menu-card-body { display: flex; flex: 1; flex-direction: column; padding: 22px; }
 .pommy-menu-card-top { display: flex; gap: 14px; justify-content: space-between; align-items: flex-start; }
 .pommy-menu-card h3 { margin: 0; font-size: 20px; }
+.pommy-menu-card h3 a {
+  color: var(--pommy-ink);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+.pommy-menu-card h3 a:hover { color: var(--pommy-orange); }
 .pommy-price { flex: none; color: var(--pommy-orange); font-weight: 700; white-space: nowrap; }
 .pommy-menu-card p { min-height: 48px; margin: 12px 0 18px; color: var(--pommy-muted); }
 .pommy-menu-card-actions { display: flex; gap: 10px; margin-top: auto; }
 .pommy-menu-card-actions .button-primary,
-.pommy-menu-card-actions .button-secondary { flex: 1; padding: 12px 14px; text-align: center; }
+.pommy-menu-card-actions .button-secondary {
+  flex: 1;
+  padding: 12px 14px;
+  text-align: center;
+  text-decoration: none;
+}
+.pommy-menu-card h3 a:focus-visible,
+.pommy-menu-card-image:focus-visible,
+.pommy-menu-card-actions .button-primary:focus-visible,
+.pommy-menu-card-actions .button-secondary:focus-visible,
+.pommy-original-menu-card .image-wrapper:focus-visible,
+.pommy-original-menu-card .title a:focus-visible,
+.pommy-original-add:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--pommy-ink);
+}
 
 .pommy-menu-tools { display: grid; gap: 20px; margin-bottom: 40px; }
 .pommy-search-label { display: block; margin-bottom: 8px; color: var(--pommy-ink); font-weight: 700; }
@@ -288,7 +311,21 @@ body.pommy-cart-locked { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pommy-cart-drawer { transition: none; }
+  html { scroll-behavior: auto !important; }
+  .pommy-cart-drawer,
+  .pommy-original-menu-card .image-wrapper.menu-card .image,
+  .pommy-original-add { transition: none !important; }
+  #main-content [data-w-id] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  #main-content .image.home-hero-image {
+    transform: rotate(-2deg) !important;
+  }
+  .menu-button .lottie-animation { display: none !important; }
+  .menu-button .pommy-fallback-menu-icon { display: block !important; }
 }
 
 /* Pommy content mapped onto the original Restaurante X compositions. */
@@ -421,6 +458,12 @@ body.pommy-cart-locked { overflow: hidden; }
 
 .pommy-original-menu-card .title a {
   color: var(--pommy-ink);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.pommy-original-menu-card .title a:hover {
+  color: var(--pommy-orange);
 }
 
 .pommy-original-menu-card p {
@@ -435,8 +478,8 @@ body.pommy-cart-locked { overflow: hidden; }
   color: var(--pommy-orange);
   font: inherit;
   font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration: none;
+  transition: color 180ms ease;
   cursor: pointer;
 }
 

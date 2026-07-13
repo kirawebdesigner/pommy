@@ -193,6 +193,7 @@ function assert(condition, message) {
   assert(await mobile.evaluate(() => Boolean(window.Webflow)), "Local Webflow interaction runtime did not load");
   await mobile.locator(".lottie-animation svg").waitFor({ state: "attached", timeout: 10000 });
   await mobile.locator(".w-nav-button").click();
+  await mobile.locator(".w-nav-menu").waitFor({ state: "visible", timeout: 5000 });
   assert(await mobile.locator(".w-nav-menu").isVisible(), "Mobile navigation did not open");
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), "Homepage has horizontal overflow on mobile");
   await mobile.close();
