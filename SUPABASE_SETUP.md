@@ -8,19 +8,21 @@ The browser configuration lives in `assets/config/supabase-config.js` and contai
 
 ## Apply The Database
 
-### Current production blocker (verified 2026-07-14)
+### Production database status (verified 2026-07-14)
 
-The target REST endpoint currently returns HTTP 404 / `PGRST205` because `public.categories` does not exist. The authenticated CLI account checked during this work did not include project `cruvatqjbignywiwoszh`, and the supplied anon key cannot create schemas, run migrations, seed data, or create the first Auth user. Do not deploy this frontend commit until an authorized project member applies the database and completes the smoke test below.
+Project `cruvatqjbignywiwoszh` is linked and healthy. Migrations `20260714000100` through `20260714000400` and the deterministic seed have been applied. The live database contains exactly 10 categories and 101 menu items, and canonical IDs/slugs, names, prices, and category relationships match `assets/data/menu.js`.
+
+The confirmed Auth user `admin@pommy.menu` is allowlisted in `private.admin_users`. Live role checks verified allowlisted dashboard/menu/category access and non-allowlisted denial. Smoke order `POM-2026-00001` verified trusted 820 ETB pricing, snapshot creation, one-row idempotent replay, mismatched-token rejection, and anonymous order-table/admin-RPC denial. Production admin sign-in and order status mutation were manually verified successfully with no errors.
 
 Apply the files in filename order, then seed:
 
 ```powershell
 supabase link --project-ref cruvatqjbignywiwoszh
 supabase db push
-supabase db execute --file supabase/seed.sql
+supabase db query --linked --file supabase/seed.sql
 ```
 
-If the installed CLI does not provide `db execute`, open the target project's trusted SQL editor and run `supabase/seed.sql` after `db push`. Do not run migrations through the anon key.
+If the installed CLI does not provide `db query`, open the target project's trusted SQL editor and run `supabase/seed.sql` after `db push`. Do not run migrations through the anon key.
 
 Verify the deterministic source before applying it:
 
@@ -67,7 +69,7 @@ Removing the allowlist row revokes admin RPC access immediately. There is intent
 
 ## Netlify
 
-The site remains a static deploy. `netlify.toml` adds no-store, noindex, frame, permissions, and CSP headers to `/admin/*`. The CSP permits connections only to the site and Supabase HTTPS/WebSocket endpoints.
+The site remains a static deploy. Production deployment `6a55a473bc2a11ca20b40698` is live at `https://pommydemo.netlify.app`. `netlify.toml` adds no-store, noindex, frame, permissions, and CSP headers to `/admin/*`. The CSP permits connections only to the site and Supabase HTTPS/WebSocket endpoints.
 
 Deploy only after the target project has all migrations and the seed. Otherwise public browsing falls back to the bundled read-only menu, but checkout correctly refuses to report a successful order.
 
@@ -80,13 +82,13 @@ Deploy only after the target project has all migrations and the seed. Otherwise 
 - Checkout retains the pending idempotency token across reloads after an uncertain response and clears it only after confirmed success or a changed request fingerprint.
 - The public RPC does not include IP/device rate limiting because Postgres receives no trustworthy client IP through PostgREST. Before high-volume public promotion, place the RPC behind a trusted server/Edge Function with bot verification and rate limiting, then revoke direct anon execution. Do not add a browser-only CAPTCHA check and call it secure.
 
-## Production Smoke Test
+## Verified Production Smoke Test
 
-After deployment, verify:
+The following production checks passed:
 
 1. `/rest/v1/categories` and `/rest/v1/menu_items` return live rows with the anon key.
-2. Homepage still shows eight products and `/menu/` shows 101 available seeded products.
-3. Submit one controlled COD order and confirm the returned `POM-YYYY-NNNNN` record and snapshots in the admin UI.
-4. Retry the identical request token and confirm there is still one order.
-5. Confirm an anonymous order-table select and an authenticated non-admin admin RPC are denied.
-6. Sign in as the allowlisted admin, update a test order status, toggle one menu item, verify the public menu, then restore the item.
+2. The homepage shows eight featured products and `/menu/` shows 101 available seeded products.
+3. A controlled COD order returned a `POM-YYYY-NNNNN` record with trusted snapshots.
+4. Retrying the identical request token returned the same order without duplication.
+5. Anonymous order-table access and authenticated non-admin admin RPC access are denied.
+6. The allowlisted admin signed in successfully, changed a production test order status, and the mutation completed without errors.

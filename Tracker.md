@@ -23,9 +23,11 @@
 - [x] Pass the final four-breakpoint motion suite with zero fallback activations, hidden targets, horizontal overflow, or browser errors; reduced motion exposes all content immediately and disables slider autoplay.
 - [x] Capture final 1440/1024/768/390 rendered states with identical document dimensions and zero hidden targets/errors/overflow. Mean absolute RGB differences versus the locked `production-fix-after` captures were 0.013478, 0.002186, 0.020158, and 0.008827; targeted gallery captures verified all six local images at every breakpoint.
 - [x] Document environment setup, migration/seed order, first-admin allowlisting, tests, Netlify headers, production smoke checks, and the public RPC rate-limit boundary in `SUPABASE_SETUP.md`.
-- [ ] Apply migrations and seed to Supabase project `cruvatqjbignywiwoszh`; on 2026-07-14 its REST API returned `PGRST205` for missing `public.categories`, and the supplied public anon key cannot perform privileged schema deployment.
-- [ ] Create and allowlist the first real Auth admin account; an admin email/password or existing Auth UUID has not been provided.
-- [ ] Deploy the feature branch and complete real-order/admin/live visual verification on `https://pommydemo.netlify.app` after the target database is ready.
+- [x] Link and verify Supabase project `cruvatqjbignywiwoszh`, apply migrations `20260714000100` through `20260714000400` in order, and apply the deterministic seed. The live database contains exactly 10 categories and 101 menu items.
+- [x] Compare the live seed with `assets/data/menu.js`: canonical IDs/slugs, names, prices, and category relationships match; all remote category and menu-item UUIDs are valid and unique.
+- [x] Verify the live `create_order` and RLS boundary with smoke order `POM-2026-00001`: trusted subtotal/snapshot pricing was 820 ETB, an identical token replay returned the same single order, mismatched token reuse returned HTTP 409, and anonymous direct order reads/writes and admin RPC access returned HTTP 401.
+- [x] Verify confirmed Auth user `admin@pommy.menu` (`7f62b01d-1ded-4014-96b7-80fd74b073ce`), add it to `private.admin_users`, confirm allowlisted authenticated access to dashboard/101 menu items/10 categories, and confirm a non-allowlisted authenticated identity receives `admin_access_required`.
+- [x] Deploy the verified feature branch to `https://pommydemo.netlify.app` (Netlify deploy `6a55a473bc2a11ca20b40698`) and complete production live-menu, real-order, allowlisted admin sign-in, and order status mutation verification with no errors.
 
 ### Security Hardening Note
 
