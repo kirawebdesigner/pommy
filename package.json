@@ -1,0 +1,17 @@
+{
+  "name": "pommy-static-site",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "audit": "node scripts/audit-pommy.cjs",
+    "test:db:static": "node scripts/test-supabase-static.cjs",
+    "test:db:behavior": "psql -v ON_ERROR_STOP=1 -f supabase/tests/database-behavior.sql",
+    "test:browser": "node scripts/validate-pommy.cjs http://127.0.0.1:8765",
+    "test:browser:live-data": "node scripts/validate-supabase-public.cjs http://127.0.0.1:8765",
+    "test:admin": "node scripts/validate-admin.cjs http://127.0.0.1:8765",
+    "test:motion": "node scripts/validate-motion-links.cjs http://127.0.0.1:8765"
+  },
+  "devDependencies": {
+    "playwright": "1.61.1"
+  }
+}

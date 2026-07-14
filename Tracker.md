@@ -1,5 +1,36 @@
 # Tracker
 
+## Supabase And Admin Integration
+
+- [x] Start from locked public baseline `aa69e3a530ae4905b3a7ff69662f2d7b6719aa87`; `main` matched `origin/main`; implementation is isolated on `feature/supabase-admin`.
+- [x] Audit the canonical `assets/data/menu.js`: 101 unique product slugs, 10 categories, numeric ETB prices, existing descriptions/images, and four explicit featured flags.
+- [x] Add four ordered migrations for the core schema, atomic/idempotent order RPC, allowlisted admin RPCs, strict grants, RLS, and policies.
+- [x] Generate an idempotent seed from the canonical JavaScript dataset and assert exactly 10 categories and 101 products; preserve all current names, slugs, prices, images, descriptions, and known ambiguous values.
+- [x] Add one browser Supabase client and centralized cached menu service with live normalized reads and a bundled display-only fallback.
+- [x] Preserve the localStorage cart and replace demo order preparation with trusted transactional COD persistence; clear the cart only after confirmed database success.
+- [x] Preserve all static product routes and load current price/availability by slug without changing the locked public composition or motion ownership.
+- [x] Add isolated `/admin/login/`, `/admin/`, `/admin/orders/`, and `/admin/menu/` pages with email/password Auth, explicit allowlist verification, order details/status updates, and approved menu/category edits.
+- [x] Add restrictive admin CSP/no-store/noindex headers and verify no service-role, database password, or management credential is present in browser code or Git.
+- [x] Apply every migration and the seed to a clean PostgreSQL 17.10 test server: all SQL completed without errors and committed counts were 10 categories/101 menu items.
+- [x] Pass rollback-only database behavior tests using real `anon` and `authenticated` roles: trusted subtotal, immutable snapshots, idempotent retries, unique order numbers, unavailable/missing/zero-quantity rejection, anonymous denial, non-admin denial, allowlisted dashboard/menu reads, server-side order search, order status update, and menu patch.
+- [x] Pass deterministic seed check, migration static checks, 153-page recursive audit, 12-route/101-product browser regression, four-breakpoint motion suite, responsive admin suite, and pixel comparison against the locked baseline.
+- [x] Pass a mocked live-Supabase public browser gate: 101 normalized rows, eight homepage showcase cards, live product price, unavailable-item removal/direct-route blocking, and zero browser errors.
+- [x] Verify checkout's server-authoritative price-change notice, in-flight duplicate-submit lock, reload-safe idempotency token, bounded request timeout, failure-preserved cart, trusted order number/total, delivery/takeaway fields, and COD confirmation.
+- [x] Verify admin browser behavior for safe POST-only login fallback, logged-out redirect, authenticated non-admin denial, allowlisted access, Nairobi timestamps, dashboard metrics, complete delivery details, server-side order search, order status save, and price/availability/featured/category/description/image menu updates with stable slug preservation.
+- [x] Render live category labels with DOM text APIs and verify an admin-supplied markup payload remains inert on the public menu.
+- [x] Restore the locked homepage parse-time `pommy-ix2-pending` guard in the generator/current homepage and extend it to the asynchronously inserted footer IX2 target without changing native timings, easing, mobile card ownership, or fallback behavior.
+- [x] Pass the final 1440/1024/768/390 intermediate-state gate: 25/25 representative targets found, zero visible-before-hidden cases, zero stuck targets, zero errors, and 24 perceptible transitions; the gallery image remains intentionally static.
+- [x] Pass the final four-breakpoint motion suite with zero fallback activations, hidden targets, horizontal overflow, or browser errors; reduced motion exposes all content immediately and disables slider autoplay.
+- [x] Capture final 1440/1024/768/390 rendered states with identical document dimensions and zero hidden targets/errors/overflow. Mean absolute RGB differences versus the locked `production-fix-after` captures were 0.013478, 0.002186, 0.020158, and 0.008827; targeted gallery captures verified all six local images at every breakpoint.
+- [x] Document environment setup, migration/seed order, first-admin allowlisting, tests, Netlify headers, production smoke checks, and the public RPC rate-limit boundary in `SUPABASE_SETUP.md`.
+- [ ] Apply migrations and seed to Supabase project `cruvatqjbignywiwoszh`; on 2026-07-14 its REST API returned `PGRST205` for missing `public.categories`, and the supplied public anon key cannot perform privileged schema deployment.
+- [ ] Create and allowlist the first real Auth admin account; an admin email/password or existing Auth UUID has not been provided.
+- [ ] Deploy the feature branch and complete real-order/admin/live visual verification on `https://pommydemo.netlify.app` after the target database is ready.
+
+### Security Hardening Note
+
+The guest RPC validates all data, trusts only database prices, and exposes no customer reads, but a direct anonymous RPC cannot enforce trustworthy IP/device rate limits. Before high-volume public promotion, route order submission through a trusted Supabase Edge Function or server endpoint with bot verification/rate limiting and revoke direct anon RPC execution. This is not represented as implemented.
+
 ## Active Focus
 
 - [x] Render and inspect the original template at 1440px, 1024px, 768px, and 390px.

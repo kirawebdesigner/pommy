@@ -6,8 +6,12 @@
 - Use only supplied Pommy facts and the official uploaded logo.
 - Keep menu prices numeric in the central data source and format them as ETB at render time.
 - Keep cart/order logic modular and out of individual HTML pages.
-- Do not claim a restaurant received an order without a configured receiver.
+- Do not claim a restaurant received an order until Supabase confirms transactional persistence.
+- Never trust cart names, prices, totals, availability, payment method, status, or order number supplied by browser code.
+- Never expose service-role, database, or management credentials in public JavaScript or Git.
+- Preserve stable product/category IDs and slugs; do not invalidate existing routes or stored carts.
+- Keep `menu.js` as a read-only public fallback after Supabase becomes the live source of truth.
+- Admin authorization must be enforced by RLS and an explicit allowlist, never by route obscurity, metadata, email suffixes, or localStorage.
 - Do not add AR, 3D food previews, `model-viewer`, or Three.js.
 - Use semantic controls, explicit labels, visible focus, and useful validation messages.
 - Preserve unrelated user files and avoid destructive Git/filesystem operations.
-

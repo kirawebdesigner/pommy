@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 
-const base = (process.env.POMMY_BASE_URL || "http://127.0.0.1:8106").replace(/\/$/, "");
+const base = (process.argv[2] || process.env.POMMY_BASE_URL || "http://127.0.0.1:8106").replace(/\/$/, "");
 const output = path.resolve(process.env.POMMY_VISUAL_DIR || ".codex-screenshots/motion-link-validation");
 const chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const requestedWidths = new Set((process.env.POMMY_MOTION_WIDTHS || "").split(",").map(Number).filter(Boolean));
@@ -39,6 +39,7 @@ async function linkState(page, selector) {
   for (const viewport of viewports) {
     const context = await browser.newContext({ viewport });
     const page = await context.newPage();
+    await page.route("**/rest/v1/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
@@ -124,6 +125,10 @@ async function linkState(page, selector) {
 
     if (viewport.width <= 768) {
       await page.goto(`${base}/`, { waitUntil: "load" });
+      await page.waitForFunction(() => {
+        try { return Boolean(window.Webflow?.require("ix2")?.store?.getState().ixSession.active); }
+        catch { return false; }
+      });
       await page.locator(".w-nav-button").click();
       await page.locator(".w-nav-menu").waitFor({ state: "visible" });
       await page.waitForTimeout(450);
@@ -152,7 +157,10 @@ async function linkState(page, selector) {
 
   const reduced = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
   const reducedPage = await reduced.newPage();
+  await reducedPage.route("**/rest/v1/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
   await reducedPage.goto(`${base}/`, { waitUntil: "load" });
+  await reducedPage.waitForFunction(() => Boolean(window.Pommy && window.Pommy.ready));
+  await reducedPage.evaluate(() => window.Pommy.ready);
   const reducedResult = await reducedPage.evaluate(() => ({
     classApplied: document.documentElement.classList.contains("pommy-reduced-motion"),
     autoplayDisabled: Array.from(document.querySelectorAll(".w-slider[data-autoplay]")).every(slider => slider.getAttribute("data-autoplay") === "false"),

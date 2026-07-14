@@ -47,20 +47,24 @@ $priorityAssets
   <link href="/assets/images/pommy-logo.png" rel="shortcut icon" type="image/png"/>
   <link href="/assets/images/pommy-logo.png" rel="apple-touch-icon"/>
   <script type="application/ld+json" data-pommy-schema="restaurant">{"@context":"https://schema.org","@type":"FastFoodRestaurant","name":"Pommy Burger and Pizza","telephone":"+251956905484","address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"ET"},"servesCuisine":["Burgers","Pizza","Fast Food","Chicken"],"priceRange":"ETB","hasMap":"https://www.google.com/maps/search/?api=1&query=XRRH%2B5Q%20Addis%20Ababa"}</script>
-  <script>!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <script>!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch");if(location.pathname==="/"&&!o.matchMedia("(prefers-reduced-motion: reduce)").matches)n.classList.add("pommy-ix2-pending")}(window,document);</script>
 </head>
 <body>
   <div class="page-wrapper"></div>
   <script src="/assets/data/menu.js"></script>
   <script src="/assets/data/blog.js"></script>
   <script src="/assets/config/order-config.js"></script>
+  <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script>
+  <script src="/assets/config/supabase-config.js"></script>
+  <script src="/assets/js/supabase-client.js"></script>
+  <script src="/assets/js/menu-service.js"></script>
   <script src="/assets/js/order-service.js"></script>
   <script src="/assets/js/pommy-site.js"></script>
   <script src="/assets/js/menu-page.js"></script>
   <script src="/assets/js/product-page.js"></script>
   <script src="/assets/js/checkout-page.js"></script>
   <script src="/assets/js/jquery-3.5.1.min.js" type="text/javascript"></script>
-  <script src="/assets/js/webflow-original.js" type="text/javascript"></script>
+  <script>window.Pommy.ready.then(function(){var script=document.createElement("script");script.src="/assets/js/webflow-original.js";document.body.appendChild(script);});</script>
 </body>
 </html>
 "@
@@ -120,7 +124,10 @@ foreach ($post in $posts) {
 
 $knownProducts = @($products.slug)
 $knownPosts = @($posts.slug)
-$existingPages = Get-ChildItem -Path $root -Recurse -Filter index.html -File | Where-Object { $_.FullName -ne (Join-Path $root "index.html") }
+$adminRoot = Join-Path $root "admin"
+$existingPages = Get-ChildItem -Path $root -Recurse -Filter index.html -File | Where-Object {
+  $_.FullName -ne (Join-Path $root "index.html") -and -not $_.FullName.StartsWith($adminRoot + [System.IO.Path]::DirectorySeparatorChar)
+}
 foreach ($page in $existingPages) {
   $relative = [System.IO.Path]::GetRelativePath($root, $page.FullName)
   if ($primary.ContainsKey($relative)) { continue }

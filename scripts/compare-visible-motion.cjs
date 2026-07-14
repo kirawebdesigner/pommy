@@ -137,6 +137,9 @@ async function naturalScroll(page, duration) {
     for (const site of [{ name: "original", url: originalUrl }, { name: "pommy", url: pommyUrl }]) {
       const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
       const page = await context.newPage();
+      if (/^https?:\/\/(?:127\.0\.0\.1|localhost)(?::|\/)/.test(site.url)) {
+        await page.route("**/rest/v1/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
+      }
       const session = await context.newCDPSession(page);
       if (viewport.cpu > 1) await session.send("Emulation.setCPUThrottlingRate", { rate: viewport.cpu });
       const errors = [];

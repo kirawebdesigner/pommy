@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="same-origin">
+  <title>Menu | Pommy Admin</title>
+  <link rel="icon" href="/assets/images/pommy-logo.png" type="image/png"><link rel="stylesheet" href="/assets/css/dm-sans.css"><link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+  <div class="admin-gate" data-admin-gate><img src="/assets/images/pommy-logo.png" alt="" width="64" height="64"><h1>Checking access</h1><p>Verifying your admin session...</p><button class="admin-button" type="button" hidden>Sign out</button></div>
+  <div class="admin-shell" data-admin-app hidden>
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/admin/"><img src="/assets/images/pommy-logo.png" alt="" width="48" height="48"><span>Pommy <small>Admin</small></span></a>
+      <nav aria-label="Admin navigation"><a href="/admin/">Dashboard</a><a href="/admin/orders/">Orders</a><a class="is-active" href="/admin/menu/" aria-current="page">Menu</a></nav>
+      <div class="admin-account"><span data-admin-email>Admin</span><button type="button" data-sign-out>Sign out</button></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-page-header"><div><p class="admin-eyebrow">Catalogue</p><h1>Menu</h1><p>Update customer-facing menu details without changing product URLs.</p></div><strong class="admin-count" data-menu-count>Loading...</strong></header>
+      <p class="admin-notice" data-notice role="status" hidden></p>
+      <form class="admin-filters" data-menu-filters>
+        <label class="admin-search">Search<input type="search" name="search" placeholder="Item name or slug"></label>
+        <label>Category<select name="category"><option value="">All categories</option></select></label>
+        <label>Availability<select name="availability"><option value="">Any availability</option><option value="true">Available</option><option value="false">Unavailable</option></select></label>
+        <button class="admin-text-button" type="reset">Clear</button>
+      </form>
+      <section class="menu-list" data-menu-list aria-live="polite"><p class="admin-loading">Loading menu...</p></section>
+    </main>
+  </div>
+  <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script><script src="/assets/config/supabase-config.js"></script><script src="/assets/js/supabase-client.js"></script><script src="/assets/js/admin/common.js"></script><script src="/assets/js/admin/menu.js"></script>
+</body>
+</html>

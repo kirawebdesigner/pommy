@@ -3,7 +3,7 @@
 
   var CART_KEY = "pommy_cart_v1";
   var config = window.POMMY_ORDER_CONFIG || {};
-  var menu = window.POMMY_MENU || [];
+  var menu = [];
   var posts = window.POMMY_POSTS || [];
 
   function escapeHtml(value) {
@@ -25,11 +25,14 @@
   }
 
   function findProduct(slug) {
-    return menu.find(function (item) { return item.slug === slug; });
+    return menu.find(function (item) { return item.slug === slug || item.id === slug; });
   }
 
   function productCard(item) {
     var description = item.description || "View this item on the Pommy menu.";
+    var action = item.available === false
+      ? '<button class="button-primary small" type="button" disabled aria-disabled="true">Unavailable</button>'
+      : '<button class="button-primary small" type="button" data-add-to-cart="' + escapeHtml(item.id) + '">Add to cart</button>';
     return '<article data-w-id="770cf311-3a76-a0f9-0c48-8b6b85d6c484" class="pommy-menu-card w-dyn-item" data-category="' + escapeHtml(item.category) + '" data-search="' + escapeHtml((item.name + " " + description).toLowerCase()) + '">' +
       '<a class="pommy-menu-card-image" href="/product/' + escapeHtml(item.slug) + '/">' +
         '<img src="' + escapeHtml(item.image) + '" alt="Food image for the ' + escapeHtml(item.category.replace(/-/g, " ")) + ' category" loading="lazy">' +
@@ -37,7 +40,7 @@
       '<div class="pommy-menu-card-body">' +
         '<div class="pommy-menu-card-top"><h3><a href="/product/' + escapeHtml(item.slug) + '/">' + escapeHtml(item.name) + '</a></h3><span class="pommy-price">' + formatEtb(item.price) + '</span></div>' +
         '<p>' + escapeHtml(description) + '</p>' +
-        '<div class="pommy-menu-card-actions"><a class="button-secondary small" href="/product/' + escapeHtml(item.slug) + '/">View</a><button class="button-primary small" type="button" data-add-to-cart="' + escapeHtml(item.id) + '">Add to cart</button></div>' +
+        '<div class="pommy-menu-card-actions"><a class="button-secondary small" href="/product/' + escapeHtml(item.slug) + '/">View</a>' + action + '</div>' +
       '</div>' +
     '</article>';
   }
@@ -51,10 +54,13 @@
 
   function originalMenuCard(item) {
     var description = item.description || "View this item on the Pommy menu.";
+    var action = item.available === false
+      ? '<button class="pommy-original-add" type="button" disabled aria-disabled="true">Unavailable</button>'
+      : '<button class="pommy-original-add" type="button" data-add-to-cart="' + escapeHtml(item.id) + '">Add to cart</button>';
     return '<article data-w-id="07b23b0f-b430-385d-b89d-4525f6d1d0be" role="listitem" class="w-dyn-item">' +
       '<div class="card menu-card pommy-original-menu-card">' +
         '<a href="/product/' + escapeHtml(item.slug) + '/" class="image-wrapper menu-card mg-bottom-24px w-inline-block"><img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.name) + ' from the Pommy menu" class="image" loading="lazy"><span class="badge dish">' + formatEtb(item.price) + '</span></a>' +
-        '<div><h3 class="title mg-bottom-8px"><a href="/product/' + escapeHtml(item.slug) + '/">' + escapeHtml(item.name) + '</a></h3><p class="mg-bottom-16px">' + escapeHtml(description) + '</p><button class="pommy-original-add" type="button" data-add-to-cart="' + escapeHtml(item.id) + '">Add to cart</button></div>' +
+        '<div><h3 class="title mg-bottom-8px"><a href="/product/' + escapeHtml(item.slug) + '/">' + escapeHtml(item.name) + '</a></h3><p class="mg-bottom-16px">' + escapeHtml(description) + '</p>' + action + '</div>' +
       '</div>' +
     '</article>';
   }
@@ -176,7 +182,7 @@
 
   function addToCart(productId, quantity) {
     var item = menu.find(function (entry) { return entry.id === productId; });
-    if (!item) return;
+    if (!item || item.available === false) return;
     var amount = Math.max(1, Number(quantity) || 1);
     var cart = readCart();
     var existing = cart.find(function (entry) { return entry.productId === item.id; });
@@ -548,11 +554,9 @@
   }
 
   function renderHome() {
-    var selectedSlugs = ["pommy-special-burger", "pommy-chicken-special-burger", "pommy-special-pizza", "chicken-bbq-pizza", "egg-sandwich", "chicken-wrap", "pommy-special-smoothie", "chocolate-milk-shake"];
-    var featured = selectedSlugs.map(findProduct).filter(Boolean);
-    if (featured.length < 8) {
-      menu.forEach(function (item) { if (featured.length < 8 && !featured.includes(item)) featured.push(item); });
-    }
+    var featured = window.PommyMenuService
+      ? window.PommyMenuService.getFeaturedItems(8)
+      : menu.filter(function (item) { return item.available !== false; }).slice(0, 8);
     var categories = [
       ["Burger", "burger", "Beef, cheese, fasting and chicken burger choices.", "burger.svg"],
       ["Pizza", "pizza", "Pommy specials, chicken, tuna, vegetable and more.", "pizza.svg"],
@@ -662,11 +666,18 @@
     else renderNotFound();
   }
 
-  function init() {
+  async function init() {
     document.documentElement.lang = "en";
     ensureSkipLink();
     ensureHeader();
     ensureFooter();
+    renderCart();
+    if (window.PommyMenuService) {
+      await window.PommyMenuService.ready;
+      menu = window.PommyMenuService.getItems();
+    } else {
+      menu = window.POMMY_MENU || [];
+    }
     routePage();
     markNativeRevealTargets();
     ensureCart();
@@ -687,8 +698,9 @@
     saveCart: saveCart,
     cartSubtotal: cartSubtotal,
     addToCart: addToCart,
-    openCart: openCart
+    openCart: openCart,
+    ready: null
   };
 
-  init();
+  window.Pommy.ready = init();
 })();

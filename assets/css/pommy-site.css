@@ -322,6 +322,12 @@ body.pommy-cart-locked { overflow: hidden; }
     transition: none !important;
     animation: none !important;
   }
+  [data-w-id="eea6b3e0-d9ff-e6b5-76a4-5c0b4254248e"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
   .pommy-card-reveal {
     opacity: 1 !important;
     transform: none !important;
@@ -338,7 +344,16 @@ html.pommy-ix2-pending .pommy-original-home [data-pommy-native-reveal] {
   opacity: 0 !important;
 }
 
+html.pommy-ix2-pending [data-w-id="eea6b3e0-d9ff-e6b5-76a4-5c0b4254248e"] {
+  opacity: 0 !important;
+}
+
 html.pommy-ix2-disabled .pommy-original-home [data-pommy-native-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.pommy-ix2-disabled [data-w-id="eea6b3e0-d9ff-e6b5-76a4-5c0b4254248e"] {
   opacity: 1 !important;
   transform: none !important;
 }

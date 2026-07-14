@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="same-origin">
+  <title>Dashboard | Pommy Admin</title>
+  <link rel="icon" href="/assets/images/pommy-logo.png" type="image/png"><link rel="stylesheet" href="/assets/css/dm-sans.css"><link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+  <div class="admin-gate" data-admin-gate><img src="/assets/images/pommy-logo.png" alt="" width="64" height="64"><h1>Checking access</h1><p>Verifying your admin session...</p><button class="admin-button" type="button" hidden>Sign out</button></div>
+  <div class="admin-shell" data-admin-app hidden>
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/admin/"><img src="/assets/images/pommy-logo.png" alt="" width="48" height="48"><span>Pommy <small>Admin</small></span></a>
+      <nav aria-label="Admin navigation"><a class="is-active" href="/admin/" aria-current="page">Dashboard</a><a href="/admin/orders/">Orders</a><a href="/admin/menu/">Menu</a></nav>
+      <div class="admin-account"><span data-admin-email>Admin</span><button type="button" data-sign-out>Sign out</button></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-page-header"><div><p class="admin-eyebrow">Overview</p><h1>Dashboard</h1><p>Restaurant activity at a glance.</p></div><a class="admin-button admin-button-secondary" href="/admin/orders/">View orders</a></header>
+      <p class="admin-notice" data-notice role="status" hidden></p>
+      <section class="metric-grid" aria-label="Key metrics">
+        <article><span>New orders</span><strong data-metric="new">-</strong><small>Awaiting confirmation</small></article>
+        <article><span>Preparing</span><strong data-metric="preparing">-</strong><small>In the kitchen</small></article>
+        <article><span>Ready</span><strong data-metric="ready">-</strong><small>Awaiting handoff</small></article>
+        <article><span>Today's orders</span><strong data-metric="today">-</strong><small>Since start of day</small></article>
+      </section>
+      <section class="admin-section"><div class="admin-section-heading"><div><h2>Recent orders</h2><p>Latest orders received.</p></div><a href="/admin/orders/">See all</a></div>
+        <div class="admin-table-wrap"><table><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Received</th></tr></thead><tbody data-recent-orders><tr><td colspan="5" class="admin-loading">Loading orders...</td></tr></tbody></table></div>
+      </section>
+    </main>
+  </div>
+  <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script><script src="/assets/config/supabase-config.js"></script><script src="/assets/js/supabase-client.js"></script><script src="/assets/js/admin/common.js"></script><script src="/assets/js/admin/dashboard.js"></script>
+</body>
+</html>

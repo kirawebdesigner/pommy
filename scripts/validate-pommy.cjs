@@ -1,6 +1,6 @@
-const { chromium } = require("C:/Users/kirub/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright");
+const { chromium } = require("playwright");
 
-const base = process.env.POMMY_BASE_URL || "http://127.0.0.1:8098";
+const base = process.argv[2] || process.env.POMMY_BASE_URL || "http://127.0.0.1:8098";
 const chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 
 function assert(condition, message) {
@@ -113,6 +113,7 @@ function assert(condition, message) {
   const menuPage = await context.newPage();
   await prepare(menuPage);
   await menuPage.goto(base + "/menu/", { waitUntil: "domcontentloaded" });
+  await menuPage.waitForFunction(() => document.querySelectorAll(".pommy-menu-card").length === 101);
   assert(await menuPage.locator(".pommy-menu-card").count() === 101, "Menu does not render all 101 public products");
   await menuPage.getByLabel("Search the menu").fill("chicken");
   const chickenCount = await menuPage.locator(".pommy-menu-card").count();
@@ -156,6 +157,34 @@ function assert(condition, message) {
 
   const checkout = await context.newPage();
   await prepare(checkout);
+  const submittedOrders = [];
+  await checkout.route("**/rest/v1/rpc/create_order", async route => {
+    const payload = route.request().postDataJSON();
+    submittedOrders.push(payload);
+    const prices = { "chicken-bbq-pizza": 1250, "beef-burger": 820 };
+    const items = payload.p_items.map(item => ({
+      menu_item_id: "00000000-0000-4000-8000-000000000001",
+      product_name: item.slug === "beef-burger" ? "Beef Burger" : "Chicken BBQ Pizza",
+      unit_price: prices[item.slug],
+      quantity: item.quantity,
+      line_total: prices[item.slug] * item.quantity
+    }));
+    await new Promise(resolve => setTimeout(resolve, 75));
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "00000000-0000-4000-8000-000000000010",
+        order_number: "POM-2026-00001",
+        order_type: payload.p_order_type,
+        subtotal: items.reduce((sum, item) => sum + item.line_total, 0),
+        payment_method: "cash_on_delivery",
+        status: "new",
+        created_at: "2026-07-14T00:00:00Z",
+        items
+      })
+    });
+  });
   await checkout.goto(base + "/product/chicken-bbq-pizza/", { waitUntil: "domcontentloaded" });
   await checkout.getByRole("button", { name: "Add to cart", exact: true }).first().click();
   await checkout.goto(base + "/checkout/", { waitUntil: "domcontentloaded" });
@@ -170,8 +199,11 @@ function assert(condition, message) {
   await checkout.getByLabel("Delivery Area").fill("Addis Ababa");
   await checkout.getByLabel("Location / Address").fill("XRRH+5Q area");
   await checkout.getByRole("button", { name: "Place Order" }).click();
-  await checkout.getByRole("heading", { name: "Order prepared" }).waitFor();
-  assert(!(await checkout.locator("body").innerText()).includes("restaurant has received"), "Checkout falsely claims restaurant receipt");
+  await checkout.evaluate(() => document.getElementById("pommy-checkout-form").dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
+  await checkout.getByRole("heading", { name: "Order received" }).waitFor();
+  assert((await checkout.locator("body").innerText()).includes("POM-2026-00001"), "Checkout did not display the trusted order number");
+  assert(await checkout.locator("[data-cart-count]").first().innerText() === "0", "Successful persistence did not clear the cart");
+  assert((await checkout.locator("body").innerText()).includes("The menu changed while your order was being prepared."), "Checkout did not explain the trusted price change");
   await checkout.getByRole("button", { name: "Copy Order Details" }).click();
   await checkout.getByText("Order details copied.").waitFor();
   await checkout.goto(base + "/product/beef-burger/", { waitUntil: "domcontentloaded" });
@@ -182,8 +214,62 @@ function assert(condition, message) {
   await checkout.getByLabel("Takeaway / Pickup", { exact: true }).check();
   assert(await checkout.locator("#pommy-delivery-fields").isHidden(), "Delivery fields remain visible for pickup");
   await checkout.getByRole("button", { name: "Place Order" }).click();
-  await checkout.getByRole("heading", { name: "Order prepared" }).waitFor();
+  await checkout.getByRole("heading", { name: "Order received" }).waitFor();
+  assert(submittedOrders.length === 2, "Checkout did not submit exactly two persisted orders");
+  assert(submittedOrders.every(payload => /^[0-9a-f-]{36}$/.test(payload.p_client_order_token)), "Checkout omitted a valid idempotency token");
+  assert(submittedOrders.every(payload => payload.p_items.every(item => Object.keys(item).sort().join(",") === "quantity,slug")), "Checkout sent untrusted item fields to the RPC");
   await checkout.close();
+
+  const failedCheckout = await context.newPage();
+  await prepare(failedCheckout);
+  await failedCheckout.goto(base + "/product/beef-burger/", { waitUntil: "domcontentloaded" });
+  await failedCheckout.getByRole("button", { name: "Add to cart", exact: true }).first().click();
+  await failedCheckout.goto(base + "/checkout/", { waitUntil: "domcontentloaded" });
+  await failedCheckout.getByLabel("Full Name").fill("Retry Customer");
+  await failedCheckout.getByLabel("Phone Number").fill("0956905484");
+  await failedCheckout.getByLabel("Takeaway / Pickup", { exact: true }).check();
+  await failedCheckout.getByRole("button", { name: "Place Order" }).click();
+  await failedCheckout.getByText(/couldn't submit|temporarily unavailable/i).waitFor();
+  assert(await failedCheckout.locator("[data-cart-count]").first().innerText() === "1", "Failed persistence cleared the cart");
+  assert(await failedCheckout.getByRole("button", { name: "Place Order" }).isEnabled(), "Failed persistence left checkout locked");
+  await failedCheckout.close();
+
+  const retryCheckout = await context.newPage();
+  await prepare(retryCheckout);
+  const retryTokens = [];
+  await retryCheckout.route("**/rest/v1/rpc/create_order", async route => {
+    const payload = route.request().postDataJSON();
+    retryTokens.push(payload.p_client_order_token);
+    if (retryTokens.length === 1) return route.abort("failed");
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "00000000-0000-4000-8000-000000000011",
+        order_number: "POM-2026-00002",
+        order_type: "takeaway",
+        subtotal: 820,
+        payment_method: "cash_on_delivery",
+        status: "new",
+        created_at: "2026-07-14T00:00:00Z",
+        items: [{ menu_item_id: "00000000-0000-4000-8000-000000000001", product_name: "Beef Burger", unit_price: 820, quantity: 1, line_total: 820 }]
+      })
+    });
+  });
+  await retryCheckout.goto(base + "/checkout/", { waitUntil: "domcontentloaded" });
+  await retryCheckout.getByLabel("Full Name").fill("Reload Customer");
+  await retryCheckout.getByLabel("Phone Number").fill("0956905484");
+  await retryCheckout.getByLabel("Takeaway / Pickup", { exact: true }).check();
+  await retryCheckout.getByRole("button", { name: "Place Order" }).click();
+  await retryCheckout.getByText(/couldn't submit/i).waitFor();
+  await retryCheckout.reload({ waitUntil: "domcontentloaded" });
+  await retryCheckout.getByLabel("Full Name").fill("Reload Customer");
+  await retryCheckout.getByLabel("Phone Number").fill("0956905484");
+  await retryCheckout.getByLabel("Takeaway / Pickup", { exact: true }).check();
+  await retryCheckout.getByRole("button", { name: "Place Order" }).click();
+  await retryCheckout.getByRole("heading", { name: "Order received" }).waitFor();
+  assert(retryTokens.length === 2 && retryTokens[0] === retryTokens[1], "Reload retry did not preserve the idempotency token");
+  await retryCheckout.close();
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
   mobileContext.setDefaultTimeout(15000);
@@ -191,6 +277,7 @@ function assert(condition, message) {
   const mobile = await mobileContext.newPage();
   await prepare(mobile);
   await mobile.goto(base + "/", { waitUntil: "load" });
+  await mobile.waitForFunction(() => Boolean(window.Webflow));
   assert(await mobile.evaluate(() => Boolean(window.Webflow)), "Local Webflow interaction runtime did not load");
   await mobile.locator(".lottie-animation svg").waitFor({ state: "attached", timeout: 10000 });
   await mobile.locator(".w-nav-button").click();

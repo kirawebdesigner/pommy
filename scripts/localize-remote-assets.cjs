@@ -1,4 +1,4 @@
-const { chromium } = require("C:/Users/kirub/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright");
+const { chromium } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 

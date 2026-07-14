@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="same-origin">
+  <title>Admin sign in | Pommy</title>
+  <link rel="icon" href="/assets/images/pommy-logo.png" type="image/png">
+  <link rel="stylesheet" href="/assets/css/dm-sans.css">
+  <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body class="admin-login-page">
+  <main class="admin-login-main">
+    <section class="admin-login-panel" aria-labelledby="login-title">
+      <a class="admin-brand admin-login-brand" href="/" aria-label="Pommy home">
+        <img src="/assets/images/pommy-logo.png" alt="" width="64" height="64">
+        <span>Pommy <small>Administration</small></span>
+      </a>
+      <div class="admin-login-copy">
+        <p class="admin-eyebrow">Restricted area</p>
+        <h1 id="login-title">Sign in</h1>
+        <p>Use your authorized staff account to manage orders and menu items.</p>
+      </div>
+      <p class="admin-alert" data-login-error role="alert" hidden></p>
+      <form class="admin-login-form" data-login-form method="post" action="/admin/login/">
+        <label>Email address<input type="email" name="email" autocomplete="username" required autofocus></label>
+        <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+        <button class="admin-button" type="submit" disabled>Sign in</button>
+      </form>
+      <a class="admin-back-link" href="/">Return to the website</a>
+    </section>
+  </main>
+  <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script>
+  <script src="/assets/config/supabase-config.js"></script>
+  <script src="/assets/js/supabase-client.js"></script>
+  <script src="/assets/js/admin/common.js"></script>
+  <script src="/assets/js/admin/login.js"></script>
+</body>
+</html>

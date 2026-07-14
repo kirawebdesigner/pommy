@@ -5,6 +5,7 @@ const crypto = require("crypto");
 
 const root = path.resolve(__dirname, "..");
 const failures = [];
+const ignoredDirectories = new Set([".git", ".netlify", ".codex-screenshots", "node_modules", "template"]);
 
 function assert(condition, message) {
   if (!condition) failures.push(message);
@@ -17,7 +18,7 @@ function read(relative) {
 function walk(directory, predicate, results = []) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const target = path.join(directory, entry.name);
-    if (entry.isDirectory()) walk(target, predicate, results);
+    if (entry.isDirectory() && !ignoredDirectories.has(entry.name)) walk(target, predicate, results);
     else if (predicate(target)) results.push(target);
   }
   return results;
@@ -59,6 +60,8 @@ const menu = loadData("assets/data/menu.js", "POMMY_MENU");
 const categories = loadData("assets/data/menu.js", "POMMY_CATEGORIES");
 const posts = loadData("assets/data/blog.js", "POMMY_POSTS");
 const htmlFiles = walk(root, file => path.basename(file) === "index.html");
+const adminFiles = htmlFiles.filter(file => path.relative(root, file).replaceAll("\\", "/").startsWith("admin/"));
+const publicHtmlFiles = htmlFiles.filter(file => !adminFiles.includes(file));
 
 assert(menu.length === 101, `Expected 101 menu products, found ${menu.length}`);
 assert(new Set(menu.map(item => item.id)).size === menu.length, "Menu product IDs are not unique");
@@ -111,7 +114,7 @@ for (const [relative, expectedTitle] of Object.entries(primary)) {
   indexedTitles.add(expectedTitle);
 }
 
-for (const file of htmlFiles) {
+for (const file of publicHtmlFiles) {
   const relative = path.relative(root, file).replaceAll("\\", "/");
   const html = fs.readFileSync(file, "utf8");
   assert(titleOf(html), `Missing title: ${relative}`);
@@ -125,6 +128,22 @@ for (const file of htmlFiles) {
   assert(!/data-wf-domain|data-wf-status|meta name="generator"|w-webflow-badge/i.test(html), `Unnecessary Webflow branding metadata remains: ${relative}`);
   assert(!/<link[^>]+rel="canonical"[^>]+(?:webflow|template)/i.test(html), `Old template canonical remains: ${relative}`);
 
+  for (const match of html.matchAll(/\b(?:href|src|action)="([^"]+)"/gi)) {
+    const target = resolveSiteReference(file, match[1]);
+    if (target) assert(fs.existsSync(target), `Broken local reference in ${relative}: ${match[1]}`);
+  }
+}
+
+for (const file of adminFiles) {
+  const relative = path.relative(root, file).replaceAll("\\", "/");
+  const html = fs.readFileSync(file, "utf8");
+  assert(titleOf(html), `Missing admin title: ${relative}`);
+  assert(/name="robots" content="noindex,nofollow,noarchive"/i.test(html), `Admin page is indexable: ${relative}`);
+  assert(html.includes('/assets/css/admin.css'), `Missing isolated admin CSS: ${relative}`);
+  assert(html.includes('/assets/vendor/supabase-js-2.49.4.min.js'), `Missing pinned Supabase client: ${relative}`);
+  assert(html.includes('/assets/config/supabase-config.js'), `Missing Supabase config: ${relative}`);
+  assert(html.includes('/assets/js/supabase-client.js'), `Missing shared Supabase client: ${relative}`);
+  assert(!html.includes('/assets/js/webflow-original.js'), `Admin page incorrectly loads Webflow runtime: ${relative}`);
   for (const match of html.matchAll(/\b(?:href|src|action)="([^"]+)"/gi)) {
     const target = resolveSiteReference(file, match[1]);
     if (target) assert(fs.existsSync(target), `Broken local reference in ${relative}: ${match[1]}`);
@@ -146,7 +165,7 @@ for (const cssRelative of ["assets/css/webflow-original.css", "assets/css/dm-san
 }
 
 const servedSource = [
-  ...htmlFiles.map(file => fs.readFileSync(file, "utf8")),
+  ...publicHtmlFiles.map(file => fs.readFileSync(file, "utf8")),
   read("assets/data/menu.js"), read("assets/data/blog.js"), read("assets/config/order-config.js"),
   read("assets/js/pommy-site.js"), read("assets/js/menu-page.js"), read("assets/js/product-page.js"),
   read("assets/js/checkout-page.js"), read("assets/js/order-service.js")

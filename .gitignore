@@ -1,2 +1,8 @@
 .codex-screenshots/
 template/
+.env
+.env.*
+!.env.example
+.netlify/
+node_modules/
+supabase/.temp/

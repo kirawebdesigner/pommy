@@ -1,4 +1,4 @@
-const { chromium } = require("C:/Users/kirub/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright");
+const { chromium } = require("playwright");
 const fs = require("fs");
 
 const base = process.env.POMMY_BASE_URL || "http://127.0.0.1:8098";
@@ -22,6 +22,8 @@ fs.mkdirSync(output, { recursive: true });
 
   for (const [name, width, height] of viewports) {
     const context = await browser.newContext({ viewport: { width, height } });
+    await context.route("**/rest/v1/categories?**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
+    await context.route("**/rest/v1/menu_items?**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
     const page = await context.newPage();
     page.on("pageerror", error => errors.push(`${name}: ${error.message}`));
     page.on("console", message => { if (message.type() === "error") errors.push(`${name}: ${message.text()}`); });
@@ -41,9 +43,25 @@ fs.mkdirSync(output, { recursive: true });
         return element.offsetParent !== null && rect.bottom > 0 && rect.top < window.innerHeight;
       }).every(element => Number.parseFloat(getComputedStyle(element).opacity || "1") >= .85), null, { timeout: 3500 }).catch(() => {});
     }
+    const revealTargets = page.locator(".pommy-original-home [data-w-id]");
+    for (let index = 0; index < await revealTargets.count(); index += 1) {
+      const target = revealTargets.nth(index);
+      if (await target.evaluate(element => element.offsetParent !== null && Number.parseFloat(getComputedStyle(element).opacity || "1") < .85)) {
+        await target.evaluate(element => element.scrollIntoView({ block: "center", inline: "nearest" }));
+        await target.evaluate(element => new Promise(resolve => {
+          const deadline = performance.now() + 2400;
+          function sample() {
+            if (Number.parseFloat(getComputedStyle(element).opacity || "1") >= .85 || performance.now() >= deadline) resolve();
+            else requestAnimationFrame(sample);
+          }
+          sample();
+        }));
+      }
+    }
+    await page.waitForFunction(() => Array.from(document.images).every(image => image.complete && image.naturalWidth > 0), null, { timeout: 20000 }).catch(() => {});
+    await page.screenshot({ path: `${output}/home-${name}.png`, fullPage: true });
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForFunction(() => Array.from(document.querySelectorAll(".section.home-hero [data-w-id]")).every(element => Number.parseFloat(getComputedStyle(element).opacity || "1") >= .85), null, { timeout: 5000 }).catch(() => {});
-    await page.waitForFunction(() => Array.from(document.images).every(image => image.complete && image.naturalWidth > 0), null, { timeout: 20000 }).catch(() => {});
 
     const metrics = await page.evaluate(() => ({
       pageHeight: document.documentElement.scrollHeight,
@@ -121,7 +139,6 @@ fs.mkdirSync(output, { recursive: true });
     }));
 
     await page.screenshot({ path: `${output}/hero-${name}.png`, fullPage: false });
-    await page.screenshot({ path: `${output}/home-${name}.png`, fullPage: true });
     results.push({ viewport: `${width}x${height}`, status: response?.status(), ...metrics });
     await context.close();
   }

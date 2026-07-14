@@ -1,4 +1,4 @@
-const { chromium } = require("C:/Users/kirub/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright");
+const { chromium } = require("playwright");
 const fs = require("fs");
 
 const base = process.env.POMMY_BASE_URL || "http://127.0.0.1:8098";
