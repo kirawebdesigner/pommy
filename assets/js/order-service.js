@@ -66,6 +66,9 @@
   }
 
   async function submit(input, submissionToken) {
+    if (window.POMMY_SEO_CONFIG && window.POMMY_SEO_CONFIG.demoMode) {
+      throw new OrderSubmissionError("demo_mode");
+    }
     var api = window.PommySupabase;
     if (!api || !api.configured) throw new OrderSubmissionError("not_configured");
 

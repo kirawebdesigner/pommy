@@ -5,6 +5,7 @@ const { chromium } = require("playwright");
 const base = (process.argv[2] || process.env.POMMY_BASE_URL || "http://127.0.0.1:8106").replace(/\/$/, "");
 const output = path.resolve(process.env.POMMY_VISUAL_DIR || ".codex-screenshots/motion-link-validation");
 const chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+const isRemote = /^https:\/\//i.test(base);
 const requestedWidths = new Set((process.env.POMMY_MOTION_WIDTHS || "").split(",").map(Number).filter(Boolean));
 const viewports = [
   { width: 1440, height: 1000 },
@@ -15,6 +16,10 @@ const viewports = [
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+function navigate(page, route) {
+  return page.goto(`${base}${route}`, { waitUntil: "load", timeout: isRemote ? 90000 : 30000 });
 }
 
 async function linkState(page, selector) {
@@ -38,13 +43,14 @@ async function linkState(page, selector) {
 
   for (const viewport of viewports) {
     const context = await browser.newContext({ viewport });
+    context.setDefaultTimeout(isRemote ? 60000 : 30000);
     const page = await context.newPage();
     await page.route("**/rest/v1/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
 
-    await page.goto(`${base}/`, { waitUntil: "load" });
+    await navigate(page, "/");
     await page.waitForFunction(() => {
       try { return Boolean(window.Webflow?.require("ix2")?.store?.getState().ixSession.active); }
       catch { return false; }
@@ -75,7 +81,7 @@ async function linkState(page, selector) {
     assert(!motion.overflow, `${viewport.width}: horizontal overflow detected`);
     await page.screenshot({ path: path.join(output, `${viewport.width}.png`), fullPage: true });
 
-    await page.goto(`${base}/`, { waitUntil: "load" });
+    await navigate(page, "/");
     await page.waitForTimeout(1400);
 
     const homeTitleSelector = ".pommy-original-menu-card .title a";
@@ -114,7 +120,9 @@ async function linkState(page, selector) {
     await page.waitForTimeout(700);
     assert(await slider.getAttribute("tabindex") !== "-1", `${viewport.width}: slider arrow is not keyboard operable`);
 
-    await page.goto(`${base}/menu/`, { waitUntil: "load" });
+    await navigate(page, "/menu/");
+    await page.waitForFunction(() => window.Pommy && window.Pommy.ready);
+    await page.evaluate(() => window.Pommy.ready);
     const menuTitle = await linkState(page, ".pommy-menu-card h3 a");
     const viewAction = await linkState(page, ".pommy-menu-card-actions .button-secondary");
     assert(menuTitle.decoration === "none", `${viewport.width}: menu title is underlined`);
@@ -124,7 +132,7 @@ async function linkState(page, selector) {
     assert(viewFocus.outlineStyle === "solid" && Number.parseFloat(viewFocus.outlineWidth) >= 3, `${viewport.width}: View focus is not visible`);
 
     if (viewport.width <= 768) {
-      await page.goto(`${base}/`, { waitUntil: "load" });
+      await navigate(page, "/");
       await page.waitForFunction(() => {
         try { return Boolean(window.Webflow?.require("ix2")?.store?.getState().ixSession.active); }
         catch { return false; }
@@ -156,9 +164,10 @@ async function linkState(page, selector) {
   }
 
   const reduced = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+  reduced.setDefaultTimeout(isRemote ? 60000 : 30000);
   const reducedPage = await reduced.newPage();
   await reducedPage.route("**/rest/v1/**", route => route.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
-  await reducedPage.goto(`${base}/`, { waitUntil: "load" });
+  await navigate(reducedPage, "/");
   await reducedPage.waitForFunction(() => Boolean(window.Pommy && window.Pommy.ready));
   await reducedPage.evaluate(() => window.Pommy.ready);
   const reducedResult = await reducedPage.evaluate(() => ({

@@ -53,12 +53,15 @@ $priorityAssets
   <div class="page-wrapper"></div>
   <script src="/assets/data/menu.js"></script>
   <script src="/assets/data/blog.js"></script>
+  <script src="/assets/config/public-runtime-config.js"></script>
+  <script src="/assets/config/seo-config.js"></script>
   <script src="/assets/config/order-config.js"></script>
   <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script>
   <script src="/assets/config/supabase-config.js"></script>
   <script src="/assets/js/supabase-client.js"></script>
   <script src="/assets/js/menu-service.js"></script>
   <script src="/assets/js/order-service.js"></script>
+  <script src="/assets/js/analytics.js"></script>
   <script src="/assets/js/pommy-site.js"></script>
   <script src="/assets/js/menu-page.js"></script>
   <script src="/assets/js/product-page.js"></script>
@@ -105,6 +108,8 @@ $primary = @{
   "contact\index.html" = @("Contact & Directions | Pommy Burger and Pizza", "Call Pommy Burger and Pizza, get directions using the confirmed Addis Ababa plus code, or browse the menu and prices.")
   "checkout\index.html" = @("Checkout | Pommy Burger and Pizza", "Review your Pommy order, choose delivery or takeaway, and prepare a cash-on-delivery order summary.")
   "delivery\index.html" = @("Delivery & Takeaway | Pommy Burger and Pizza", "Learn how to prepare a Pommy delivery or takeaway order and call the restaurant to confirm it.")
+  "burger-around-cmc\index.html" = @("Burgers Around CMC | Pommy Burger and Pizza", "Explore Pommy burgers around CMC in Addis Ababa, view current ETB prices and prepare an order from the full menu.")
+  "pizza-around-cmc\index.html" = @("Pizza Around CMC | Pommy Burger and Pizza", "Explore Pommy pizza around CMC in Addis Ababa, compare current ETB prices and prepare an order from the full menu.")
   "404\index.html" = @("Page Not Found | Pommy Burger and Pizza", "Return to the Pommy Burger and Pizza homepage or browse the menu.")
   "401\index.html" = @("Page Unavailable | Pommy Burger and Pizza", "Return to the Pommy Burger and Pizza homepage or browse the menu.")
 }
@@ -159,5 +164,11 @@ foreach ($page in $existingPages) {
 $homePath = Join-Path $root "index.html"
 $homeHtml = Get-Shell -Title "Pommy Burger and Pizza | Burgers & Pizza in Addis Ababa" -Description "Browse Pommy Burger and Pizza in Addis Ababa: real menu items, clear ETB prices, dine-in, takeaway, directions and easy order preparation." -PageId "6165adad51c39dd2424fe6cc"
 [System.IO.File]::WriteAllText($homePath, $homeHtml, [System.Text.UTF8Encoding]::new($false))
+
+node (Join-Path $PSScriptRoot "generate-seo.cjs")
+if ($LASTEXITCODE -ne 0) { throw "SEO generation failed." }
+
+node (Join-Path $PSScriptRoot "prerender-public.cjs")
+if ($LASTEXITCODE -ne 0) { throw "Static prerender failed." }
 
 Write-Output ("Generated {0} product pages and {1} blog posts." -f $products.Count, $posts.Count)

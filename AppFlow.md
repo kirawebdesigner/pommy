@@ -37,3 +37,21 @@ Logged-out users return to `/admin/login/`. Authenticated users who are not allo
 `localStorage cart IDs/quantities -> create_order RPC -> active menu rows locked/read -> trusted totals -> orders row + immutable order_items snapshots -> confirmation`
 
 The idempotency token survives uncertain retries for the same checkout attempt. Historical names and prices are never recalculated from current menu rows.
+
+## Admin Order Refresh
+
+`New order -> secured database write -> dashboard/order-list RPC refresh -> updated metrics and order cards`
+
+Admin pages refresh in the background and when the tab regains focus or connectivity. Active order controls are not replaced while staff are interacting with them.
+
+## Search Discovery Flow
+
+`Crawler -> robots.txt -> sitemap.xml -> static route HTML -> canonical metadata + visible content + JSON-LD -> menu/product/contact internal links`
+
+AI retrieval tools can also use `llms.txt`, then follow the same canonical public routes. Public discovery never requires delayed client rendering for the H1, business facts, menu links, or structured data.
+
+## Analytics Flow
+
+`Public interaction -> PommyAnalytics.track -> dataLayer -> configured GTM or GA4`
+
+Without an analytics identifier, events remain locally available in `dataLayer` and no external analytics script loads.

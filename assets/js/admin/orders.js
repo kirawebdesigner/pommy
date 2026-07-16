@@ -85,10 +85,13 @@
     return card;
   }
 
-  async function load() {
-    list.setAttribute("aria-busy", "true");
-    list.textContent = "";
-    list.appendChild(A.el("p", "admin-loading", "Loading orders..."));
+  async function load(options) {
+    options = options || {};
+    if (!options.silent) {
+      list.setAttribute("aria-busy", "true");
+      list.textContent = "";
+      list.appendChild(A.el("p", "admin-loading", "Loading orders..."));
+    }
     var filters = values();
     var term = filters.search;
     var limit = PAGE_SIZE + 1;
@@ -114,6 +117,9 @@
   }
 
   function reload() { A.setNotice(""); load().catch(function (error) { list.textContent = ""; A.setNotice(A.message(error), "error"); }); }
+  function canAutoRefresh() {
+    return !list.contains(document.activeElement) && !list.querySelector("button:disabled");
+  }
   form.addEventListener("submit", function (event) { event.preventDefault(); state.page = 1; reload(); });
   form.addEventListener("reset", function () { setTimeout(function () { state.page = 1; reload(); }, 0); });
   document.querySelector("[data-prev]").addEventListener("click", function () { state.page -= 1; reload(); });
@@ -125,6 +131,11 @@
   A.requireAdmin().then(function (access) {
     if (!access) return;
     state.access = access;
-    reload();
+    load().then(function () {
+      A.startAutoRefresh(function () { return load({ silent: true }); }, { canRefresh: canAutoRefresh });
+    }).catch(function (error) {
+      list.textContent = "";
+      A.setNotice(A.message(error), "error");
+    });
   });
 })();

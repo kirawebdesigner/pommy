@@ -2,6 +2,7 @@ const { chromium } = require("playwright");
 
 const base = process.argv[2] || process.env.POMMY_BASE_URL || "http://127.0.0.1:8098";
 const chrome = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+const isRemote = /^https:\/\//i.test(base);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -10,15 +11,32 @@ function assert(condition, message) {
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: chrome });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
-  context.setDefaultTimeout(15000);
+  context.setDefaultTimeout(isRemote ? 60000 : 15000);
   context.setDefaultNavigationTimeout(60000);
   const failures = [];
   const consoleErrors = [];
   const pageErrors = [];
 
-  async function prepare(page) {
+  async function prepare(page, options = {}) {
+    if (options.demoMode === false) {
+      await page.addInitScript(() => {
+        var config;
+        Object.defineProperty(window, "POMMY_SEO_CONFIG", {
+          configurable: true,
+          get: function () { return config; },
+          set: function (value) { config = Object.freeze(Object.assign({}, value, { demoMode: false })); }
+        });
+      });
+    }
     await page.route("**/*", route => {
       const url = new URL(route.request().url());
+      if (options.demoMode === false && url.origin === base && url.pathname === "/assets/config/public-runtime-config.js") {
+        return route.fulfill({
+          status: 200,
+          contentType: "text/javascript",
+          body: '(function(){window.POMMY_PUBLIC_ENV=Object.freeze({PUBLIC_SITE_URL:"https://pommydemo.netlify.app",PUBLIC_DEMO_MODE:false,PUBLIC_GA4_ID:"",PUBLIC_GTM_ID:"",PUBLIC_GOOGLE_SITE_VERIFICATION:""});})();'
+        });
+      }
       if (url.origin === base) return route.continue();
       return route.abort();
     });
@@ -156,7 +174,7 @@ function assert(condition, message) {
   await cartPage.close();
 
   const checkout = await context.newPage();
-  await prepare(checkout);
+  await prepare(checkout, { demoMode: false });
   const submittedOrders = [];
   await checkout.route("**/rest/v1/rpc/create_order", async route => {
     const payload = route.request().postDataJSON();
@@ -221,7 +239,7 @@ function assert(condition, message) {
   await checkout.close();
 
   const failedCheckout = await context.newPage();
-  await prepare(failedCheckout);
+  await prepare(failedCheckout, { demoMode: false });
   await failedCheckout.goto(base + "/product/beef-burger/", { waitUntil: "domcontentloaded" });
   await failedCheckout.getByRole("button", { name: "Add to cart", exact: true }).first().click();
   await failedCheckout.goto(base + "/checkout/", { waitUntil: "domcontentloaded" });
@@ -235,7 +253,7 @@ function assert(condition, message) {
   await failedCheckout.close();
 
   const retryCheckout = await context.newPage();
-  await prepare(retryCheckout);
+  await prepare(retryCheckout, { demoMode: false });
   const retryTokens = [];
   await retryCheckout.route("**/rest/v1/rpc/create_order", async route => {
     const payload = route.request().postDataJSON();
@@ -271,8 +289,26 @@ function assert(condition, message) {
   assert(retryTokens.length === 2 && retryTokens[0] === retryTokens[1], "Reload retry did not preserve the idempotency token");
   await retryCheckout.close();
 
+  const demoCheckout = await context.newPage();
+  await prepare(demoCheckout);
+  let demoOrderRequests = 0;
+  demoCheckout.on("request", request => {
+    if (request.url().includes("/rest/v1/rpc/create_order")) demoOrderRequests += 1;
+  });
+  await demoCheckout.goto(base + "/product/beef-burger/", { waitUntil: "domcontentloaded" });
+  await demoCheckout.getByRole("button", { name: "Add to cart", exact: true }).first().click();
+  await demoCheckout.goto(base + "/checkout/", { waitUntil: "domcontentloaded" });
+  await demoCheckout.getByLabel("Full Name").fill("Demo Customer");
+  await demoCheckout.getByLabel("Phone Number").fill("0956905484");
+  await demoCheckout.getByLabel("Takeaway / Pickup", { exact: true }).check();
+  await demoCheckout.getByRole("button", { name: "Place Order" }).click();
+  await demoCheckout.getByText("This demonstration does not submit a real order. Your cart is still saved.").waitFor();
+  assert(demoOrderRequests === 0, "Demo mode attempted a real order request");
+  assert(await demoCheckout.locator("[data-cart-count]").first().innerText() === "1", "Demo mode cleared the cart");
+  await demoCheckout.close();
+
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  mobileContext.setDefaultTimeout(15000);
+  mobileContext.setDefaultTimeout(isRemote ? 60000 : 15000);
   mobileContext.setDefaultNavigationTimeout(60000);
   const mobile = await mobileContext.newPage();
   await prepare(mobile);

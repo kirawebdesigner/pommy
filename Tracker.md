@@ -1,5 +1,22 @@
 # Tracker
 
+## SEO, Local Search, And AI Discovery
+
+- [x] Centralize canonical URL, verified Pommy facts, explicit unknown owner data, analytics settings, Search Console verification, and demo mode in `assets/config/seo-config.js`.
+- [x] Generate one unique metadata set, canonical, robots directive, Open Graph/Twitter set, and JSON-LD graph for every public HTML page.
+- [x] Permanently generate the verified Google Search Console token on all 151 public pages and confirm it in raw production HTML.
+- [x] Generate a 116-URL canonical sitemap, crawler-safe `robots.txt`, factual `llms.txt`, and route-by-route `SEO_METADATA.md`.
+- [x] Add high-value `/burger-around-cmc/` and `/pizza-around-cmc/` pages using the locked Pommy design and real menu records.
+- [x] Add static prerendering so H1s, business facts, menu/product content, internal links, and structured data remain available without JavaScript.
+- [x] Add optional GA4/GTM loading and stable events for menu views, product selection, add-to-cart, checkout start, order submission, calls, directions, and future verified WhatsApp links.
+- [x] Add canonical route redirects, public/security/cache headers, custom-domain portability through `PUBLIC_SITE_URL`, and unofficial-order protection through `PUBLIC_DEMO_MODE`.
+- [x] Document Search Console, indexing, analytics, custom-domain migration, demo mode, owner-data requirements, metadata inventory, schema inventory, and validation commands in `SEO_SETUP.md`.
+- [x] Auto-refresh the admin dashboard and order list through the existing secured RPCs without granting direct browser access to customer-order tables.
+- [x] Validate automatic admin refresh through both the eight-second timer and focus recovery; new orders and dashboard metrics update without a manual browser reload.
+- [x] Pass the final static, database, public-browser, live-data, admin, SEO-browser, four-breakpoint motion, Netlify-build, and eight-width visual-regression gates.
+- [x] Deploy the production build and verify the raw homepage source contains exactly one permanent Search Console tag.
+- [x] Verify production `robots.txt`, `sitemap.xml`, `llms.txt`, local landing pages, canonical redirects, live admin refresh, and live public routes with zero required local-request failures, runtime exceptions, or console errors.
+
 ## Supabase And Admin Integration
 
 - [x] Start from locked public baseline `aa69e3a530ae4905b3a7ff69662f2d7b6719aa87`; `main` matched `origin/main`; implementation is isolated on `feature/supabase-admin`.

@@ -48,6 +48,8 @@
 
   A.requireAdmin().then(function (access) {
     if (!access) return;
-    load(access).catch(function (error) { A.setNotice(A.message(error, "Dashboard data could not be loaded."), "error"); });
+    load(access).then(function () {
+      A.startAutoRefresh(function () { return load(access); });
+    }).catch(function (error) { A.setNotice(A.message(error, "Dashboard data could not be loaded."), "error"); });
   });
 })();

@@ -92,6 +92,7 @@
       if (kind === "invalid_customer") return "The order details could not be validated. Review the form and try again.";
       if (kind === "idempotency_conflict") return "The order details changed during submission. Review them and try again.";
       if (kind === "not_configured") return "Online ordering is temporarily unavailable. Your cart is still saved; please call Pommy or try again later.";
+      if (kind === "demo_mode") return "This demonstration does not submit a real order. Your cart is still saved.";
       return "We couldn't submit your order right now. Your cart is still saved. Please try again.";
     }
 
@@ -160,6 +161,7 @@
 
       clearPendingOrder();
       window.Pommy.saveCart([]);
+      document.dispatchEvent(new CustomEvent("pommy:order-submitted", { detail: { transaction_id: order.orderNumber, value: order.subtotal, currency: "ETB" } }));
       form.hidden = true;
       var priceNotice = order.priceChanged
         ? '<p><strong>The menu changed while your order was being prepared.</strong> The confirmed Cash on Delivery total is ' + window.Pommy.formatEtb(order.subtotal) + '.</p>'

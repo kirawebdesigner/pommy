@@ -20,3 +20,8 @@
 18. Validate database constraints, RLS roles, idempotency, snapshots, public flows, admin flows, and all 101 products.
 19. Run screenshot and motion regression gates at 1440px, 1024px, 768px, and 390px before deployment.
 20. Apply migrations, create the first allowlisted admin through a trusted channel, deploy, and verify the live Netlify/Supabase integration.
+21. Centralize verified business/search configuration and explicit unknown owner facts.
+22. Generate unique metadata, canonicals, social metadata, structured data, robots, sitemap, `llms.txt`, and a route inventory.
+23. Prerender public content for JavaScript-independent crawling and add two high-value CMC landing pages.
+24. Add GA4/GTM event readiness, Search Console verification, demo-order protection, Netlify canonical redirects/headers, and custom-domain portability.
+25. Run static, browser, motion, live-data, admin, SEO-rendering, performance, and eight-width visual-regression gates before production deployment.

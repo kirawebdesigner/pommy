@@ -23,9 +23,13 @@ The current static Webflow export is a generic restaurant template. It must beco
 - Responsive admin dashboard for orders, status management, and approved menu fields.
 - Accurate contact/location/service information.
 - Pommy-focused blog, local SEO metadata, structured data, and accessible controls.
+- Static, JavaScript-independent discovery content for Google and AI search tools.
+- Local-search landing pages for burgers and pizza around CMC without creating spam city pages.
+- Search Console verification, sitemap/robots/LLM discovery files, analytics readiness, and custom-domain portability.
 - Preserve the current Webflow design, responsive behavior, and non-commerce interactions.
 
 ## Out Of Scope
 
 - Online payments, customer accounts, social login, delivery-driver assignment, and public order history.
 - Public-site redesign, framework migration, or changes to the verified Webflow IX2 motion system.
+- Unsupported claims such as ratings, awards, opening hours, exact coordinates, social profiles, or delivery coverage.

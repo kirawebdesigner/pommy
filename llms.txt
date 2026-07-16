@@ -1,0 +1,26 @@
+# Pommy Burger and Pizza
+
+> Pommy Burger and Pizza serves burgers, pizza, chicken, breakfast, wraps and drinks around CMC in Addis Ababa.
+
+- Category: Burger and pizza restaurant
+- Location: Around CMC, Addis Ababa, Ethiopia
+- Plus code: XRRH+5Q Addis Ababa
+- Phone: 095 690 5484 (+251956905484)
+- Food: Burgers, Pizza, Fast Food, Chicken, Breakfast
+- Service area: CMC, Addis Ababa
+- Payment: Cash on Delivery
+- Opening hours: Not confirmed; call Pommy before visiting.
+- WhatsApp: No verified public number is configured.
+
+## Canonical pages
+
+- Home: https://pommydemo.netlify.app/
+- Menu and current ETB prices: https://pommydemo.netlify.app/menu/
+- Burgers around CMC: https://pommydemo.netlify.app/burger-around-cmc/
+- Pizza around CMC: https://pommydemo.netlify.app/pizza-around-cmc/
+- Order: https://pommydemo.netlify.app/checkout/
+- Location and contact: https://pommydemo.netlify.app/contact/
+- About: https://pommydemo.netlify.app/about/
+- Blog: https://pommydemo.netlify.app/blog/
+
+The menu contains 101 items across 10 categories. Product prices are displayed in ETB. No reviews, ratings, awards, coordinates, opening hours, email address or social profiles are claimed without owner verification.

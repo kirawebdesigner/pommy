@@ -147,6 +147,53 @@
     return String(status || "new").replace(/_/g, " ").replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
   }
 
+  function startAutoRefresh(refresh, options) {
+    options = options || {};
+    var intervalMs = Math.max(5000, Number(options.intervalMs) || 8000);
+    var canRefresh = typeof options.canRefresh === "function" ? options.canRefresh : function () { return true; };
+    var timer = 0;
+    var running = false;
+    var pending = false;
+    var stopped = false;
+
+    async function run() {
+      if (stopped || document.hidden || !canRefresh()) return;
+      if (running) {
+        pending = true;
+        return;
+      }
+      running = true;
+      try {
+        await refresh();
+      } catch (_) {
+        // Background refresh failures must not replace already-rendered admin data.
+      } finally {
+        running = false;
+        if (pending) {
+          pending = false;
+          run();
+        }
+      }
+    }
+
+    function onVisible() {
+      if (!document.hidden) run();
+    }
+
+    timer = window.setInterval(run, intervalMs);
+    window.addEventListener("focus", run);
+    window.addEventListener("online", run);
+    document.addEventListener("visibilitychange", onVisible);
+
+    return function stopAutoRefresh() {
+      stopped = true;
+      window.clearInterval(timer);
+      window.removeEventListener("focus", run);
+      window.removeEventListener("online", run);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }
+
   window.PommyAdmin = {
     ADMIN_PATH: ADMIN_PATH,
     LOGIN_PATH: LOGIN_PATH,
@@ -160,6 +207,7 @@
     requireAdmin: requireAdmin,
     setBusy: setBusy,
     setNotice: setNotice,
+    startAutoRefresh: startAutoRefresh,
     statusLabel: statusLabel,
     verifiedAccess: verifiedAccess
   };

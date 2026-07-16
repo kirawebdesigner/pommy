@@ -9,6 +9,7 @@
 - Supabase Auth email/password sessions for invite-only staff access.
 - `localStorage` remains the customer cart store; customer orders are persisted only after the database confirms the transaction.
 - No public-site framework migration and no payment gateway.
+- Build-time metadata/static-content generation for crawlability without changing the runtime design.
 
 ## Modules
 
@@ -22,6 +23,10 @@
 - `assets/js/checkout-page.js`: checkout UI and validation.
 - `assets/js/order-service.js`: idempotent `create_order` RPC submission, response normalization, and confirmation formatting.
 - `assets/css/pommy-site.css`: scoped additions that reuse the existing visual language.
+- `assets/config/seo-config.js`: centralized canonical URL, business facts, placeholders, analytics IDs, Search Console token, and demo-mode settings.
+- `scripts/generate-seo.cjs`: metadata, JSON-LD, robots, sitemap, `llms.txt`, runtime config, and metadata inventory generation.
+- `scripts/prerender-public.cjs`: static serialization of public page content for JavaScript-independent crawling.
+- `assets/js/analytics.js`: optional GA4/GTM loading and stable conversion-event names.
 - `supabase/migrations/`: versioned schema, functions, grants, RLS policies, and deterministic seed data.
 - `admin/`, `assets/js/admin/`, `assets/css/admin.css`: isolated protected staff interface.
 
@@ -32,6 +37,7 @@
 - Anonymous clients cannot list or directly insert orders. They can execute only the constrained transactional order RPC.
 - Admin access requires both a valid Supabase Auth user and explicit membership in the private admin allowlist.
 - RLS, revoked table privileges, and field-whitelisting admin RPCs prevent public writes, non-admin access, subtotal changes, and order-item snapshot edits.
+- The dashboard and order list refresh their secured RPC views automatically on a short interval and immediately when the tab regains focus or connectivity; refreshes never require direct order-table grants.
 - Only the public Supabase URL and anon key may be shipped to browsers. Service-role and database credentials are never committed.
 - Render dynamic content with DOM APIs and `textContent` where possible.
 - Ethiopian-style phone validation accepts local `09...` and international `+2519...` forms.
@@ -50,3 +56,6 @@
 - If that read fails, the bundled 101-product dataset remains available for read-only browsing.
 - Checkout never reports success or clears the cart unless the live database confirms persistence.
 - Existing static product route shells and SEO metadata remain compatible with stable slugs.
+- Every public page receives one title, description, canonical, robots directive, Open Graph/Twitter set, verification tag, and JSON-LD graph during the build.
+- `PUBLIC_SITE_URL` controls canonical hosts across metadata, schema, sitemap, robots, and AI discovery files.
+- `PUBLIC_DEMO_MODE=true` blocks the order RPC before network submission on unofficial deployments.

@@ -127,7 +127,10 @@ commit;
 
 const generated = generate();
 if (process.argv.includes("--check")) {
-  if (!fs.existsSync(outputPath) || fs.readFileSync(outputPath, "utf8") !== generated) {
+  const current = fs.existsSync(outputPath)
+    ? fs.readFileSync(outputPath, "utf8").replace(/\r\n/g, "\n")
+    : "";
+  if (current !== generated) {
     console.error("supabase/seed.sql is stale; run node scripts/generate-supabase-seed.cjs");
     process.exit(1);
   }

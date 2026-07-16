@@ -97,12 +97,12 @@ for (const post of posts) {
 }
 
 const primary = {
-  "index.html": "Pommy Burger and Pizza | Burgers & Pizza in Addis Ababa",
-  "menu/index.html": "Menu & Prices | Pommy Burger and Pizza",
-  "about/index.html": "About Pommy Burger and Pizza | Addis Ababa",
-  "blog/index.html": "Pommy Blog | Burgers, Pizza & Food in Addis Ababa",
-  "contact/index.html": "Contact & Directions | Pommy Burger and Pizza",
-  "checkout/index.html": "Checkout | Pommy Burger and Pizza"
+  "index.html": "Pommy Burger and Pizza | Burgers & Pizza Around CMC",
+  "menu/index.html": "Pommy Menu & Prices | Burgers and Pizza Around CMC",
+  "about/index.html": "About Pommy Burger and Pizza | CMC, Addis Ababa",
+  "blog/index.html": "Pommy Food Guides | Burgers and Pizza in Addis Ababa",
+  "contact/index.html": "Pommy CMC Location, Phone & Directions | Addis Ababa",
+  "checkout/index.html": "Order Pommy Burger and Pizza | CMC, Addis Ababa"
 };
 
 for (const [relative, expectedTitle] of Object.entries(primary)) {
@@ -114,6 +114,22 @@ for (const [relative, expectedTitle] of Object.entries(primary)) {
   indexedTitles.add(expectedTitle);
 }
 
+const sitemapLocations = [...read("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+const sitemapTitles = new Set();
+const sitemapDescriptions = new Set();
+for (const location of sitemapLocations) {
+  const pathname = new URL(location).pathname;
+  const relative = pathname === "/" ? "index.html" : pathname.slice(1) + "index.html";
+  const html = read(relative);
+  const title = titleOf(html);
+  const description = descriptionOf(html);
+  assert(!/name="robots" content="noindex/i.test(html), `Sitemap route is noindex: ${relative}`);
+  assert(!sitemapTitles.has(title), `Duplicate sitemap title: ${title}`);
+  assert(!sitemapDescriptions.has(description), `Duplicate sitemap description: ${description}`);
+  sitemapTitles.add(title);
+  sitemapDescriptions.add(description);
+}
+
 for (const file of publicHtmlFiles) {
   const relative = path.relative(root, file).replaceAll("\\", "/");
   const html = fs.readFileSync(file, "utf8");
@@ -122,9 +138,12 @@ for (const file of publicHtmlFiles) {
   assert(html.includes('/assets/css/webflow-original.css'), `Missing original design CSS: ${relative}`);
   assert(html.includes('/assets/css/pommy-site.css'), `Missing Pommy CSS: ${relative}`);
   assert(html.includes('/assets/js/webflow-original.js'), `Missing Webflow interaction runtime: ${relative}`);
-  assert(html.includes('data-pommy-schema="restaurant"'), `Missing restaurant structured data: ${relative}`);
-  const schemaText = html.match(/<script type="application\/ld\+json" data-pommy-schema="restaurant">(.*?)<\/script>/s)?.[1];
-  try { JSON.parse(schemaText); } catch (error) { failures.push(`Invalid JSON-LD: ${relative}`); }
+  assert(html.includes('data-pommy-schema="seo"'), `Missing SEO structured data: ${relative}`);
+  const schemaText = html.match(/<script type="application\/ld\+json" data-pommy-schema="seo">(.*?)<\/script>/s)?.[1];
+  try {
+    const schema = JSON.parse(schemaText);
+    assert(Array.isArray(schema["@graph"]) && schema["@graph"].some(entry => Array.isArray(entry["@type"]) && entry["@type"].includes("Restaurant")), `Missing Restaurant entity: ${relative}`);
+  } catch (error) { failures.push(`Invalid JSON-LD: ${relative}`); }
   assert(!/data-wf-domain|data-wf-status|meta name="generator"|w-webflow-badge/i.test(html), `Unnecessary Webflow branding metadata remains: ${relative}`);
   assert(!/<link[^>]+rel="canonical"[^>]+(?:webflow|template)/i.test(html), `Old template canonical remains: ${relative}`);
 
@@ -196,7 +215,9 @@ console.log(JSON.stringify({
   products: menu.length,
   categories: categories.length,
   blogPosts: posts.length,
-  indexedUniqueTitles: indexedTitles.size,
+  sitemapUrls: sitemapLocations.length,
+  indexedUniqueTitles: sitemapTitles.size,
+  indexedUniqueDescriptions: sitemapDescriptions.size,
   brokenLocalReferences: 0,
   forbiddenCustomerSourceMatches: 0,
   logoMatchesUploadedSource: true

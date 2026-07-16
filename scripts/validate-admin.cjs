@@ -20,6 +20,13 @@ const order = {
   created_at: "2026-07-14T08:00:00Z",
   items: [{ product_name: "Beef Burger", unit_price: 820, quantity: 2, line_total: 1640 }]
 };
+const newOrder = {
+  ...order,
+  id: "66666666-6666-4666-8666-666666666666",
+  order_number: "POM-2026-00002",
+  customer_name: "New Customer",
+  created_at: "2026-07-14T08:05:00Z"
+};
 const category = { id: "33333333-3333-4333-8333-333333333333", name: "Burger", slug: "burger", sort_order: 1, is_active: true };
 const secondCategory = { id: "55555555-5555-4555-8555-555555555555", name: "Pizza", slug: "pizza", sort_order: 2, is_active: true };
 const menuItem = {
@@ -64,10 +71,19 @@ async function authorize(page, writes, isAdmin = true) {
     const payload = route.request().postDataJSON() || {};
     let body;
     if (name === "is_admin") body = isAdmin;
-    else if (name === "admin_dashboard") body = { metrics: { new_orders: 1, preparing: 2, ready: 3, today_orders: 4 }, recent_orders: [order] };
+    else if (name === "admin_dashboard") {
+      writes.dashboardCalls = (writes.dashboardCalls || 0) + 1;
+      body = writes.dashboardData || { metrics: { new_orders: 1, preparing: 2, ready: 3, today_orders: 4 }, recent_orders: [order] };
+    }
     else if (name === "admin_list_orders") {
       writes.orderList = payload;
-      body = [order];
+      writes.orderListCalls = (writes.orderListCalls || 0) + 1;
+      body = writes.orderRows || [order];
+      if (payload.p_status) body = body.filter(item => item.status === payload.p_status);
+      if (payload.p_search) {
+        const term = String(payload.p_search).toLowerCase();
+        body = body.filter(item => [item.order_number, item.customer_name, item.phone].some(value => String(value || "").toLowerCase().includes(term)));
+      }
     }
     else if (name === "admin_update_order_status") {
       writes.status = payload;
@@ -108,6 +124,10 @@ async function authorize(page, writes, isAdmin = true) {
   assert(await dashboard.locator('[data-metric="new"]').innerText() === "1", "Dashboard new-order metric is wrong");
   assert(await dashboard.locator('[data-metric="preparing"]').innerText() === "2", "Dashboard preparing metric is wrong");
   assert(await dashboard.locator("[data-recent-orders] tr").count() === 1, "Dashboard recent orders did not render");
+  writes.dashboardData = { metrics: { new_orders: 2, preparing: 2, ready: 3, today_orders: 5 }, recent_orders: [newOrder, order] };
+  await dashboard.evaluate(() => window.dispatchEvent(new Event("focus")));
+  await dashboard.getByText("New Customer").waitFor();
+  assert(await dashboard.locator('[data-metric="new"]').innerText() === "2", "Dashboard did not auto-refresh new-order metrics");
   await dashboard.close();
 
   const orders = await browser.newPage({ viewport: { width: 1024, height: 900 } });
@@ -116,6 +136,9 @@ async function authorize(page, writes, isAdmin = true) {
   await orders.locator(".order-card").waitFor();
   const orderDetails = await orders.locator(".order-details").innerText();
   assert(orderDetails.includes(order.delivery_area) && orderDetails.includes(order.address) && orderDetails.includes(order.landmark), "Admin order card omitted delivery fulfilment details");
+  writes.orderRows = [newOrder, order];
+  await orders.getByText(newOrder.order_number).waitFor({ timeout: 11000 });
+  assert(await orders.locator(".order-card").count() === 2, "Orders page did not auto-refresh when a new order arrived");
   await orders.getByLabel("Search").fill(order.order_number);
   await orders.getByRole("button", { name: "Apply filters" }).click();
   await orders.locator(".order-card").waitFor();
@@ -148,12 +171,12 @@ async function authorize(page, writes, isAdmin = true) {
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await authorize(mobile, writes);
   await mobile.goto(`${base}/admin/orders/`, { waitUntil: "domcontentloaded" });
-  await mobile.locator(".order-card").waitFor();
+  await mobile.locator(".order-card").first().waitFor();
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), "Admin orders overflow at 390px");
   await mobile.close();
 
   await browser.close();
-  console.log(JSON.stringify({ authGuard: true, nonAdminDenied: true, dashboard: true, orderStatus: true, menuUpdate: true, mobileOverflow: false, status: "passed" }));
+  console.log(JSON.stringify({ authGuard: true, nonAdminDenied: true, dashboard: true, orderAutoRefresh: true, dashboardAutoRefresh: true, orderStatus: true, menuUpdate: true, mobileOverflow: false, status: "passed" }));
 })().catch(error => {
   console.error(error.stack || error);
   process.exit(1);

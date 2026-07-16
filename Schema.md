@@ -188,3 +188,14 @@ values ('00000000-0000-0000-0000-000000000000');
 4. Sign in through the admin login UI and call `is_admin()` before loading protected data.
 
 Removing the row revokes admin database access immediately. Never expose an allowlist insert RPC or a public Create Admin control.
+
+## Search Data Model
+
+Search metadata is file-generated rather than stored in PostgreSQL. `assets/config/seo-config.js` owns reusable business facts and explicit unknown values. `scripts/generate-seo.cjs` combines that configuration with the canonical menu/blog datasets to produce:
+
+- Route metadata and absolute canonicals
+- Restaurant/local-business graph entities
+- Menu, product, offer, article, breadcrumb, and visible FAQ entities
+- `robots.txt`, `sitemap.xml`, `llms.txt`, and `SEO_METADATA.md`
+
+No database schema or migration is required for SEO generation.

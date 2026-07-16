@@ -16,3 +16,10 @@ The current working website is the visual source of truth.
 - Reuse original Webflow classes, hierarchy, and `data-w-id` hooks wherever Pommy content replaces template content.
 - Keep Pommy data, accessibility, navigation, cart, checkout, blog, SEO, and local assets intact.
 - Do not reintroduce template branding, fake testimonials, reservation claims, external social claims, or obsolete ecommerce behavior.
+
+## SEO Visual Lock
+
+- Metadata, semantics, static prerendering, analytics hooks, and structured data must not alter rendered geometry.
+- Local landing pages reuse existing Pommy sections, cards, buttons, typography, and responsive rules.
+- Do not add visible keyword blocks or hidden SEO text.
+- Any future demo notice must be small, truthful, accessible, and approved against the locked visual baseline.

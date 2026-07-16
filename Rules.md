@@ -15,3 +15,8 @@
 - Do not add AR, 3D food previews, `model-viewer`, or Three.js.
 - Use semantic controls, explicit labels, visible focus, and useful validation messages.
 - Preserve unrelated user files and avoid destructive Git/filesystem operations.
+- Keep all reusable SEO/business facts in `assets/config/seo-config.js`; do not scatter canonical hosts or unverified data through generated pages.
+- Never add review/rating schema, opening hours, coordinates, email, WhatsApp, social URLs, or delivery claims without owner verification.
+- Keep important metadata, H1s, business facts, primary links, and JSON-LD in generated source HTML.
+- Preserve the permanent Google Search Console verification token unless ownership is intentionally transferred.
+- Keep unofficial deployments in demo mode; never allow a demo build to submit a real order.
