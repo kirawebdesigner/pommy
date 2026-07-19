@@ -98,9 +98,10 @@ assert(!locations.some((url) => /\/(?:admin|401|404)\//.test(url)), "sitemap.xml
 assert(locations.length === 116, `sitemap.xml: expected 116 URLs, found ${locations.length}`);
 
 const llms = fs.readFileSync(path.join(root, "llms.txt"), "utf8");
-for (const fact of ["Pommy Burger and Pizza", "Around CMC", "095 690 5484", "Opening hours: Not confirmed"]) {
+for (const fact of ["# Pommy Burger and Pizza", "Addis Ababa, Ethiopia", "+251 95 690 5484", "Services: Dine-in and takeaway"]) {
   assert(llms.includes(fact), `llms.txt: missing factual signal "${fact}"`);
 }
+assert(!/\/admin\/|\/checkout\//i.test(llms), "llms.txt: private or transactional route exposed");
 
 if (failures.length) {
   console.error(failures.join("\n"));

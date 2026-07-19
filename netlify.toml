@@ -31,8 +31,16 @@
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'sha256-xDoYQXtMKrG4LZd0Dyw14KrXec50CIgfZMwUy3Q/bac=' 'sha256-wqVcTDlQv3E44vm8hiSLQO6Lq0UlgYNz52x/5S3jgG0=' https://www.googletagmanager.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://cruvatqjbignywiwoszh.supabase.co wss://cruvatqjbignywiwoszh.supabase.co https://www.google-analytics.com https://region1.google-analytics.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; worker-src 'self' blob:; upgrade-insecure-requests"
+
+[[headers]]
+  for = "/assets/images/optimized/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "/assets/*"

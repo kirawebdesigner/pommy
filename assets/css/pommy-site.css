@@ -573,6 +573,34 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
   font-weight: 700;
 }
 
+/* Preserve the orange identity while meeting text contrast on light surfaces. */
+.pommy-original-home .color-primary-1,
+.pommy-original-home .pommy-eyebrow,
+.pommy-original-home .pommy-trust-detail,
+.pommy-original-add,
+.pommy-price,
+.pommy-product-price,
+.pommy-cart-item h3 a {
+  color: #c84f0a;
+}
+
+.pommy-original-home .home-hero h1 .color-primary-1 {
+  color: #e95d11;
+}
+
+.button-primary:not(.button-white),
+.pommy-category-tab[aria-pressed="true"] {
+  background-color: #c84f0a;
+}
+
+.button-primary.button-white {
+  color: #c84f0a;
+}
+
+.pommy-original-home .section.cta-v1 {
+  background-color: #c84f0a;
+}
+
 .pommy-original-home .blog-card.featured-blog .mask {
   min-height: 380px;
 }

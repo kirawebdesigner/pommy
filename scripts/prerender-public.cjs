@@ -96,11 +96,9 @@ async function main() {
     });
 
     let source = fs.readFileSync(file, "utf8");
-    const scriptMarker = '  <script src="/assets/data/menu.js"></script>';
-    const markerIndex = source.indexOf(scriptMarker);
-    if (markerIndex === -1) throw new Error(`Missing script marker in ${file}`);
     const bodyIndex = source.indexOf("<body>");
-    if (bodyIndex === -1 || bodyIndex > markerIndex) throw new Error(`Missing body in ${file}`);
+    const markerIndex = source.indexOf("  <script", bodyIndex);
+    if (bodyIndex === -1 || markerIndex === -1 || bodyIndex > markerIndex) throw new Error(`Missing body or script marker in ${file}`);
     source = source.slice(0, bodyIndex) + "<body>\n  " + prefix + "\n" + source.slice(markerIndex);
     fs.writeFileSync(file, source);
     process.stdout.write(`\rPrerendered ${index + 1}/${files.length}: ${route.padEnd(72)}`);

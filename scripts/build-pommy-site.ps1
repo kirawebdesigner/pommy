@@ -14,7 +14,8 @@ function Get-Shell {
     [string]$Title,
     [string]$Description,
     [bool]$NoIndex = $false,
-    [string]$PageId = ""
+    [string]$PageId = "",
+    [string]$RelativePath = "index.html"
   )
 
   $robots = if ($NoIndex) { '<meta name="robots" content="noindex,follow"/>' } else { "" }
@@ -23,8 +24,39 @@ function Get-Shell {
   $pageAttribute = if ($PageId) { ' data-wf-page="' + (Encode $PageId) + '"' } else { "" }
   $priorityAssets = if ($PageId) {
     '  <link rel="preload" href="/assets/fonts/dm-sans-2.woff2" as="font" type="font/woff2" crossorigin/>' + "`r`n" +
-    '  <link rel="preload" href="/assets/images/menu/home-hero.jpg" as="image" type="image/jpeg" fetchpriority="high"/>'
+    '  <link rel="preload" href="/assets/fonts/pommy-ui-icons.woff2" as="font" type="font/woff2" crossorigin/>' + "`r`n" +
+    '  <link rel="preload" href="/assets/images/optimized/home-hero-1258.webp" imagesrcset="/assets/images/optimized/home-hero-480.webp 480w, /assets/images/optimized/home-hero-800.webp 800w, /assets/images/optimized/home-hero-1258.webp 1258w" imagesizes="(max-width: 767px) calc(100vw - 32px), 50vw" as="image" type="image/webp" fetchpriority="high"/>'
   } else { "" }
+  $route = ($RelativePath -replace '\\', '/').ToLowerInvariant()
+  $isHome = $route -eq "index.html"
+  $isMenuPage = $route -eq "menu/index.html" -or $route.StartsWith("category/") -or $route.StartsWith("dish-categories/")
+  $isProductPage = $route.StartsWith("product/")
+  $isCheckoutPage = $route -eq "checkout/index.html"
+  $isLocalMenuPage = $route -in @("burger-around-cmc/index.html", "pizza-around-cmc/index.html")
+  $needsMenuData = $isHome -or $isMenuPage -or $isProductPage -or $isLocalMenuPage
+  $needsBlogData = $isHome -or $route -eq "blog/index.html" -or $route.StartsWith("blog-posts/") -or $route.StartsWith("blog-posts-category/")
+  $needsSupabase = $needsMenuData -or $isCheckoutPage
+  $scripts = [System.Collections.Generic.List[string]]::new()
+  if ($needsMenuData) { $scripts.Add('  <script src="/assets/data/menu.js"></script>') }
+  if ($needsBlogData) { $scripts.Add('  <script src="/assets/data/blog.js"></script>') }
+  $scripts.Add('  <script src="/assets/config/public-runtime-config.js"></script>')
+  $scripts.Add('  <script src="/assets/config/seo-config.js"></script>')
+  $scripts.Add('  <script src="/assets/config/order-config.js"></script>')
+  if ($needsSupabase) {
+    $scripts.Add('  <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script>')
+    $scripts.Add('  <script src="/assets/config/supabase-config.js"></script>')
+    $scripts.Add('  <script src="/assets/js/supabase-client.js"></script>')
+  }
+  if ($needsMenuData) { $scripts.Add('  <script src="/assets/js/menu-service.js"></script>') }
+  if ($isCheckoutPage) { $scripts.Add('  <script src="/assets/js/order-service.js"></script>') }
+  $scripts.Add('  <script src="/assets/js/analytics.js"></script>')
+  $scripts.Add('  <script src="/assets/js/pommy-site.js"></script>')
+  if ($isMenuPage) { $scripts.Add('  <script src="/assets/js/menu-page.js"></script>') }
+  if ($isProductPage) { $scripts.Add('  <script src="/assets/js/product-page.js"></script>') }
+  if ($isCheckoutPage) { $scripts.Add('  <script src="/assets/js/checkout-page.js"></script>') }
+  $scripts.Add('  <script src="/assets/js/jquery-3.5.1.min.js" type="text/javascript"></script>')
+  $scripts.Add('  <script>window.Pommy.motionReady.then(function(){var script=document.createElement("script");script.src="/assets/js/webflow-original.js";document.body.appendChild(script);});</script>')
+  $scriptMarkup = [string]::Join("`r`n", $scripts)
   return @"
 <!DOCTYPE html>
 <html lang="en" data-wf-site="6165adad51c39da51d4fe6cd"$pageAttribute>
@@ -44,30 +76,14 @@ $priorityAssets
   <link href="/assets/css/webflow-original.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/dm-sans.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/pommy-site.css" rel="stylesheet" type="text/css"/>
-  <link href="/assets/images/pommy-logo.png" rel="shortcut icon" type="image/png"/>
-  <link href="/assets/images/pommy-logo.png" rel="apple-touch-icon"/>
+  <link href="/assets/images/optimized/pommy-logo-192.png" rel="shortcut icon" type="image/png"/>
+  <link href="/assets/images/optimized/pommy-logo-192.png" rel="apple-touch-icon"/>
   <script type="application/ld+json" data-pommy-schema="restaurant">{"@context":"https://schema.org","@type":"FastFoodRestaurant","name":"Pommy Burger and Pizza","telephone":"+251956905484","address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"ET"},"servesCuisine":["Burgers","Pizza","Fast Food","Chicken"],"priceRange":"ETB","hasMap":"https://www.google.com/maps/search/?api=1&query=XRRH%2B5Q%20Addis%20Ababa"}</script>
   <script>!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch");if(location.pathname==="/"&&!o.matchMedia("(prefers-reduced-motion: reduce)").matches)n.classList.add("pommy-ix2-pending")}(window,document);</script>
 </head>
 <body>
   <div class="page-wrapper"></div>
-  <script src="/assets/data/menu.js"></script>
-  <script src="/assets/data/blog.js"></script>
-  <script src="/assets/config/public-runtime-config.js"></script>
-  <script src="/assets/config/seo-config.js"></script>
-  <script src="/assets/config/order-config.js"></script>
-  <script src="/assets/vendor/supabase-js-2.49.4.min.js"></script>
-  <script src="/assets/config/supabase-config.js"></script>
-  <script src="/assets/js/supabase-client.js"></script>
-  <script src="/assets/js/menu-service.js"></script>
-  <script src="/assets/js/order-service.js"></script>
-  <script src="/assets/js/analytics.js"></script>
-  <script src="/assets/js/pommy-site.js"></script>
-  <script src="/assets/js/menu-page.js"></script>
-  <script src="/assets/js/product-page.js"></script>
-  <script src="/assets/js/checkout-page.js"></script>
-  <script src="/assets/js/jquery-3.5.1.min.js" type="text/javascript"></script>
-  <script>window.Pommy.ready.then(function(){var script=document.createElement("script");script.src="/assets/js/webflow-original.js";document.body.appendChild(script);});</script>
+$scriptMarkup
 </body>
 </html>
 "@
@@ -85,7 +101,7 @@ function Set-Page {
   if (-not (Test-Path -LiteralPath $directory)) {
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
   }
-  [System.IO.File]::WriteAllText($target, (Get-Shell -Title $Title -Description $Description -NoIndex $NoIndex), [System.Text.UTF8Encoding]::new($false))
+  [System.IO.File]::WriteAllText($target, (Get-Shell -Title $Title -Description $Description -NoIndex $NoIndex -RelativePath $RelativePath), [System.Text.UTF8Encoding]::new($false))
 }
 
 $nodeOutput = node -e "global.window=global;require('./assets/data/menu.js');process.stdout.write(JSON.stringify(global.POMMY_MENU))"
@@ -162,7 +178,7 @@ foreach ($page in $existingPages) {
 }
 
 $homePath = Join-Path $root "index.html"
-$homeHtml = Get-Shell -Title "Pommy Burger and Pizza | Burgers & Pizza in Addis Ababa" -Description "Browse Pommy Burger and Pizza in Addis Ababa: real menu items, clear ETB prices, dine-in, takeaway, directions and easy order preparation." -PageId "6165adad51c39dd2424fe6cc"
+$homeHtml = Get-Shell -Title "Pommy Burger and Pizza | Burgers & Pizza in Addis Ababa" -Description "Browse Pommy Burger and Pizza in Addis Ababa: real menu items, clear ETB prices, dine-in, takeaway, directions and easy order preparation." -PageId "6165adad51c39dd2424fe6cc" -RelativePath "index.html"
 [System.IO.File]::WriteAllText($homePath, $homeHtml, [System.Text.UTF8Encoding]::new($false))
 
 node (Join-Path $PSScriptRoot "generate-seo.cjs")

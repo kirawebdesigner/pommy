@@ -128,6 +128,22 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 - [x] Final live motion/link suite passed at all four breakpoints, including slider keyboard input, mobile menu open/close, product hover/focus states, cart updates, and reduced-motion emulation.
 - [x] Final live full regression passed 12 representative routes and all 101 products with cart persistence, quantity controls, delivery/pickup COD preparation, zero failed required local requests, zero runtime exceptions, and zero console errors.
 
+## Performance, Accessibility, Headers, And Crawler Metadata
+
+- [x] Record the uncontaminated production reference (desktop Performance 91, Accessibility 97, Best Practices 96, SEO 100; FCP 0.9s, LCP 1.3s, TBT 80ms, CLS 0.076, Speed Index 1.9s) and exclude the extension/cache/IndexedDB-contaminated 27 run from decisions.
+- [x] Map active image and script ownership. Webflow remains required for IX2, slider, mobile navigation, Lottie, and original interaction choreography; it was preserved unchanged.
+- [x] Generate responsive local WebP variants for active menu photography and 128/256px logo variants while retaining original JPEG/PNG fallbacks. The hero remains eager, high priority, explicitly sized, and HTML-discoverable; below-fold media remains lazy.
+- [x] Split generated scripts by route so menu, product, checkout, order, Supabase, and blog code loads only where consumed. All 151 generated public pages use the generator as source of truth.
+- [x] Preserve the pre-paint IX2 ownership guard and start Webflow from `Pommy.motionReady` instead of waiting for Supabase. The prerendered homepage remains stable while its eight featured cards reconcile in place with authoritative live data.
+- [x] Correct invalid product-list/cart ARIA, add intrinsic dimensions to active images/icons, and apply only measured WCAG-safe orange variants (`#c84f0a` for normal text/white controls and `#e95d11` for the large hero accent).
+- [x] Add Netlify `nosniff`, referrer, permissions, frame, COOP, and tested CSP definitions. The CSP hashes exactly match the generated pre-paint and Webflow-loader inline scripts.
+- [x] Repair `robots.txt` and Markdown `llms.txt`; public crawl routes remain allowed while `/admin/` and `/checkout/` are excluded.
+- [x] Local static gates: 155 HTML pages, 101 products, 10 categories, 6 posts, 116 sitemap URLs, zero broken local references, zero missing image dimensions, and Supabase seed parity across four migrations.
+- [x] Local browser gates: 12 representative routes, 101 products, eight live featured cards, authoritative price/unavailable behavior, cart/checkout, admin authorization/mutations/auto-refresh, and SEO browser validation all pass with zero failed required requests, runtime exceptions, or console errors.
+- [x] Local motion gates at 1440, 1024, 768, and 390px retain perceptible native reveals, zero reveal-fallback activations, zero visible-before-hidden events on the guarded ownership set, zero stuck targets in natural scrolling, mobile lightweight card reveals, reduced-motion visibility, and zero horizontal overflow.
+- [x] Local Lighthouse diagnostic reached Accessibility 100, Best Practices 100, and SEO 100. Three-run production medians remain pending until the linked Netlify build is live.
+- [ ] Verify the linked Netlify deploy headers, CSP, crawler files, Supabase, checkout/admin, visuals, images, and motion, then record three clean desktop/mobile Lighthouse runs and medians.
+
 ## Superseded Compact Polish
 
 - [x] The rejected compact `pommy-polish.css` direction and its page-height reductions were removed.
