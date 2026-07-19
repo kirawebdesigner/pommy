@@ -41,6 +41,59 @@
     catch (error) { /* Storage may be unavailable in private browsing modes. */ }
   }
 
+  function legacyCopy(text) {
+    var area = document.createElement("textarea");
+    var active = document.activeElement;
+    area.value = text;
+    area.readOnly = true;
+    area.setAttribute("aria-hidden", "true");
+    area.style.position = "fixed";
+    area.style.top = "0";
+    area.style.left = "-9999px";
+    area.style.fontSize = "16px";
+    document.body.appendChild(area);
+    area.focus({ preventScroll: true });
+    area.select();
+    area.setSelectionRange(0, text.length);
+    var copied = false;
+    try {
+      copied = document.execCommand("copy") === true;
+    } catch (_) {
+      copied = false;
+    }
+    area.remove();
+    if (active && typeof active.focus === "function") active.focus({ preventScroll: true });
+    return copied;
+  }
+
+  async function copyOrderDetails(text) {
+    if (window.isSecureContext && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (_) {
+        // Continue to the synchronous fallback for restricted mobile browsers.
+      }
+    }
+    return legacyCopy(text);
+  }
+
+  function showManualCopy(status, text) {
+    var existing = document.getElementById("manual-order-details");
+    if (existing) existing.remove();
+    var area = document.createElement("textarea");
+    area.id = "manual-order-details";
+    area.className = "pommy-manual-copy";
+    area.readOnly = true;
+    area.setAttribute("aria-label", "Order details to copy");
+    area.value = text;
+    status.textContent = "Automatic copy was blocked. Select the order details below and copy them manually.";
+    status.insertAdjacentElement("afterend", area);
+    area.focus({ preventScroll: true });
+    area.select();
+    area.setSelectionRange(0, text.length);
+  }
+
   function init() {
     var app = document.getElementById("pommy-checkout-app");
     if (!app || !window.Pommy || !window.PommyOrderService) return;
@@ -169,19 +222,17 @@
       result.innerHTML = '<div class="pommy-order-success"><h2>Order received</h2><p>Pommy has received your Cash on Delivery order. The restaurant may call you to confirm delivery or pickup details.</p>' + priceNotice + '<p><strong>Order number:</strong> ' + window.Pommy.escapeHtml(order.orderNumber) + '</p><p><strong>Confirmed total:</strong> ' + window.Pommy.formatEtb(order.subtotal) + '</p><div class="pommy-actions"><a class="button-primary w-button" href="tel:' + window.Pommy.escapeHtml(window.POMMY_ORDER_CONFIG.phoneInternational) + '">Call Pommy</a><button class="button-secondary w-button" type="button" id="copy-order-details">Copy Order Details</button></div><p id="copy-order-status" class="pommy-disclosure" aria-live="polite"></p></div>';
       summary.innerHTML = summaryMarkup(order.items, order.subtotal);
       var copyButton = document.getElementById("copy-order-details");
-      copyButton.addEventListener("click", function () {
+      copyButton.addEventListener("click", async function () {
         var text = window.PommyOrderService.format(order);
-        navigator.clipboard.writeText(text).then(function () {
-          document.getElementById("copy-order-status").textContent = "Order details copied.";
-        }).catch(function () {
-          var area = document.createElement("textarea");
-          area.value = text;
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand("copy");
-          area.remove();
-          document.getElementById("copy-order-status").textContent = "Order details copied.";
-        });
+        var status = document.getElementById("copy-order-status");
+        var copied = await copyOrderDetails(text);
+        if (copied) {
+          var manual = document.getElementById("manual-order-details");
+          if (manual) manual.remove();
+          status.textContent = "Order details copied.";
+        } else {
+          showManualCopy(status, text);
+        }
       });
       result.scrollIntoView({ behavior: "smooth", block: "start" });
     });

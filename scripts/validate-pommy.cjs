@@ -11,6 +11,7 @@ function assert(condition, message) {
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: chrome });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin: new URL(base).origin });
   context.setDefaultTimeout(isRemote ? 60000 : 15000);
   context.setDefaultNavigationTimeout(60000);
   const failures = [];
@@ -224,6 +225,8 @@ function assert(condition, message) {
   assert((await checkout.locator("body").innerText()).includes("The menu changed while your order was being prepared."), "Checkout did not explain the trusted price change");
   await checkout.getByRole("button", { name: "Copy Order Details" }).click();
   await checkout.getByText("Order details copied.").waitFor();
+  const copiedOrder = await checkout.evaluate(() => navigator.clipboard.readText());
+  assert(copiedOrder.includes("Order: POM-2026-00001") && copiedOrder.includes("Chicken BBQ Pizza"), "Copy Order Details did not write the confirmed order to the clipboard");
   await checkout.goto(base + "/product/beef-burger/", { waitUntil: "domcontentloaded" });
   await checkout.getByRole("button", { name: "Add to cart", exact: true }).first().click();
   await checkout.goto(base + "/checkout/", { waitUntil: "domcontentloaded" });
