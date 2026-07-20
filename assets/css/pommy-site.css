@@ -581,7 +581,7 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
 .pommy-price,
 .pommy-product-price,
 .pommy-cart-item h3 a {
-  color: #c84f0a;
+  color: #c24b08;
 }
 
 .pommy-original-home .home-hero h1 .color-primary-1 {
@@ -590,15 +590,15 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
 
 .button-primary:not(.button-white),
 .pommy-category-tab[aria-pressed="true"] {
-  background-color: #c84f0a;
+  background-color: #c24b08;
 }
 
 .button-primary.button-white {
-  color: #c84f0a;
+  color: #c24b08;
 }
 
 .pommy-original-home .section.cta-v1 {
-  background-color: #c84f0a;
+  background-color: #c24b08;
 }
 
 .pommy-original-home .blog-card.featured-blog .mask {

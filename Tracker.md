@@ -135,7 +135,7 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 - [x] Generate responsive local WebP variants for active menu photography and 128/256px logo variants while retaining original JPEG/PNG fallbacks. The hero remains eager, high priority, explicitly sized, and HTML-discoverable; below-fold media remains lazy.
 - [x] Split generated scripts by route so menu, product, checkout, order, Supabase, and blog code loads only where consumed. All 151 generated public pages use the generator as source of truth.
 - [x] Preserve the pre-paint IX2 ownership guard and start Webflow from `Pommy.motionReady` instead of waiting for Supabase. The prerendered homepage remains stable while its eight featured cards reconcile in place with authoritative live data.
-- [x] Correct invalid product-list/cart ARIA, add intrinsic dimensions to active images/icons, and apply only measured WCAG-safe orange variants (`#c84f0a` for normal text/white controls and `#e95d11` for the large hero accent).
+- [x] Correct invalid product-list/cart ARIA, add intrinsic dimensions to active images/icons, and apply only measured WCAG-safe orange variants (`#c24b08` for normal text/white controls and `#e95d11` for the large hero accent).
 - [x] Add Netlify `nosniff`, referrer, permissions, frame, COOP, and tested CSP definitions. The CSP hashes exactly match the generated pre-paint and Webflow-loader inline scripts.
 - [x] Repair `robots.txt` and Markdown `llms.txt`; public crawl routes remain allowed while `/admin/` and `/checkout/` are excluded.
 - [x] Local static gates: 155 HTML pages, 101 products, 10 categories, 6 posts, 116 sitemap URLs, zero broken local references, zero missing image dimensions, and Supabase seed parity across four migrations.

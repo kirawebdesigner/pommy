@@ -19,23 +19,23 @@ function assert(condition, message) {
   const pageErrors = [];
 
   async function prepare(page, options = {}) {
-    if (options.demoMode === false) {
-      await page.addInitScript(() => {
+    if (typeof options.demoMode === "boolean") {
+      await page.addInitScript(settings => {
         var config;
         Object.defineProperty(window, "POMMY_SEO_CONFIG", {
           configurable: true,
           get: function () { return config; },
-          set: function (value) { config = Object.freeze(Object.assign({}, value, { demoMode: false })); }
+          set: function (value) { config = Object.freeze(Object.assign({}, value, { demoMode: settings.demoMode })); }
         });
-      });
+      }, options);
     }
     await page.route("**/*", route => {
       const url = new URL(route.request().url());
-      if (options.demoMode === false && url.origin === base && url.pathname === "/assets/config/public-runtime-config.js") {
+      if (typeof options.demoMode === "boolean" && url.origin === base && url.pathname === "/assets/config/public-runtime-config.js") {
         return route.fulfill({
           status: 200,
           contentType: "text/javascript",
-          body: '(function(){window.POMMY_PUBLIC_ENV=Object.freeze({PUBLIC_SITE_URL:"https://pommydemo.netlify.app",PUBLIC_DEMO_MODE:false,PUBLIC_GA4_ID:"",PUBLIC_GTM_ID:"",PUBLIC_GOOGLE_SITE_VERIFICATION:""});})();'
+          body: '(function(){window.POMMY_PUBLIC_ENV=Object.freeze({PUBLIC_SITE_URL:"https://pommydemo.netlify.app",PUBLIC_DEMO_MODE:' + String(options.demoMode) + ',PUBLIC_GA4_ID:"",PUBLIC_GTM_ID:"",PUBLIC_GOOGLE_SITE_VERIFICATION:""});})();'
         });
       }
       if (url.origin === base) return route.continue();
@@ -293,7 +293,7 @@ function assert(condition, message) {
   await retryCheckout.close();
 
   const demoCheckout = await context.newPage();
-  await prepare(demoCheckout);
+  await prepare(demoCheckout, { demoMode: true });
   let demoOrderRequests = 0;
   demoCheckout.on("request", request => {
     if (request.url().includes("/rest/v1/rpc/create_order")) demoOrderRequests += 1;
