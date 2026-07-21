@@ -8,7 +8,7 @@
 - [x] Make checkout consistently `noindex,follow`, remove it from the sitemap, and keep it crawlable so search engines can read the directive.
 - [x] Force duplicate `/index.html` and nested `/*/index.html` URLs to their canonical trailing-slash routes at the Netlify layer.
 - [x] Pass local SEO/static/browser gates and validate favicon, manifest MIME type, crawler source, and canonical redirects on a Netlify preview.
-- [/] Push through GitHub, wait for the linked Netlify production deploy, and verify production source and redirects.
+- [x] Push through GitHub and verify linked Netlify production deploy `6a60051038d39a0008349b4a` serves the square Pommy favicon, manifest, naming schema, indexable `/menu/`, 115-URL sitemap, and canonical redirects with zero browser errors or failed local requests.
 
 ## SEO, Local Search, And AI Discovery
 

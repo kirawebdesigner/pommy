@@ -107,8 +107,10 @@ Google ultimately controls crawling, indexing, the displayed site name, and favi
 ## Verified Production Audit
 
 - Homepage source: HTTP 200, one exact Google verification tag, and the canonical `https://pommydemo.netlify.app/`.
+- Search appearance source: HTTP 200 square Pommy favicon, correctly typed web manifest, `Pommy Burger and Pizza` application name, and homepage `WebSite` name/alternate-name schema.
+- `/menu/`: HTTP 200 for Googlebot, self-canonical, `index,follow`, present in the sitemap, and available without JavaScript.
 - `robots.txt`, `sitemap.xml`, `llms.txt`, `/burger-around-cmc/`, and `/pizza-around-cmc/`: HTTP 200.
-- `/index.html`, `/location`, and `/order`: permanent canonical redirects.
+- `/index.html`, nested `/*/index.html`, `/location`, and `/order`: permanent canonical redirects.
 - Live SEO browser gate: 8 rendered routes, 6 no-JavaScript routes, 115 sitemap URLs, zero console errors, and zero failed local requests.
 - Live public gate: 12 representative routes and all 101 products with cart/checkout behavior, zero failed required local requests, zero runtime exceptions, and zero console errors.
 - Live admin gate: authentication/authorization, dashboard, timed order auto-refresh, focus refresh, status mutation, menu mutation, and 390px overflow checks passed using mocked RPC responses against the deployed frontend assets.
