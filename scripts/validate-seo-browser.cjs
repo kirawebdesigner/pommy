@@ -95,6 +95,9 @@ async function mockSupabase(page) {
       title: document.title,
       description: document.querySelector('meta[name="description"]')?.content || "",
       canonical: document.querySelector('link[rel="canonical"]')?.href || "",
+      robots: document.querySelector('meta[name="robots"]')?.content || "",
+      favicon: document.querySelector('link[rel="icon"]')?.href || "",
+      manifest: document.querySelector('link[rel="manifest"]')?.href || "",
       h1: document.querySelectorAll("h1").length,
       main: document.querySelectorAll("main").length,
       header: document.querySelectorAll("header").length,
@@ -105,6 +108,9 @@ async function mockSupabase(page) {
     }));
     assert(state.title && state.description.length >= 70, `${route}: metadata is incomplete`);
     assert(state.canonical === `https://pommydemo.netlify.app${route}`, `${route}: canonical is incorrect`);
+    assert(state.favicon === `${base}/favicon.png`, `${route}: favicon is incorrect`);
+    assert(state.manifest === `${base}/site.webmanifest`, `${route}: manifest is incorrect`);
+    assert(route === "/checkout/" ? state.robots.startsWith("noindex,follow") : state.robots.startsWith("index,follow"), `${route}: robots directive is incorrect`);
     assert(state.h1 === 1 && state.main === 1 && state.header === 1 && state.footer === 1, `${route}: semantic landmark or H1 count is incorrect`);
     assert(state.schema.length === 1, `${route}: expected one JSON-LD graph`);
     for (const schema of state.schema) {
@@ -173,7 +179,7 @@ async function mockSupabase(page) {
   console.log(JSON.stringify({
     routes: routes.length,
     noJavaScriptRoutes: 6,
-    sitemapUrls: 116,
+    sitemapUrls: 115,
     analyticsEvents: ["view_menu", "select_item", "add_to_cart"],
     vitals,
     consoleErrors: errors.length,

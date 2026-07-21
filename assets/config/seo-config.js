@@ -36,6 +36,7 @@
     googleSiteVerification: "pY7z6H-NGHLqbbZ_31OKCE-mJV_FNFHOCZg6r6QEU3w",
     business: Object.freeze({
       name: "Pommy Burger and Pizza",
+      alternateNames: Object.freeze(["Pommy", "Pommy Burger & Pizzeria"]),
       displayName: "Pommy Burger and Pizza",
       category: "Burger and pizza restaurant",
       description: "Pommy Burger and Pizza serves burgers, pizza, chicken, breakfast, wraps and drinks around CMC in Addis Ababa.",
@@ -56,6 +57,8 @@
       socialProfiles: Object.freeze([]),
       directionsUrl: "https://www.google.com/maps/search/?api=1&query=XRRH%2B5Q%20Addis%20Ababa",
       logoPath: "/assets/images/pommy-logo.png",
+      squareLogoPath: "/favicon-512x512.png",
+      faviconPath: "/favicon.png",
       defaultImagePath: "/assets/images/menu/home-hero.jpg",
       menuPath: "/menu/",
       orderPath: "/checkout/",

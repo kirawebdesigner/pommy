@@ -101,8 +101,7 @@ const primary = {
   "menu/index.html": "Pommy Menu & Prices | Burgers and Pizza Around CMC",
   "about/index.html": "About Pommy Burger and Pizza | CMC, Addis Ababa",
   "blog/index.html": "Pommy Food Guides | Burgers and Pizza in Addis Ababa",
-  "contact/index.html": "Pommy CMC Location, Phone & Directions | Addis Ababa",
-  "checkout/index.html": "Order Pommy Burger and Pizza | CMC, Addis Ababa"
+  "contact/index.html": "Pommy CMC Location, Phone & Directions | Addis Ababa"
 };
 
 for (const [relative, expectedTitle] of Object.entries(primary)) {
@@ -113,6 +112,11 @@ for (const [relative, expectedTitle] of Object.entries(primary)) {
   assert(!indexedTitles.has(expectedTitle), `Duplicate indexed title: ${expectedTitle}`);
   indexedTitles.add(expectedTitle);
 }
+
+const checkoutHtml = read("checkout/index.html");
+assert(titleOf(checkoutHtml) === "Order Pommy Burger and Pizza | CMC, Addis Ababa", "Incorrect checkout title");
+assert(descriptionOf(checkoutHtml).length >= 70, "Checkout meta description is too short");
+assert(/name="robots" content="noindex,follow/i.test(checkoutHtml), "Checkout must be noindex,follow");
 
 const sitemapLocations = [...read("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 const sitemapTitles = new Set();

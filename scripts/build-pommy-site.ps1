@@ -80,8 +80,9 @@ $priorityAssets
   <link href="/assets/css/pommy-site.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/pommy-astryx.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/pommy-redesign.css" rel="stylesheet" type="text/css"/>
-  <link href="/assets/images/optimized/pommy-logo-192.png" rel="shortcut icon" type="image/png"/>
-  <link href="/assets/images/optimized/pommy-logo-192.png" rel="apple-touch-icon"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
   <script type="application/ld+json" data-pommy-schema="restaurant">{"@context":"https://schema.org","@type":"FastFoodRestaurant","name":"Pommy Burger and Pizza","telephone":"+251956905484","address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"ET"},"servesCuisine":["Burgers","Pizza","Fast Food","Chicken"],"priceRange":"ETB","hasMap":"https://www.google.com/maps/search/?api=1&query=XRRH%2B5Q%20Addis%20Ababa"}</script>
   <script>!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch");if(location.pathname==="/"&&!o.matchMedia("(prefers-reduced-motion: reduce)").matches)n.classList.add("pommy-ix2-pending")}(window,document);</script>
 </head>

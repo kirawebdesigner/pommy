@@ -76,7 +76,8 @@ const routeMeta = new Map([
   }],
   ["/checkout/", {
     title: "Order Pommy Burger and Pizza | CMC, Addis Ababa",
-    description: "Review your Pommy cart and prepare a cash-on-delivery or takeaway order for burgers, pizza and more around CMC in Addis Ababa."
+    description: "Review your Pommy cart and prepare a cash-on-delivery or takeaway order for burgers, pizza and more around CMC in Addis Ababa.",
+    noindex: true
   }],
   ["/delivery/", {
     title: "Pommy Delivery & Takeaway | CMC, Addis Ababa",
@@ -158,6 +159,7 @@ function globalGraph() {
       "@id": baseUrl + "/#website",
       url: baseUrl + "/",
       name: business.name,
+      alternateName: business.alternateNames,
       description: business.description,
       inLanguage: "en",
       publisher: { "@id": baseUrl + "/#organization" }
@@ -167,7 +169,12 @@ function globalGraph() {
       "@id": baseUrl + "/#organization",
       name: business.name,
       url: baseUrl + "/",
-      logo: { "@type": "ImageObject", url: absolute(business.logoPath) },
+      logo: {
+        "@type": "ImageObject",
+        url: absolute(business.squareLogoPath),
+        width: 512,
+        height: 512
+      },
       telephone: business.phoneInternational
     },
     restaurant
@@ -279,6 +286,8 @@ function cleanHead(source) {
   return source
     .replace(/\s*<title>[\s\S]*?<\/title>/i, "")
     .replace(/\s*<link\s+rel="canonical"[^>]*>/gi, "")
+    .replace(/\s*<link\s+[^>]*rel="(?:shortcut icon|icon|apple-touch-icon|manifest)"[^>]*>/gi, "")
+    .replace(/\s*<meta\s+name="(?:application-name|apple-mobile-web-app-title)"[^>]*>/gi, "")
     .replace(/\s*<meta\s+(?:name|property)="(?:description|robots|theme-color|google-site-verification|og:[^"]+|twitter:[^"]+)"[^>]*>/gi, "")
     .replace(/\s*<script\s+type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/^[ \t]+$/gm, "");
@@ -291,6 +300,11 @@ function metadataMarkup(route, meta) {
     `  <title>${html(meta.title)}</title>`,
     `  <meta name="description" content="${html(meta.description)}"/>`,
     `  <link rel="canonical" href="${html(canonical)}"/>`,
+    `  <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png"/>`,
+    `  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>`,
+    `  <link rel="manifest" href="/site.webmanifest"/>`,
+    `  <meta name="application-name" content="${html(business.name)}"/>`,
+    `  <meta name="apple-mobile-web-app-title" content="Pommy"/>`,
     `  <meta name="robots" content="${meta.noindex ? "noindex,follow" : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"}"/>`,
     `  <meta name="theme-color" content="#ff7629"/>`,
     `  <meta property="og:type" content="${meta.post ? "article" : "website"}"/>`,
@@ -390,13 +404,11 @@ const robots = [
   "User-agent: *",
   "Allow: /",
   "Disallow: /admin/",
-  "Disallow: /checkout/",
   "",
   ...namedCrawlers.flatMap((crawler) => [
     `User-agent: ${crawler}`,
     "Allow: /",
     "Disallow: /admin/",
-    "Disallow: /checkout/",
     ""
   ]),
   `Sitemap: ${absolute("/sitemap.xml")}`,

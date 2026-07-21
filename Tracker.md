@@ -1,5 +1,15 @@
 # Tracker
 
+## Google Search Appearance And Indexability
+
+- [x] Confirm `/menu/` is not blocked: HTTP 200, self-canonical, `index,follow`, present in the sitemap, and linked from public navigation.
+- [x] Replace the non-square 192-by-166 favicon reference with deterministic square Pommy logo assets at 48, 96, 180, 192, and 512 pixels plus `favicon.ico` and `site.webmanifest`.
+- [x] Generate the stable `/favicon.png`, Apple touch icon, manifest, application name, and Pommy `WebSite.alternateName` signals on every public page without changing visible UI.
+- [x] Make checkout consistently `noindex,follow`, remove it from the sitemap, and keep it crawlable so search engines can read the directive.
+- [x] Force duplicate `/index.html` and nested `/*/index.html` URLs to their canonical trailing-slash routes at the Netlify layer.
+- [x] Pass local SEO/static/browser gates and validate favicon, manifest MIME type, crawler source, and canonical redirects on a Netlify preview.
+- [/] Push through GitHub, wait for the linked Netlify production deploy, and verify production source and redirects.
+
 ## SEO, Local Search, And AI Discovery
 
 - [x] Centralize canonical URL, verified Pommy facts, explicit unknown owner data, analytics settings, Search Console verification, and demo mode in `assets/config/seo-config.js`.

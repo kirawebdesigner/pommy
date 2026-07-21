@@ -6,7 +6,8 @@
 - Production deployment verified on `https://pommydemo.netlify.app`.
 - Search Console verification token: committed, generated on all 151 public pages, and confirmed exactly once in the raw production homepage source.
 - Public HTML: statically prerendered with title, description, canonical, H1, primary content, links, and JSON-LD available without JavaScript.
-- Indexable sitemap: 116 canonical URLs.
+- Indexable sitemap: 115 canonical URLs. Checkout remains crawlable but is intentionally `noindex,follow` and excluded from the sitemap.
+- Search appearance: every public page references the square Pommy favicon and web manifest; the homepage `WebSite` schema identifies the preferred site name as `Pommy Burger and Pizza` with Pommy alternates.
 - Public page inventory: 151 generated HTML pages; obsolete/error/template-derived routes are `noindex,follow`.
 - Demo safeguard: enabled by default. Checkout cannot call the real order RPC while `PUBLIC_DEMO_MODE=true`.
 - Visual design and Webflow motion remain unchanged.
@@ -40,7 +41,7 @@ The Search Console token is intentionally permanent in the centralized configura
 ## Generated Search Assets
 
 - `robots.txt`: permits public search and supported AI crawlers; disallows `/admin/`.
-- `sitemap.xml`: contains 116 absolute canonical URLs with post dates where available.
+- `sitemap.xml`: contains 115 absolute canonical URLs with post dates where available.
 - `llms.txt`: concise, factual business and route summary for AI retrieval.
 - `SEO_METADATA.md`: generated route-by-route metadata, canonical, indexability, and schema inventory.
 - `/burger-around-cmc/`: focused local burger landing page.
@@ -87,9 +88,12 @@ Use either `PUBLIC_GTM_ID` or `PUBLIC_GA4_ID`. If both are supplied, GTM loads a
 2. Choose HTML tag verification.
 3. Verify. The exact tag is present in the raw homepage source.
 4. Submit `https://pommydemo.netlify.app/sitemap.xml`.
-5. Inspect `/`, `/menu/`, `/contact/`, `/burger-around-cmc/`, and `/pizza-around-cmc/`.
-6. Request indexing for those priority pages after verification.
-7. Monitor Pages, Sitemaps, Core Web Vitals, Enhancements, and Manual Actions.
+5. Inspect `/` first, run **Test live URL**, and request indexing so Google can recrawl the homepage site-name and favicon signals.
+6. Inspect the exact URL `https://pommydemo.netlify.app/menu/`, run **Test live URL**, and request indexing. It returns HTTP 200, is self-canonical, is `index,follow`, is internally linked, and is included in the sitemap.
+7. Inspect `/contact/`, `/burger-around-cmc/`, and `/pizza-around-cmc/`, then request indexing for those priority pages.
+8. Monitor Pages, Sitemaps, Core Web Vitals, Enhancements, and Manual Actions.
+
+Google ultimately controls crawling, indexing, the displayed site name, and favicon selection. Recrawling can take several days or longer. The metadata can change the search-result label from `Netlify` to the preferred Pommy name, but the visible `pommydemo.netlify.app` hostname will remain until an official custom domain is connected.
 
 ## Google Indexing Checklist
 
@@ -105,7 +109,7 @@ Use either `PUBLIC_GTM_ID` or `PUBLIC_GA4_ID`. If both are supplied, GTM loads a
 - Homepage source: HTTP 200, one exact Google verification tag, and the canonical `https://pommydemo.netlify.app/`.
 - `robots.txt`, `sitemap.xml`, `llms.txt`, `/burger-around-cmc/`, and `/pizza-around-cmc/`: HTTP 200.
 - `/index.html`, `/location`, and `/order`: permanent canonical redirects.
-- Live SEO browser gate: 8 rendered routes, 6 no-JavaScript routes, 116 sitemap URLs, zero console errors, and zero failed local requests.
+- Live SEO browser gate: 8 rendered routes, 6 no-JavaScript routes, 115 sitemap URLs, zero console errors, and zero failed local requests.
 - Live public gate: 12 representative routes and all 101 products with cart/checkout behavior, zero failed required local requests, zero runtime exceptions, and zero console errors.
 - Live admin gate: authentication/authorization, dashboard, timed order auto-refresh, focus refresh, status mutation, menu mutation, and 390px overflow checks passed using mocked RPC responses against the deployed frontend assets.
 - Live motion gate: no hidden targets, horizontal overflow, or browser errors at 1440, 1024, 768, and 390px; reduced-motion content remained immediately visible.
