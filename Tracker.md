@@ -63,7 +63,7 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 - [x] Correct feedback from live local review: remove inherited 32px header padding that made the navbar oversized; replace the sticky menu filter that covered product cards with a compact in-flow panel; and bind search/filter controls immediately to bundled data while preserving state through live Supabase reconciliation.
 - [x] Pass static audit, SEO validation, database parity, and live-data browser gate: 155 pages, 101 products, 10 categories, 116 sitemap URLs, zero broken references, 8 featured cards, authoritative live pricing, and unavailable-item blocking.
 - [x] Complete final browser/motion/functional gates on `https://ui-motion-preview--pommydemo.netlify.app/`: 12 public routes, 101 products, live Supabase behavior, admin E2E, compact menu search/filter at 1440/1024/768/390, zero overflow, zero hidden motion targets, zero fallback activations, and zero browser/runtime errors.
-- [/] Merge the verified redesign branch into `main`, push GitHub, and verify the resulting Netlify production deployment.
+- [x] Fast-forward the verified redesign into `main`, push GitHub, and verify `https://pommydemo.netlify.app/`: public, Supabase, admin, menu search/filter, and four-breakpoint motion gates all pass with zero overflow, hidden targets, fallback activations, runtime errors, or console errors.
 
 - [x] Render and inspect the original template at 1440px, 1024px, 768px, and 390px.
 - [x] Map the original homepage section hierarchy, dimensions, and Webflow interaction IDs.
