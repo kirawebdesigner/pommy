@@ -139,7 +139,7 @@
     return '<header data-collapse="medium" data-animation="default" data-duration="400" data-w-id="58db7844-5919-d71b-dd74-2323ed8dffe9" data-easing="ease" data-easing2="ease" class="header w-nav">' +
       '<div class="container-default w-container"><div class="header-wrapper">' +
         '<div class="split-content header-right"><a href="/" class="brand w-nav-brand" aria-label="Pommy Burger and Pizza home"><img ' + logoAttributes("(max-width: 767px) 44px, 66px") + ' alt="Pommy Burger and Pizzeria logo" class="header-logo pommy-logo"></a><nav role="navigation" class="nav-menu w-nav-menu">' + navMarkup() + '</nav></div>' +
-        '<div class="split-content header-left"><div class="header-buttons-wrapper"><button class="button-secondary small mg-right-24px pommy-cart-open" type="button" aria-haspopup="dialog">Cart (<span data-cart-count>0</span>)</button><a href="/menu/" class="button-primary small w-button">Order Now</a></div>' +
+        '<div class="split-content header-left"><div class="header-buttons-wrapper"><span class="pommy-astryx-cart-root" data-astryx-cart-root><button class="button-secondary small pommy-cart-open" type="button" aria-haspopup="dialog">Cart (<span data-cart-count>0</span>)</button></span><a href="/menu/" class="button-primary small w-button">Order Now</a></div>' +
         '<div class="menu-button w-nav-button" aria-label="Open navigation" role="button" tabindex="0"><div data-is-ix2-target="1" class="lottie-animation" data-animation-type="lottie" data-src="/assets/animations/menu-toggle.json" data-loop="0" data-direction="1" data-autoplay="0" data-renderer="svg" data-default-duration="2.0208333333333335" data-duration="0" data-loading="eager"></div><div class="w-icon-nav-menu pommy-fallback-menu-icon"></div></div></div>' +
       '</div></div></header>';
   }
@@ -173,7 +173,7 @@
       }
     }
     if (buttons) {
-      buttons.innerHTML = '<button class="button-secondary small mg-right-24px pommy-cart-open" type="button" aria-haspopup="dialog">Cart (<span data-cart-count>0</span>)</button><a href="/menu/" class="button-primary small w-button">Order Now</a>';
+      buttons.innerHTML = '<span class="pommy-astryx-cart-root" data-astryx-cart-root><button class="button-secondary small pommy-cart-open" type="button" aria-haspopup="dialog">Cart (<span data-cart-count>0</span>)</button></span><a href="/menu/" class="button-primary small w-button">Order Now</a>';
     }
   }
 
@@ -644,6 +644,12 @@
       '<section class="section bg-secondary-1 pommy-gallery-section"><div class="container-default w-container"><div><div class="_2-column-grid header-button"><div><div class="pommy-eyebrow">From the Pommy menu</div><h2 class="mg-bottom-0px">See what\'s cooking</h2></div><div><a href="/menu/" class="button-primary w-button">View Menu</a></div></div><div class="_3-column-grid instagram-grid"><div class="mask instagram-image"><img ' + imageAttributes("/assets/images/menu/" + gallery[0], "(max-width: 767px) 100vw, 33vw", "lazy") + ' alt="Burgers and fries from the Pommy menu" class="image instagram"></div><div class="mask instagram-image"><img ' + imageAttributes("/assets/images/menu/" + gallery[1], "(max-width: 767px) 100vw, 33vw", "lazy") + ' alt="French fries from the Pommy menu" class="image instagram"></div><div class="_2-column-grid instagram-grid">' + gallery.slice(2).map(function (image, index) { return '<div class="mask instagram-image' + (index > 1 ? ' hide-in-mobile' : '') + '"><img ' + imageAttributes("/assets/images/menu/" + image, "(max-width: 767px) 50vw, 17vw", "lazy") + ' alt="Food and drinks from the Pommy menu" class="image instagram"></div>'; }).join("") + '</div></div></div></div></section>' +
       '</main>';
     replaceMain(html);
+    var trustSection = document.querySelector(".pommy-original-home .slider")?.closest("section");
+    var editorialSection = document.querySelector(".pommy-original-home .blog-grid")?.closest("section");
+    var visitSection = document.querySelector(".pommy-original-home #visit-pommy");
+    if (trustSection) trustSection.classList.add("pommy-trust-section");
+    if (editorialSection) editorialSection.classList.add("pommy-editorial-section");
+    if (visitSection) visitSection.classList.add("pommy-visit-section");
   }
 
   function renderAbout() {

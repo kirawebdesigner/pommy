@@ -3,8 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "npm run build:seo",
+    "build": "npm run build:astryx && npm run build:seo",
+    "build:astryx": "vite build",
     "build:seo": "node scripts/generate-seo.cjs",
+    "astryx": "node node_modules/@astryxdesign/cli/bin/astryx.mjs",
     "prerender": "node scripts/prerender-public.cjs",
     "audit": "node scripts/audit-pommy.cjs",
     "test:seo": "node scripts/validate-seo.cjs",
@@ -19,6 +21,14 @@
     "test:motion": "node scripts/validate-motion-links.cjs http://127.0.0.1:8765"
   },
   "devDependencies": {
-    "playwright": "1.61.1"
+    "@astryxdesign/cli": "^0.1.7",
+    "playwright": "1.61.1",
+    "vite": "^8.1.5"
+  },
+  "dependencies": {
+    "@astryxdesign/core": "^0.1.7",
+    "@astryxdesign/theme-neutral": "^0.1.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   }
 }

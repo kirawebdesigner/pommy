@@ -1,0 +1,67 @@
+.pommy-astryx-cart-root {
+  display: inline-flex;
+}
+
+.pommy-astryx-cart-root .pommy-astryx-cart-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 8px 10px 8px 18px;
+  border: 1px solid #191919;
+  border-radius: 999px;
+  background: transparent;
+  color: #191919;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: none;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.pommy-astryx-cart-root .pommy-astryx-cart-button:hover {
+  background: #191919;
+  color: #fff;
+}
+
+.pommy-astryx-cart-root .pommy-astryx-cart-button:active {
+  transform: scale(.97);
+}
+
+.pommy-astryx-cart-root .pommy-astryx-cart-button:focus-visible {
+  outline: 3px solid #ff7629;
+  outline-offset: 3px;
+}
+
+.pommy-astryx-cart-root .pommy-astryx-cart-count {
+  display: inline-grid;
+  min-width: 26px;
+  min-height: 26px;
+  padding: 2px 7px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: #ff7629;
+  color: #191919;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pommy-astryx-cart-root .pommy-astryx-cart-button:hover .pommy-astryx-cart-count {
+  background: #ffe817;
+}
+
+@media (max-width: 479px) {
+  .pommy-astryx-cart-root .pommy-astryx-cart-button {
+    min-height: 42px;
+    padding-left: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pommy-astryx-cart-root .pommy-astryx-cart-button {
+    transition: none;
+  }
+}

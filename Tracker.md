@@ -52,6 +52,19 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 
 ## Active Focus
 
+### Editorial UI And Motion Redesign
+
+- [x] Create and deploy rollback checkpoint `checkpoint-pre-ui-animation-20260720` at commit `5951fc8` before redesign work.
+- [x] Establish the design read: bold editorial fast-food site for Addis Ababa customers, with tactile menu-board energy, oversized food photography, controlled asymmetry, and kinetic but lightweight interaction.
+- [x] Isolate redesign work on `codex/ui-motion-refinement`; preserve menu data, Supabase, cart, checkout, admin, SEO, and original homepage IX2 ownership.
+- [x] Install official Facebook Astryx packages and integrate a real Astryx Button/Badge cart island with the existing cart event contract and native HTML fallback.
+- [x] Add the scoped `pommy-redesign.css` layer for the hero, category board, story composition, 8-product showcase, split CTA, trust slider, editorial blog, visit block, gallery, footer, menu, product, blog, and checkout routes.
+- [x] Add restrained one-shot generated-page reveals without changing native homepage IX2 timing, fallback behavior, or reduced-motion visibility.
+- [x] Correct feedback from live local review: remove inherited 32px header padding that made the navbar oversized; replace the sticky menu filter that covered product cards with a compact in-flow panel; and bind search/filter controls immediately to bundled data while preserving state through live Supabase reconciliation.
+- [x] Pass static audit, SEO validation, database parity, and live-data browser gate: 155 pages, 101 products, 10 categories, 116 sitemap URLs, zero broken references, 8 featured cards, authoritative live pricing, and unavailable-item blocking.
+- [/] Complete final browser/motion/functional gates and deploy a Netlify preview for visual approval.
+- [ ] Promote to production only after the preview passes and the redesigned production experience is confirmed.
+
 - [x] Render and inspect the original template at 1440px, 1024px, 768px, and 390px.
 - [x] Map the original homepage section hierarchy, dimensions, and Webflow interaction IDs.
 - [x] Remove the compact polish layer and restore original-template homepage compositions.

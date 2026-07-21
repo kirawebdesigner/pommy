@@ -6,6 +6,8 @@
   --pommy-muted: #656565;
   --pommy-surface: #fff9f3;
   --pommy-border: #e8e8e8;
+  --pommy-motion-ease: cubic-bezier(.22, 1, .36, 1);
+  --pommy-motion-fast: 180ms;
 }
 
 .pommy-skip-link {
@@ -18,9 +20,10 @@
   color: var(--pommy-ink);
   border: 2px solid var(--pommy-orange);
   transform: translateY(-160%);
+  transition: transform var(--pommy-motion-fast) var(--pommy-motion-ease);
 }
 
-.pommy-skip-link:focus { transform: translateY(0); }
+.pommy-skip-link:focus-visible { transform: translateY(0); }
 
 .header-logo.pommy-logo { width: 54px; height: 54px; object-fit: contain; }
 .footer-logo.pommy-logo { width: 96px; height: 96px; object-fit: contain; }
@@ -170,10 +173,13 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  display: none;
+  display: block;
   background: rgba(0, 0, 0, .48);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
 }
-.pommy-cart-overlay.is-open { display: block; }
+.pommy-cart-overlay.is-open { opacity: 1; pointer-events: auto; }
 .pommy-cart-drawer {
   position: fixed;
   top: 0;
@@ -186,7 +192,7 @@
   background: #fff;
   box-shadow: -14px 0 40px rgba(0, 0, 0, .16);
   transform: translateX(105%);
-  transition: transform 300ms ease;
+  transition: transform 360ms var(--pommy-motion-ease);
 }
 .pommy-cart-drawer.is-open { transform: translateX(0); }
 .pommy-cart-header,
@@ -325,7 +331,14 @@ body.pommy-cart-locked { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
+  .pommy-skip-link,
+  .pommy-cart-overlay,
   .pommy-cart-drawer,
+  .button-primary,
+  .button-secondary,
+  .pommy-original-home .menu-category-card img,
+  .pommy-original-home .pommy-gallery-section .image.instagram,
+  .footer .image.instagram,
   .pommy-original-menu-card .image-wrapper.menu-card .image,
   .pommy-original-add { transition: none !important; }
   #main-content [data-w-id] {
@@ -505,6 +518,19 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
   aspect-ratio: 1.08 / 1;
 }
 
+.pommy-original-menu-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.pommy-original-menu-card > div:last-child {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
 .pommy-original-menu-card .image-wrapper.menu-card .image {
   width: 100%;
   height: 100%;
@@ -541,6 +567,10 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
   text-decoration: none;
   transition: color 180ms ease;
   cursor: pointer;
+}
+
+.pommy-original-menu-card .pommy-original-add {
+  margin-top: auto;
 }
 
 .pommy-original-add:hover {
@@ -657,6 +687,34 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
   object-fit: cover;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .pommy-original-home .menu-category-card img {
+    transition: transform 300ms var(--pommy-motion-ease);
+  }
+
+  .pommy-original-home .menu-category-card:hover img {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+
+  .pommy-original-home .pommy-gallery-section .image.instagram,
+  .footer .image.instagram {
+    transition: transform 420ms var(--pommy-motion-ease);
+  }
+
+  .pommy-original-home .pommy-gallery-section .instagram-image:hover .image.instagram,
+  .footer .instagram-image:hover .image.instagram {
+    transform: scale(1.035);
+  }
+}
+
+.button-primary:active,
+.button-secondary:active,
+.slider-arrow-v1:active,
+.pommy-icon-button:active,
+.pommy-quantity-button:active {
+  transform: scale(.97);
+}
+
 .footer .footer-column {
   opacity: 1 !important;
   transform: none !important;
@@ -693,6 +751,13 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
 
   .pommy-gallery-section .instagram-grid > .instagram-image {
     min-height: 400px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .pommy-original-home .pommy-trust-card {
+    padding-right: 72px;
+    padding-left: 72px;
   }
 }
 
@@ -754,6 +819,18 @@ html.pommy-ix2-disabled .pommy-original-home .image.home-hero-image {
   .pommy-trust-mark {
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .pommy-about-actions,
+  .pommy-visit-card ._2-button-wrap {
+    display: grid;
+    gap: 12px;
+  }
+
+  .pommy-about-actions > *,
+  .pommy-visit-card ._2-button-wrap > * {
+    width: 100%;
+    margin: 0;
   }
 
   .pommy-gallery-section .instagram-grid > .instagram-image {

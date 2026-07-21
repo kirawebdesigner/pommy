@@ -51,6 +51,8 @@ function Get-Shell {
   if ($isCheckoutPage) { $scripts.Add('  <script src="/assets/js/order-service.js"></script>') }
   $scripts.Add('  <script src="/assets/js/analytics.js"></script>')
   $scripts.Add('  <script src="/assets/js/pommy-site.js"></script>')
+  $scripts.Add('  <script src="/assets/js/pommy-redesign.js"></script>')
+  $scripts.Add('  <script type="module" src="/assets/js/pommy-astryx.js"></script>')
   if ($isMenuPage) { $scripts.Add('  <script src="/assets/js/menu-page.js"></script>') }
   if ($isProductPage) { $scripts.Add('  <script src="/assets/js/product-page.js"></script>') }
   if ($isCheckoutPage) { $scripts.Add('  <script src="/assets/js/checkout-page.js"></script>') }
@@ -76,6 +78,8 @@ $priorityAssets
   <link href="/assets/css/webflow-original.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/dm-sans.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/css/pommy-site.css" rel="stylesheet" type="text/css"/>
+  <link href="/assets/css/pommy-astryx.css" rel="stylesheet" type="text/css"/>
+  <link href="/assets/css/pommy-redesign.css" rel="stylesheet" type="text/css"/>
   <link href="/assets/images/optimized/pommy-logo-192.png" rel="shortcut icon" type="image/png"/>
   <link href="/assets/images/optimized/pommy-logo-192.png" rel="apple-touch-icon"/>
   <script type="application/ld+json" data-pommy-schema="restaurant">{"@context":"https://schema.org","@type":"FastFoodRestaurant","name":"Pommy Burger and Pizza","telephone":"+251956905484","address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"ET"},"servesCuisine":["Burgers","Pizza","Fast Food","Chicken"],"priceRange":"ETB","hasMap":"https://www.google.com/maps/search/?api=1&query=XRRH%2B5Q%20Addis%20Ababa"}</script>

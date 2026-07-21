@@ -1,0 +1,1152 @@
+/* Pommy editorial restaurant redesign. Functional and IX2 ownership stay in existing layers. */
+:root {
+  --pommy-rd-ink: #171717;
+  --pommy-rd-paper: #fffaf4;
+  --pommy-rd-white: #fff;
+  --pommy-rd-orange: #c24b08;
+  --pommy-rd-orange-bright: #ff7629;
+  --pommy-rd-yellow: #ffe817;
+  --pommy-rd-line: rgba(23, 23, 23, .15);
+  --pommy-rd-ease: cubic-bezier(.22, 1, .36, 1);
+  --pommy-rd-radius: 8px;
+}
+
+html {
+  background: var(--pommy-rd-ink);
+}
+
+body {
+  background: var(--pommy-rd-paper);
+  color: var(--pommy-rd-ink);
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  letter-spacing: 0;
+}
+
+.container-default,
+.pommy-section-inner {
+  width: min(100% - 48px, 1320px);
+  max-width: 1320px;
+}
+
+.header.w-nav {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--pommy-rd-line);
+  background: rgba(255, 250, 244, .96);
+  box-shadow: none;
+}
+
+.header .header-wrapper {
+  min-height: 64px;
+}
+
+.header-logo.pommy-logo {
+  width: 54px;
+  height: 54px;
+}
+
+.header .nav-link {
+  position: relative;
+  padding: 12px 15px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.header .nav-link::after {
+  position: absolute;
+  right: 15px;
+  bottom: 6px;
+  left: 15px;
+  height: 2px;
+  background: var(--pommy-rd-orange-bright);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 240ms var(--pommy-rd-ease);
+}
+
+.header .nav-link:hover::after,
+.header .nav-link.w--current::after,
+.header .nav-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.header .header-buttons-wrapper {
+  gap: 12px;
+}
+
+.button-primary,
+.button-secondary,
+.w-button {
+  letter-spacing: 0;
+}
+
+.button-primary:not(.button-white) {
+  border-color: var(--pommy-rd-orange);
+  background: var(--pommy-rd-orange);
+  box-shadow: 0 10px 24px rgba(194, 75, 8, .18);
+}
+
+.button-primary,
+.button-secondary {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease, transform 180ms var(--pommy-rd-ease);
+}
+
+.button-primary:hover {
+  box-shadow: 0 14px 30px rgba(194, 75, 8, .24);
+  transform: translateY(-2px);
+}
+
+.button-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.pommy-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--pommy-rd-orange);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.pommy-eyebrow::before {
+  width: 32px;
+  height: 3px;
+  background: currentColor;
+  content: "";
+}
+
+/* Homepage: preserve native Webflow choreography, redesign only its visual composition. */
+.pommy-original-home .section.home-hero {
+  position: relative;
+  min-height: min(900px, calc(100dvh - 90px));
+  background: var(--pommy-rd-paper);
+}
+
+.pommy-original-home .section.home-hero::before {
+  position: absolute;
+  top: 8%;
+  right: 0;
+  width: 41%;
+  height: 84%;
+  background: var(--pommy-rd-orange-bright);
+  content: "";
+}
+
+.pommy-original-home .pommy-home-hero-container {
+  position: relative;
+  z-index: 1;
+}
+
+.pommy-original-home .pommy-home-hero-grid {
+  min-height: min(790px, calc(100dvh - 90px));
+  grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+
+.pommy-original-home .pommy-home-hero-copy {
+  max-width: 650px;
+  padding: 54px 0 80px;
+}
+
+.pommy-original-home .section.home-hero h1 {
+  max-width: 650px;
+  margin-bottom: 28px;
+  font-size: clamp(64px, 6.25vw, 96px);
+  line-height: .92;
+  letter-spacing: 0;
+}
+
+.pommy-original-home .pommy-home-hero-copy > p {
+  max-width: 520px;
+  margin-bottom: 36px;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.pommy-original-home .pommy-home-hero-copy ._2-button-wrap {
+  gap: 14px;
+}
+
+.pommy-original-home .pommy-home-hero-media {
+  width: min(100%, 670px);
+  max-width: none;
+  justify-self: end;
+}
+
+.pommy-original-home .image.home-hero-image {
+  aspect-ratio: .94 / 1;
+  border-radius: var(--pommy-rd-radius);
+  box-shadow: 24px 28px 0 var(--pommy-rd-ink);
+  object-fit: cover;
+}
+
+.pommy-original-home .section.home-hero + .section {
+  position: relative;
+  z-index: 2;
+  margin-top: -1px;
+  padding: 38px 0;
+  background: var(--pommy-rd-ink);
+  color: var(--pommy-rd-white);
+}
+
+.pommy-original-home .section.home-hero + .section .pommy-service-apps {
+  justify-content: space-between;
+  gap: 20px 32px;
+  color: var(--pommy-rd-white);
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.pommy-original-home .section.home-hero + .section .pommy-service-apps span {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pommy-original-home .section.home-hero + .section .pommy-service-apps span::before {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--pommy-rd-yellow);
+  content: "";
+}
+
+.pommy-original-home > .section,
+.pommy-original-home .section {
+  overflow: clip;
+}
+
+.pommy-original-home .section:not(.home-hero):not(.cta-v1) {
+  padding-top: clamp(96px, 9vw, 144px);
+  padding-bottom: clamp(96px, 9vw, 144px);
+}
+
+.pommy-original-home .section-title-wrapper h2,
+.pommy-original-home ._2-column-grid.header-button h2 {
+  max-width: 780px;
+  font-size: clamp(48px, 5vw, 76px);
+  line-height: .98;
+  letter-spacing: 0;
+}
+
+/* Category cards become tactile menu-board choices. */
+.pommy-original-home .menu-categories-grid {
+  gap: 18px;
+}
+
+.pommy-original-home .menu-category-card {
+  position: relative;
+  min-height: 420px;
+  padding: 42px 30px 30px;
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-white);
+  box-shadow: 8px 8px 0 var(--pommy-rd-ink);
+  transition: color 260ms ease, background-color 260ms ease, transform 260ms var(--pommy-rd-ease),
+    box-shadow 260ms var(--pommy-rd-ease);
+}
+
+.pommy-original-home .menu-category-card:nth-child(even) {
+  margin-top: 38px;
+}
+
+.pommy-original-home .menu-category-card::after {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  content: "";
+  transform: rotate(-45deg);
+}
+
+.pommy-original-home .menu-category-card:hover {
+  background: var(--pommy-rd-orange-bright);
+  box-shadow: 4px 4px 0 var(--pommy-rd-ink);
+  transform: translate(4px, 4px);
+}
+
+.pommy-original-home .menu-category-card img {
+  width: 92px;
+  height: 92px;
+  margin-bottom: 32px;
+}
+
+.pommy-original-home .menu-category-card h3 {
+  margin-bottom: 14px;
+  font-size: 30px;
+}
+
+.pommy-original-home .menu-category-card p {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* Large restaurant story composition. */
+.pommy-original-home .pommy-home-about-grid {
+  gap: clamp(60px, 8vw, 120px);
+}
+
+.pommy-original-home .pommy-home-about-copy {
+  max-width: 560px;
+}
+
+.pommy-original-home .pommy-home-about-copy h2 {
+  font-size: clamp(52px, 5.2vw, 78px);
+  line-height: .98;
+}
+
+.pommy-original-home .pommy-home-about-composition {
+  min-height: 720px;
+}
+
+.pommy-original-home .pommy-home-about-composition > .image {
+  min-height: 690px;
+  border-radius: var(--pommy-rd-radius);
+  filter: saturate(1.03) contrast(1.02);
+}
+
+.pommy-original-home .home-about-card {
+  right: -46px;
+  bottom: 38px;
+  max-width: 410px;
+  padding: 36px;
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  box-shadow: 12px 12px 0 var(--pommy-rd-orange-bright);
+}
+
+/* Product showcase: large imagery, clear pricing, editorial names. */
+.pommy-original-home .menu-grid {
+  gap: 46px 24px;
+}
+
+.pommy-original-menu-card .image-wrapper.menu-card {
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  box-shadow: 7px 7px 0 rgba(23, 23, 23, .92);
+}
+
+.pommy-original-menu-card .price {
+  top: 16px;
+  right: 16px;
+  border: 2px solid var(--pommy-rd-ink);
+  background: var(--pommy-rd-yellow);
+  color: var(--pommy-rd-ink);
+  box-shadow: 4px 4px 0 var(--pommy-rd-ink);
+  font-weight: 800;
+}
+
+.pommy-original-menu-card > div:last-child {
+  align-items: flex-start;
+  padding-top: 22px;
+  text-align: left;
+}
+
+.pommy-original-menu-card .title {
+  margin-bottom: 10px;
+  font-size: 25px;
+  line-height: 1.12;
+}
+
+.pommy-original-menu-card p {
+  min-height: 52px;
+  margin-bottom: 14px;
+  color: #555;
+}
+
+.pommy-original-add {
+  position: relative;
+  min-height: 40px;
+  padding: 7px 0;
+  color: var(--pommy-rd-orange);
+}
+
+.pommy-original-add::after {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  content: "";
+  transform: scaleX(.22);
+  transform-origin: left;
+  transition: transform 220ms var(--pommy-rd-ease);
+}
+
+.pommy-original-add:hover::after,
+.pommy-original-add:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Split CTA keeps the original composition but gains a bolder editorial edge. */
+.pommy-original-home .section.cta-v1 {
+  min-height: 710px;
+  border-top: 12px solid var(--pommy-rd-ink);
+  border-bottom: 12px solid var(--pommy-rd-ink);
+  background: var(--pommy-rd-orange);
+}
+
+.pommy-original-home .section.cta-v1 h2 {
+  max-width: 610px;
+  font-size: clamp(58px, 6vw, 88px);
+  line-height: .94;
+}
+
+.pommy-original-home .section.cta-v1 .image-wrapper {
+  border-left: 12px solid var(--pommy-rd-ink);
+}
+
+.pommy-original-home .section.cta-v1 .dash-small---90px {
+  height: 5px;
+  background: var(--pommy-rd-yellow);
+}
+
+/* Trust slider becomes a dark, high-value section without changing slider mechanics. */
+.pommy-original-home .pommy-trust-section {
+  background: var(--pommy-rd-ink);
+  color: var(--pommy-rd-white);
+}
+
+.pommy-original-home .pommy-trust-section h2,
+.pommy-original-home .pommy-trust-section p {
+  color: var(--pommy-rd-white);
+}
+
+.pommy-original-home .pommy-trust-section .pommy-eyebrow,
+.pommy-original-home .pommy-trust-section .pommy-trust-detail {
+  color: var(--pommy-rd-yellow);
+}
+
+.pommy-original-home .pommy-trust-section .slider {
+  overflow: visible;
+}
+
+.pommy-original-home .pommy-trust-card {
+  min-height: 430px;
+  padding: 58px 72px;
+  border: 0;
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-paper);
+  color: var(--pommy-rd-ink);
+  box-shadow: 10px 10px 0 var(--pommy-rd-orange-bright);
+}
+
+.pommy-original-home .pommy-trust-card p {
+  color: var(--pommy-rd-ink);
+}
+
+.pommy-original-home .pommy-trust-mark {
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-orange-bright);
+  color: var(--pommy-rd-ink);
+}
+
+.pommy-original-home .pommy-trust-section .slider-arrow-v1 {
+  border: 2px solid var(--pommy-rd-paper);
+  background: var(--pommy-rd-ink);
+  color: var(--pommy-rd-paper);
+}
+
+/* Editorial article section. */
+.pommy-original-home .pommy-editorial-section {
+  background: #f3e8da;
+}
+
+.pommy-original-home .pommy-editorial-section .blog-grid {
+  gap: 20px;
+}
+
+.pommy-original-home .blog-card {
+  height: 100%;
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-white);
+  box-shadow: 7px 7px 0 var(--pommy-rd-ink);
+}
+
+.pommy-original-home .blog-card.featured-blog .mask {
+  min-height: 510px;
+}
+
+.pommy-original-home .blog-card:not(.featured-blog) .mask {
+  min-height: 220px;
+}
+
+.pommy-original-home .blog-card .card-blog-content {
+  padding: 28px;
+}
+
+.pommy-original-home .blog-card.featured-blog h3 {
+  font-size: clamp(32px, 3.2vw, 50px);
+  line-height: 1.02;
+}
+
+/* Visit block: grounded details + floating orange stage. */
+.pommy-original-home .pommy-visit-section {
+  background: var(--pommy-rd-paper);
+}
+
+.pommy-original-home .pommy-visit-section ._2-column-grid.contact {
+  gap: clamp(56px, 8vw, 120px);
+}
+
+.pommy-original-home .pommy-visit-section .contact-left-column h2 {
+  font-size: clamp(54px, 5.2vw, 78px);
+  line-height: .98;
+}
+
+.pommy-original-home .pommy-visit-section .pommy-visit-card {
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-white);
+  box-shadow: 14px 14px 0 var(--pommy-rd-ink);
+}
+
+.pommy-original-home .pommy-visit-section .home-contact-bg {
+  background: var(--pommy-rd-orange-bright);
+}
+
+.pommy-original-home .contact-link {
+  border-bottom: 1px solid var(--pommy-rd-line);
+  transition: color 180ms ease, transform 180ms var(--pommy-rd-ease);
+}
+
+.pommy-original-home .contact-link:hover {
+  color: var(--pommy-rd-orange);
+  transform: translateX(6px);
+}
+
+/* Gallery behaves like a restaurant wall, not a generic social grid. */
+.pommy-original-home .pommy-gallery-section {
+  background: var(--pommy-rd-ink);
+  color: var(--pommy-rd-white);
+}
+
+.pommy-original-home .pommy-gallery-section h2,
+.pommy-original-home .pommy-gallery-section .pommy-eyebrow {
+  color: var(--pommy-rd-white);
+}
+
+.pommy-original-home .pommy-gallery-section .instagram-grid {
+  gap: 14px;
+}
+
+.pommy-original-home .pommy-gallery-section .instagram-image {
+  border: 2px solid var(--pommy-rd-paper);
+  border-radius: var(--pommy-rd-radius);
+}
+
+/* Generated public routes: same brand, stronger utility and editorial hierarchy. */
+#main-content:not(.pommy-original-home) {
+  overflow: clip;
+  background: var(--pommy-rd-paper);
+}
+
+#main-content:not(.pommy-original-home) > .section:first-child,
+#main-content:not(.pommy-original-home) > .narrow-section:first-child {
+  position: relative;
+  border-bottom: 2px solid var(--pommy-rd-ink);
+  background: var(--pommy-rd-orange-bright);
+}
+
+#main-content:not(.pommy-original-home) > .section:first-child::after,
+#main-content:not(.pommy-original-home) > .narrow-section:first-child::after {
+  position: absolute;
+  right: -4vw;
+  bottom: -1px;
+  width: clamp(180px, 25vw, 420px);
+  height: 18px;
+  background: var(--pommy-rd-ink);
+  content: "";
+  transform: skewX(-32deg);
+}
+
+#main-content:not(.pommy-original-home) .pommy-section-inner {
+  padding-top: clamp(88px, 9vw, 140px);
+  padding-bottom: clamp(88px, 9vw, 140px);
+}
+
+#main-content:not(.pommy-original-home) .pommy-page-intro {
+  max-width: 900px;
+  margin-right: auto;
+  margin-left: 0;
+  text-align: left;
+}
+
+#main-content:not(.pommy-original-home) .pommy-page-intro h1 {
+  max-width: 880px;
+  font-size: clamp(58px, 7vw, 104px);
+  line-height: .92;
+  letter-spacing: 0;
+}
+
+#main-content:not(.pommy-original-home) .pommy-page-intro h2,
+#main-content:not(.pommy-original-home) .pommy-two-column h2 {
+  font-size: clamp(44px, 4.6vw, 70px);
+  line-height: .98;
+  letter-spacing: 0;
+}
+
+#main-content:not(.pommy-original-home) .pommy-page-intro p {
+  max-width: 650px;
+  color: #252525;
+  font-size: 18px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-info-card,
+#main-content:not(.pommy-original-home) .pommy-menu-card,
+#main-content:not(.pommy-original-home) .pommy-post-card,
+#main-content:not(.pommy-original-home) .pommy-checkout-panel {
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-white);
+  box-shadow: 7px 7px 0 var(--pommy-rd-ink);
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px 22px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-card-image {
+  aspect-ratio: 1 / 1;
+  border-bottom: 2px solid var(--pommy-rd-ink);
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-card-image img {
+  transition: transform 420ms var(--pommy-rd-ease);
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-card:hover .pommy-menu-card-image img {
+  transform: scale(1.045);
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-card-body {
+  padding: 24px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-card h3 {
+  font-size: 24px;
+  line-height: 1.12;
+}
+
+#main-content:not(.pommy-original-home) .pommy-price {
+  padding: 6px 9px;
+  border: 1px solid var(--pommy-rd-ink);
+  border-radius: 999px;
+  background: var(--pommy-rd-yellow);
+  color: var(--pommy-rd-ink);
+  font-size: 13px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-menu-tools {
+  position: static;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  background: rgba(255, 250, 244, .97);
+  box-shadow: 5px 5px 0 var(--pommy-rd-ink);
+}
+
+#main-content:not(.pommy-original-home) .pommy-search-input {
+  height: 48px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-white);
+  font-size: 16px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-search-input::placeholder {
+  font-size: 16px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-category-tab {
+  min-height: 38px;
+  padding: 7px 14px;
+  border-color: var(--pommy-rd-ink);
+  background: var(--pommy-rd-white);
+  font-size: 16px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-category-tab[aria-pressed="true"] {
+  background: var(--pommy-rd-ink);
+  color: var(--pommy-rd-white);
+}
+
+#main-content:not(.pommy-original-home) .pommy-product-layout {
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+  gap: clamp(56px, 8vw, 110px);
+}
+
+#main-content:not(.pommy-original-home) .pommy-product-image {
+  border: 2px solid var(--pommy-rd-ink);
+  border-radius: var(--pommy-rd-radius);
+  box-shadow: 14px 14px 0 var(--pommy-rd-ink);
+}
+
+#main-content:not(.pommy-original-home) .pommy-product-copy h1 {
+  font-size: clamp(48px, 5vw, 76px);
+  line-height: .96;
+  letter-spacing: 0;
+}
+
+#main-content:not(.pommy-original-home) .pommy-product-price {
+  color: var(--pommy-rd-orange);
+  font-size: 34px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-post-grid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 28px 20px;
+}
+
+#main-content:not(.pommy-original-home) .pommy-post-card {
+  grid-column: span 4;
+}
+
+#main-content:not(.pommy-original-home) .pommy-post-card:first-child,
+#main-content:not(.pommy-original-home) .pommy-post-card:nth-child(5n) {
+  grid-column: span 8;
+}
+
+#main-content:not(.pommy-original-home) .pommy-post-card img {
+  border-bottom: 2px solid var(--pommy-rd-ink);
+}
+
+#main-content:not(.pommy-original-home) .pommy-checkout-grid {
+  gap: clamp(36px, 6vw, 80px);
+}
+
+#main-content:not(.pommy-original-home) .pommy-checkout-panel {
+  padding: clamp(24px, 3vw, 42px);
+}
+
+.pommy-redesign-motion-ready .pommy-redesign-reveal {
+  opacity: 0;
+  transform: translateY(24px) scale(.985);
+  transition: opacity 560ms var(--pommy-rd-ease) var(--pommy-redesign-delay, 0ms),
+    transform 560ms var(--pommy-rd-ease) var(--pommy-redesign-delay, 0ms);
+}
+
+.pommy-redesign-motion-ready .pommy-redesign-reveal.is-redesign-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Footer keeps the existing content but reads as a deliberate final restaurant panel. */
+.footer {
+  border-top: 12px solid var(--pommy-rd-orange-bright);
+  background: var(--pommy-rd-ink);
+  color: var(--pommy-rd-white);
+}
+
+.footer h3,
+.footer a,
+.footer p,
+.footer .color-neutral-600 {
+  color: var(--pommy-rd-white);
+}
+
+.footer .footer-logo.pommy-logo {
+  width: 116px;
+  height: 116px;
+  padding: 10px;
+  border-radius: var(--pommy-rd-radius);
+  background: var(--pommy-rd-white);
+}
+
+.footer .footer-column a {
+  position: relative;
+  text-decoration: none;
+}
+
+.footer .footer-column a:hover {
+  color: var(--pommy-rd-yellow);
+}
+
+.footer .instagram-footer-grid .instagram-image {
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: var(--pommy-rd-radius);
+}
+
+.footer .footer-bottom-content {
+  border-top-color: rgba(255, 255, 255, .22);
+}
+
+@media (min-width: 992px) {
+  .header.w-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .pommy-original-home .menu-category-card:nth-child(3) {
+    margin-top: 0;
+  }
+
+  .pommy-original-home .menu-category-card:nth-child(4) {
+    margin-top: 38px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .pommy-original-home .section.home-hero h1 {
+    font-size: clamp(56px, 7.2vw, 76px);
+  }
+
+  .pommy-original-home .menu-category-card {
+    min-height: 370px;
+    padding: 34px 24px 26px;
+  }
+
+  .pommy-original-home .home-about-card {
+    right: 18px;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .container-default,
+  .pommy-section-inner {
+    width: min(100% - 40px, 1320px);
+  }
+
+  .header .header-wrapper {
+    min-height: 60px;
+  }
+
+  .pommy-original-home .section.home-hero {
+    min-height: auto;
+    padding-bottom: 90px;
+  }
+
+  .pommy-original-home .section.home-hero::before {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    width: 78%;
+    height: 44%;
+  }
+
+  .pommy-original-home .pommy-home-hero-grid {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy {
+    max-width: 720px;
+    padding: 70px 0 20px;
+  }
+
+  .pommy-original-home .pommy-home-hero-media {
+    width: min(88%, 690px);
+    justify-self: end;
+  }
+
+  .pommy-original-home .image.home-hero-image {
+    aspect-ratio: 1.2 / 1;
+    box-shadow: 16px 18px 0 var(--pommy-rd-ink);
+  }
+
+  .pommy-original-home .section.home-hero + .section .pommy-service-apps {
+    justify-content: center;
+  }
+
+  .pommy-original-home .pommy-home-about-grid {
+    gap: 52px;
+  }
+
+  .pommy-original-home .pommy-home-about-copy {
+    max-width: 700px;
+  }
+
+  .pommy-original-home .pommy-home-about-composition {
+    min-height: 660px;
+  }
+
+  .pommy-original-home .pommy-home-about-composition > .image {
+    min-height: 620px;
+  }
+
+  .pommy-original-home .pommy-trust-card {
+    padding-right: 58px;
+    padding-left: 58px;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-product-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-post-card,
+  #main-content:not(.pommy-original-home) .pommy-post-card:first-child,
+  #main-content:not(.pommy-original-home) .pommy-post-card:nth-child(5n) {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 767px) {
+  .container-default,
+  .pommy-section-inner {
+    width: min(100% - 32px, 1320px);
+  }
+
+  .header-logo.pommy-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .pommy-original-home .section.home-hero h1,
+  #main-content:not(.pommy-original-home) .pommy-page-intro h1 {
+    font-size: clamp(50px, 13vw, 72px);
+    line-height: .94;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy {
+    padding-top: 54px;
+  }
+
+  .pommy-original-home .pommy-home-hero-media {
+    width: calc(100% - 10px);
+  }
+
+  .pommy-original-home .image.home-hero-image {
+    aspect-ratio: .98 / 1;
+    box-shadow: 10px 12px 0 var(--pommy-rd-ink);
+  }
+
+  .pommy-original-home .section.home-hero::before {
+    width: 88%;
+    height: 38%;
+  }
+
+  .pommy-original-home .section.home-hero + .section {
+    padding: 30px 0;
+  }
+
+  .pommy-original-home .section.home-hero + .section .pommy-service-apps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    text-align: left;
+  }
+
+  .pommy-original-home .section:not(.home-hero):not(.cta-v1) {
+    padding-top: 86px;
+    padding-bottom: 86px;
+  }
+
+  .pommy-original-home .section-title-wrapper h2,
+  .pommy-original-home ._2-column-grid.header-button h2,
+  .pommy-original-home .pommy-home-about-copy h2,
+  .pommy-original-home .pommy-visit-section .contact-left-column h2 {
+    font-size: clamp(42px, 11.5vw, 58px);
+  }
+
+  .pommy-original-home .menu-category-card,
+  .pommy-original-home .menu-category-card:nth-child(even),
+  .pommy-original-home .menu-category-card:nth-child(3),
+  .pommy-original-home .menu-category-card:nth-child(4) {
+    min-height: 330px;
+    margin-top: 0;
+    box-shadow: 6px 6px 0 var(--pommy-rd-ink);
+  }
+
+  .pommy-original-home .pommy-home-about-composition {
+    min-height: 590px;
+    padding-bottom: 80px;
+  }
+
+  .pommy-original-home .pommy-home-about-composition > .image {
+    min-height: 480px;
+  }
+
+  .pommy-original-home .home-about-card {
+    right: 0;
+    bottom: 0;
+    left: 22px;
+    max-width: calc(100% - 22px);
+    padding: 26px;
+    box-shadow: 8px 8px 0 var(--pommy-rd-orange-bright);
+  }
+
+  .pommy-original-home .menu-grid {
+    gap: 38px 16px;
+  }
+
+  .pommy-original-menu-card .title {
+    font-size: 22px;
+  }
+
+  .pommy-original-home .section.cta-v1 {
+    min-height: auto;
+    border-width: 8px 0;
+  }
+
+  .pommy-original-home .section.cta-v1 h2 {
+    font-size: clamp(48px, 13vw, 68px);
+  }
+
+  .pommy-original-home .section.cta-v1 .image-wrapper {
+    border-top: 8px solid var(--pommy-rd-ink);
+    border-left: 0;
+  }
+
+  .pommy-original-home .pommy-trust-card {
+    min-height: 440px;
+    padding: 42px 28px;
+    box-shadow: 7px 7px 0 var(--pommy-rd-orange-bright);
+  }
+
+  .pommy-original-home .blog-card.featured-blog .mask {
+    min-height: 360px;
+  }
+
+  .pommy-original-home .blog-card:not(.featured-blog) .mask {
+    min-height: 240px;
+  }
+
+  .pommy-original-home .pommy-visit-section .pommy-visit-card {
+    box-shadow: 8px 8px 0 var(--pommy-rd-ink);
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-section-inner {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-page-intro h2,
+  #main-content:not(.pommy-original-home) .pommy-two-column h2 {
+    font-size: clamp(40px, 10.5vw, 56px);
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-menu-tools {
+    position: static;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-menu-grid,
+  #main-content:not(.pommy-original-home) .pommy-post-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-post-card,
+  #main-content:not(.pommy-original-home) .pommy-post-card:first-child,
+  #main-content:not(.pommy-original-home) .pommy-post-card:nth-child(5n) {
+    grid-column: auto;
+  }
+
+  .footer .footer-logo.pommy-logo {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 479px) {
+  .container-default,
+  .pommy-section-inner {
+    width: min(100% - 28px, 1320px);
+  }
+
+  .header .header-buttons-wrapper > .button-primary {
+    display: none;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy > p,
+  #main-content:not(.pommy-original-home) .pommy-page-intro p {
+    font-size: 16px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy ._2-button-wrap,
+  .pommy-original-home .section.cta-v1 ._2-button-wrap {
+    display: grid;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .pommy-original-home .pommy-home-hero-copy ._2-button-wrap > *,
+  .pommy-original-home .section.cta-v1 ._2-button-wrap > * {
+    width: 100%;
+    margin: 0;
+  }
+
+  .pommy-original-home .section.home-hero + .section .pommy-service-apps {
+    grid-template-columns: 1fr;
+  }
+
+  .pommy-original-home .menu-category-card {
+    min-height: 300px;
+  }
+
+  .pommy-original-home .pommy-home-about-composition {
+    min-height: 640px;
+  }
+
+  .pommy-original-home .home-about-card {
+    left: 10px;
+    max-width: calc(100% - 10px);
+  }
+
+  .pommy-original-home .pommy-visit-facts {
+    grid-template-columns: 1fr;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #main-content:not(.pommy-original-home) .pommy-info-card,
+  #main-content:not(.pommy-original-home) .pommy-menu-card,
+  #main-content:not(.pommy-original-home) .pommy-post-card,
+  #main-content:not(.pommy-original-home) .pommy-checkout-panel {
+    box-shadow: 5px 5px 0 var(--pommy-rd-ink);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pommy-original-menu-card:hover .image-wrapper.menu-card {
+    box-shadow: 3px 3px 0 rgba(23, 23, 23, .92);
+    transform: translate(4px, 4px);
+  }
+
+  .pommy-original-menu-card .image-wrapper.menu-card {
+    transition: box-shadow 260ms var(--pommy-rd-ease), transform 260ms var(--pommy-rd-ease);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pommy-redesign-motion-ready .pommy-redesign-reveal,
+  .pommy-redesign-motion-ready .pommy-redesign-reveal.is-redesign-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .header .nav-link::after,
+  .pommy-original-home .menu-category-card,
+  .pommy-original-add::after,
+  #main-content:not(.pommy-original-home) .pommy-menu-card-image img {
+    transition: none;
+  }
+}

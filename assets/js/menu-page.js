@@ -1,18 +1,25 @@
 (function () {
   "use strict";
 
-  function init() {
+  var menuState = {
+    query: "",
+    selected: null
+  };
+
+  function init(useLiveData) {
     var app = document.getElementById("pommy-menu-app");
     if (!app || !window.Pommy) return;
 
-    var categories = window.POMMY_CATEGORIES || [];
-    var products = (window.POMMY_MENU || []).filter(function (item) { return item.available; });
+    var service = useLiveData ? window.PommyMenuService : null;
+    var categories = service ? service.getCategories() : (window.POMMY_CATEGORIES || []);
+    var products = (service ? service.getItems() : (window.POMMY_MENU || [])).filter(function (item) { return item.available; });
     var params = new URLSearchParams(window.location.search);
     var routeCategory = window.location.pathname.split("/")[2] || "";
     var legacyMap = { breakfast: "breakfast", "main-dishes": "burger", drinks: "juice", desserts: "" };
-    var selected = params.get("category") || legacyMap[routeCategory] || "all";
+    var selected = menuState.selected || params.get("category") || legacyMap[routeCategory] || "all";
     if (!categories.some(function (category) { return category.id === selected || category.slug === selected; })) selected = "all";
-    var query = "";
+    var query = menuState.query;
+    menuState.selected = selected;
 
     app.innerHTML = '<div class="pommy-menu-tools"><div><label class="pommy-search-label" for="pommy-menu-search">Search the menu</label><input id="pommy-menu-search" class="input pommy-search-input w-input" type="search" placeholder="Search products or ingredients" autocomplete="off"></div><div class="pommy-category-tabs" role="group" aria-label="Filter menu by category"></div><p class="pommy-results-count" data-results-count aria-live="polite"></p></div><div class="pommy-menu-grid" data-menu-grid></div>';
 
@@ -44,16 +51,24 @@
       tabs.querySelectorAll("[data-category-filter]").forEach(function (button) { button.setAttribute("aria-pressed", String(button.dataset.categoryFilter === selected)); });
     }
 
-    app.querySelector("#pommy-menu-search").addEventListener("input", function (event) { query = event.target.value; render(); });
+    var search = app.querySelector("#pommy-menu-search");
+    search.value = query;
+    search.addEventListener("input", function (event) {
+      query = event.target.value;
+      menuState.query = query;
+      render();
+    });
     tabs.addEventListener("click", function (event) {
       var button = event.target.closest("[data-category-filter]");
       if (!button) return;
       selected = button.dataset.categoryFilter;
+      menuState.selected = selected;
       render();
     });
     render();
   }
 
   if (!window.Pommy) return;
-  Promise.resolve(window.Pommy.ready).then(init);
+  Promise.resolve(window.Pommy.motionReady).then(function () { init(false); });
+  Promise.resolve(window.Pommy.ready).then(function () { init(true); });
 })();
