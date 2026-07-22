@@ -28,6 +28,13 @@ The current static Webflow export is a generic restaurant template. It must beco
 - Search Console verification, sitemap/robots/LLM discovery files, analytics readiness, and custom-domain portability.
 - Preserve the current Webflow design, responsive behavior, and non-commerce interactions.
 
+## Current Production Baseline
+
+- Production is live at `https://pommydemo.netlify.app` with 101 Supabase-backed menu items, 10 categories, real COD order persistence, and allowlisted staff administration.
+- Search discovery uses 115 indexable canonical URLs, statically generated content, a verified sitemap, crawler-readable robots directives, and permanent Google Search Console verification.
+- Search appearance uses square Pommy favicon assets, a web manifest, and homepage `WebSite` naming signals for `Pommy Burger and Pizza` and `Pommy`.
+- `/menu/` is a primary indexable route. Transactional `/checkout/` remains crawlable but is `noindex,follow`; admin, error, and obsolete template routes are excluded from indexing.
+
 ## Out Of Scope
 
 - Online payments, customer accounts, social login, delivery-driver assignment, and public order history.

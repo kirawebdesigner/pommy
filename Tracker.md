@@ -8,14 +8,14 @@
 - [x] Make checkout consistently `noindex,follow`, remove it from the sitemap, and keep it crawlable so search engines can read the directive.
 - [x] Force duplicate `/index.html` and nested `/*/index.html` URLs to their canonical trailing-slash routes at the Netlify layer.
 - [x] Pass local SEO/static/browser gates and validate favicon, manifest MIME type, crawler source, and canonical redirects on a Netlify preview.
-- [x] Push through GitHub and verify linked Netlify production deploy `6a60051038d39a0008349b4a` serves the square Pommy favicon, manifest, naming schema, indexable `/menu/`, 115-URL sitemap, and canonical redirects with zero browser errors or failed local requests.
+- [x] Push through GitHub and verify final linked Netlify production deploy `6a600565e4d2e80008ce9bdf` serves the square Pommy favicon, manifest, naming schema, indexable `/menu/`, 115-URL sitemap, and canonical redirects with zero browser errors or failed local requests.
 
 ## SEO, Local Search, And AI Discovery
 
 - [x] Centralize canonical URL, verified Pommy facts, explicit unknown owner data, analytics settings, Search Console verification, and demo mode in `assets/config/seo-config.js`.
 - [x] Generate one unique metadata set, canonical, robots directive, Open Graph/Twitter set, and JSON-LD graph for every public HTML page.
 - [x] Permanently generate the verified Google Search Console token on all 151 public pages and confirm it in raw production HTML.
-- [x] Generate a 116-URL canonical sitemap, crawler-safe `robots.txt`, factual `llms.txt`, and route-by-route `SEO_METADATA.md`.
+- [x] Generate the current 115-URL canonical sitemap, crawler-safe `robots.txt`, factual `llms.txt`, and route-by-route `SEO_METADATA.md`.
 - [x] Add high-value `/burger-around-cmc/` and `/pizza-around-cmc/` pages using the locked Pommy design and real menu records.
 - [x] Add static prerendering so H1s, business facts, menu/product content, internal links, and structured data remain available without JavaScript.
 - [x] Add optional GA4/GTM loading and stable events for menu views, product selection, add-to-cart, checkout start, order submission, calls, directions, and future verified WhatsApp links.
@@ -71,7 +71,7 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 - [x] Add the scoped `pommy-redesign.css` layer for the hero, category board, story composition, 8-product showcase, split CTA, trust slider, editorial blog, visit block, gallery, footer, menu, product, blog, and checkout routes.
 - [x] Add restrained one-shot generated-page reveals without changing native homepage IX2 timing, fallback behavior, or reduced-motion visibility.
 - [x] Correct feedback from live local review: remove inherited 32px header padding that made the navbar oversized; replace the sticky menu filter that covered product cards with a compact in-flow panel; and bind search/filter controls immediately to bundled data while preserving state through live Supabase reconciliation.
-- [x] Pass static audit, SEO validation, database parity, and live-data browser gate: 155 pages, 101 products, 10 categories, 116 sitemap URLs, zero broken references, 8 featured cards, authoritative live pricing, and unavailable-item blocking.
+- [x] Pass static audit, SEO validation, database parity, and live-data browser gate: 155 pages, 101 products, 10 categories, the then-current sitemap, zero broken references, 8 featured cards, authoritative live pricing, and unavailable-item blocking.
 - [x] Complete final browser/motion/functional gates on `https://ui-motion-preview--pommydemo.netlify.app/`: 12 public routes, 101 products, live Supabase behavior, admin E2E, compact menu search/filter at 1440/1024/768/390, zero overflow, zero hidden motion targets, zero fallback activations, and zero browser/runtime errors.
 - [x] Fast-forward the verified redesign into `main`, push GitHub, and verify `https://pommydemo.netlify.app/`: public, Supabase, admin, menu search/filter, and four-breakpoint motion gates all pass with zero overflow, hidden targets, fallback activations, runtime errors, or console errors.
 
@@ -160,8 +160,8 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 - [x] Preserve the pre-paint IX2 ownership guard and start Webflow from `Pommy.motionReady` instead of waiting for Supabase. The prerendered homepage remains stable while its eight featured cards reconcile in place with authoritative live data.
 - [x] Correct invalid product-list/cart ARIA, add intrinsic dimensions to active images/icons, and apply only measured WCAG-safe orange variants (`#c24b08` for normal text/white controls and `#e95d11` for the large hero accent).
 - [x] Add Netlify `nosniff`, referrer, permissions, frame, COOP, and tested CSP definitions. The CSP hashes exactly match the generated pre-paint and Webflow-loader inline scripts.
-- [x] Repair `robots.txt` and Markdown `llms.txt`; public crawl routes remain allowed while `/admin/` and `/checkout/` are excluded.
-- [x] Local static gates: 155 HTML pages, 101 products, 10 categories, 6 posts, 116 sitemap URLs, zero broken local references, zero missing image dimensions, and Supabase seed parity across four migrations.
+- [x] Repair `robots.txt` and Markdown `llms.txt`; public crawl routes remain allowed, `/admin/` is excluded, and checkout remains crawlable with a page-level `noindex,follow` directive.
+- [x] Current local static gates: 155 HTML pages, 101 products, 10 categories, 6 posts, 115 sitemap URLs, zero broken local references, zero missing image dimensions, and Supabase seed parity across four migrations.
 - [x] Local browser gates: 12 representative routes, 101 products, eight live featured cards, authoritative price/unavailable behavior, cart/checkout, admin authorization/mutations/auto-refresh, and SEO browser validation all pass with zero failed required requests, runtime exceptions, or console errors.
 - [x] Local motion gates at 1440, 1024, 768, and 390px retain perceptible native reveals, zero reveal-fallback activations, zero visible-before-hidden events on the guarded ownership set, zero stuck targets in natural scrolling, mobile lightweight card reveals, reduced-motion visibility, and zero horizontal overflow.
 - [x] Local Lighthouse diagnostic reached Accessibility 100, Best Practices 100, and SEO 100. Three-run production medians remain pending until the linked Netlify build is live.
@@ -197,4 +197,4 @@ The guest RPC validates all data, trusts only database prices, and exposes no cu
 
 - Duplicate prices for Double Peanut Tea and Double Fasting Macchiato require Pommy confirmation.
 - Peanut at 1330 ETB is retained as supplied but requires confirmation.
-- No exact Google Maps URL, email, opening hours, social profiles, or live order receiver is confirmed.
+- No owner-confirmed direct Google Maps place URL, public email, opening hours, or social profiles are available.

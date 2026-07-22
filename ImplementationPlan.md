@@ -25,3 +25,5 @@
 23. Prerender public content for JavaScript-independent crawling and add two high-value CMC landing pages.
 24. Add GA4/GTM event readiness, Search Console verification, demo-order protection, Netlify canonical redirects/headers, and custom-domain portability.
 25. Run static, browser, motion, live-data, admin, SEO-rendering, performance, and eight-width visual-regression gates before production deployment.
+26. Replace the invalid non-square search favicon with square Pommy assets, add the manifest and site-name signals at generator level, and preserve the permanent Search Console verification tag.
+27. Make crawl/index policy consistent: keep `/menu/` indexable, mark checkout `noindex,follow`, publish the 115-URL sitemap, force duplicate `index.html` redirects, validate on a Netlify preview, and verify the linked production deployment.

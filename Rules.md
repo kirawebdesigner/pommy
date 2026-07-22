@@ -19,4 +19,6 @@
 - Never add review/rating schema, opening hours, coordinates, email, WhatsApp, social URLs, or delivery claims without owner verification.
 - Keep important metadata, H1s, business facts, primary links, and JSON-LD in generated source HTML.
 - Preserve the permanent Google Search Console verification token unless ownership is intentionally transferred.
-- Keep unofficial deployments in demo mode; never allow a demo build to submit a real order.
+- Keep unofficial and unconfigured deployments in demo mode; only verified production may set `PUBLIC_DEMO_MODE=false` and submit through the live server-authoritative order RPC.
+- Keep `/menu/` indexable and self-canonical. Keep checkout `noindex,follow`, admin routes excluded, and duplicate `index.html` forms redirected to clean routes.
+- Preserve the stable square Pommy favicon, manifest, homepage site-name schema, and 115-URL sitemap through generator changes.

@@ -50,6 +50,12 @@ Admin pages refresh in the background and when the tab regains focus or connecti
 
 AI retrieval tools can also use `llms.txt`, then follow the same canonical public routes. Public discovery never requires delayed client rendering for the H1, business facts, menu links, or structured data.
 
+`Googlebot -> /menu/ HTTP 200 -> self-canonical + index,follow -> prerendered 101-product links -> product routes`
+
+`Duplicate /index.html URL -> Netlify 301 -> canonical trailing-slash route`
+
+The homepage supplies the preferred Pommy site name and organization logo. All public pages reference the same stable square favicon and manifest. Checkout can be crawled so its `noindex,follow` directive is visible, but it is not submitted in the sitemap; `/admin/` is blocked from crawling and indexing.
+
 ## Analytics Flow
 
 `Public interaction -> PommyAnalytics.track -> dataLayer -> configured GTM or GA4`

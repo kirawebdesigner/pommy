@@ -25,6 +25,7 @@
 - `assets/css/pommy-site.css`: scoped additions that reuse the existing visual language.
 - `assets/config/seo-config.js`: centralized canonical URL, business facts, placeholders, analytics IDs, Search Console token, and demo-mode settings.
 - `scripts/generate-seo.cjs`: metadata, JSON-LD, robots, sitemap, `llms.txt`, runtime config, and metadata inventory generation.
+- `favicon.png`, `favicon-*.png`, `favicon.ico`, `apple-touch-icon.png`, and `site.webmanifest`: square Pommy search/browser identity assets generated from the official logo.
 - `scripts/prerender-public.cjs`: static serialization of public page content for JavaScript-independent crawling.
 - `assets/js/analytics.js`: optional GA4/GTM loading and stable conversion-event names.
 - `supabase/migrations/`: versioned schema, functions, grants, RLS policies, and deterministic seed data.
@@ -48,6 +49,7 @@
 - Product details: `/product/<slug>/`.
 - Blog details: `/blog-posts/<slug>/`.
 - Utility pages remain unlinked and `noindex`.
+- `/checkout/` is functional and crawlable but `noindex,follow`; it is intentionally absent from the sitemap.
 - Admin: `/admin/login/`, `/admin/`, `/admin/orders/`, `/admin/menu/`; all are `noindex` and data access is enforced by Auth and RLS.
 
 ## Data Availability
@@ -58,4 +60,6 @@
 - Existing static product route shells and SEO metadata remain compatible with stable slugs.
 - Every public page receives one title, description, canonical, robots directive, Open Graph/Twitter set, verification tag, and JSON-LD graph during the build.
 - `PUBLIC_SITE_URL` controls canonical hosts across metadata, schema, sitemap, robots, and AI discovery files.
-- `PUBLIC_DEMO_MODE=true` blocks the order RPC before network submission on unofficial deployments.
+- The committed default is `PUBLIC_DEMO_MODE=true`, which blocks the order RPC on unconfigured or unofficial builds. Verified production sets `PUBLIC_DEMO_MODE=false` at build time and uses the live Supabase order RPC.
+- Production currently emits 115 sitemap URLs. `/menu/` is self-canonical and `index,follow`; duplicate `index.html` forms permanently redirect to clean trailing-slash routes.
+- The homepage `WebSite` graph owns the preferred site name and alternate names. Every public page links the stable square favicon and manifest without changing rendered geometry.

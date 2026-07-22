@@ -33,3 +33,5 @@ The July 2026 editorial restaurant redesign is the public visual source of truth
 - Local landing pages reuse existing Pommy sections, cards, buttons, typography, and responsive rules.
 - Do not add visible keyword blocks or hidden SEO text.
 - Any future demo notice must be small, truthful, accessible, and approved against the locked visual baseline.
+- Browser/search identity uses square crops of the official Pommy logo at the root favicon paths. These assets may be resized for platform requirements but must not be recolored, redrawn, distorted, or substituted.
+- Favicon, manifest, canonical, robots, and structured-data changes are head-only and must produce zero public geometry or motion changes.

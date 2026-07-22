@@ -198,4 +198,8 @@ Search metadata is file-generated rather than stored in PostgreSQL. `assets/conf
 - Menu, product, offer, article, breadcrumb, and visible FAQ entities
 - `robots.txt`, `sitemap.xml`, `llms.txt`, and `SEO_METADATA.md`
 
+The current production search inventory contains 115 indexable canonical URLs. `/menu/` is included and remains `index,follow`. `/checkout/` is intentionally `noindex,follow` and excluded from the sitemap while remaining crawlable so search engines can read the directive.
+
+Search appearance is also file-generated: every public page links `/favicon.png`, `/apple-touch-icon.png`, and `/site.webmanifest`; the homepage `WebSite` entity defines `Pommy Burger and Pizza` with Pommy alternate names, and the `Organization` entity references the square 512px logo. These files require no PostgreSQL table or migration.
+
 No database schema or migration is required for SEO generation.
